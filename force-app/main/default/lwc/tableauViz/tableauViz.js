@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
 import { loadScript } from 'lightning/platformResourceLoader';
+
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
 
 const FIELDS = [
@@ -11,52 +12,43 @@ const FIELDS = [
 ];
 
 export default class TableauViz extends LightningElement {
+    privateStyle;
     @api recordId
-
-    @api vizName
+    @api flexipageRegionWidth
+    @api vizURL
     @api hideTabs
     @api hideToolbar
     @api listenToMarksSelection
     @api listenToFilterChanged
+    @api filter
+    @api objectApiName;
 
     @wire(getRecord, { recordId: '$recordId', fields: FIELDS })
     account;
 
 
-    vizEventFilterChanged(evt) {
-        console.log("Field: " + evt.getFieldName());
-        console.log("EventName: " + evt.getEventName());
-    }
-
-    async vizEventMarksSelection(evt) {
-        console.log("EventName: " + evt.getEventName());
-        const marks = await evt.getMarksAsync();
-        console.log("Marks: " + marks.getPairs());
-        console.log(this.listenToMarksSelection);
-    }
-
-    vizOnFirstInteractive() {
-        console.log(this.listenToFilterChanged);
-        if (this.listenToFilterChanged) {
-            this.viz.addEventListener(tableau.TableauEventName.FILTER_CHANGE, this.vizEventFilterChanged.bind(this))
-        }
-        console.log(this.listenToMarksSelection);
-        if (this.listenToMarksSelection) {
-            this.viz.addEventListener(tableau.TableauEventName.MARKS_SELECTION, this.vizEventMarksSelection.bind(this))
-        }
-    }
-
     async renderedCallback() {
-        await loadScript(this, tableauJSAPI)
-        if (this.vizName !== "--None--") {
+        await loadScript(this, tableauJSAPI);
+        
+        
+        if (this.vizURL !== "--None--") {
+            console.log(this.flexipageRegionWidth);
+            console.log(this.objectApiName);
+            
             let containerDiv = this.template.querySelector('div');
-            // const vizToLoad = "https://10az.online.tableau.com/t/tableausalesdemo/views/2014GlobalHungerIndex/" + this.vizName
-            const vizToLoad = "https://10ax.online.tableau.com/t/datadevtc19/views/MoretheftsinSeattle/oftheftperprecinct"
-            // const vizToLoad = "https://us-west-2a.online.tableau.com/t/alpodev/views/StoryTestResults/HealthofStoryTests"
+            console.log(this.filter);
+            let vizToLoad;
+            
+            if(this.filter == true){
+                vizToLoad = this.vizURL+"?"+this.objectApiName+" ID="+this.recordId;
+            }
+            else{
+                vizToLoad = this.vizURL;
+            }
+            
             const options = {
                     hideTabs: this.hideTabs,
-                    hideToolbar: this.hideToolbar,
-                    onFirstInteractive: this.vizOnFirstInteractive.bind(this)
+                    hideToolbar: this.hideToolbar                   
                 };
             this.viz = new tableau.Viz(containerDiv, vizToLoad, options);
         }

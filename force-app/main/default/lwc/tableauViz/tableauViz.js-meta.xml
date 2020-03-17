@@ -9,12 +9,16 @@
     </targets>
      <!-- Configuring the design attributes -->
       <targetConfigs>
-        <targetConfig targets="lightning__HomePage,lightning__RecordPage,lightning__AppPage">
-            <property name="vizName" type="String" label="Enter the Viz Name" required="true" default="--None--" datasource="--None--,TrendsofHunger,2014GHI"/>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage">
+            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" default="--None--" />
             <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
             <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
-            <property name="listenToMarksSelection" type="Boolean" default="false" label="Listen to MarksSelection" />
-            <property name="listenToFilterChanged" type="Boolean" default="false" label="Listen to FilterChanged" />
+            <property name="filter" type="Boolean" default="false" label="Filter visualization based on the page" />
+        </targetConfig>
+        <targetConfig targets="lightning__HomePage">
+            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" default="--None--" />
+            <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
+            <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
         </targetConfig>
       </targetConfigs>
 </LightningComponentBundle>
