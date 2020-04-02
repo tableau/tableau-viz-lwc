@@ -9,14 +9,27 @@
     </targets>
      <!-- Configuring the design attributes -->
       <targetConfigs>
-        <targetConfig targets="lightning__RecordPage,lightning__AppPage">
-            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" default="--None--" />
+        <targetConfig targets="lightning__RecordPage">
+            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here" default="--None--" />
             <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
             <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
             <property name="filter" type="Boolean" default="false" label="Filter visualization based on the page" />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage">
+            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here" default="--None--" />
+            <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
+            <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
         </targetConfig>
         <targetConfig targets="lightning__HomePage">
-            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" default="--None--" />
+            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here" default="--None--" />
             <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
             <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
         </targetConfig>
