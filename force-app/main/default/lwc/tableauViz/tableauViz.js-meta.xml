@@ -1,39 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>48.0</apiVersion>
     <isExposed>true</isExposed>
-      <targets>
+    <masterLabel>Tableau Visualization</masterLabel>
+    <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>
         <target>lightning__HomePage</target>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
-     <!-- Configuring the design attributes -->
-      <targetConfigs>
-        <targetConfig targets="lightning__RecordPage">
-            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here" default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true" />
-            <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
-            <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
-            <property name="filter" type="Boolean" default="false" label="Filter visualization based on the page" />
-            <supportedFormFactors>
-                <supportedFormFactor type="Small" />
-                <supportedFormFactor type="Large" />
-            </supportedFormFactors>
+    <targetConfigs>
+        <targetConfig
+            targets="lightning__RecordPage,lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
+        >
+            <property
+                name="vizURL"
+                type="String"
+                label="Enter the Viz URL"
+                required="true"
+                description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here"
+                default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
+            />
+            <property
+                name="hideTabs"
+                type="Boolean"
+                default="false"
+                label="Hide Tabs"
+            />
+            <property
+                name="hideToolbar"
+                type="Boolean"
+                default="true"
+                label="Hide Toolbar"
+            />
+            <property
+                name="filter"
+                type="Boolean"
+                default="false"
+                label="Filter visualization based on the page"
+            />
         </targetConfig>
-        <targetConfig targets="lightning__AppPage">
-            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here" default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true" />
-            <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
-            <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
-            <supportedFormFactors>
-                <supportedFormFactor type="Small" />
-                <supportedFormFactor type="Large" />
-            </supportedFormFactors>
-        </targetConfig>
-        <targetConfig targets="lightning__HomePage, lightningCommunity__Default">
-            <property name="vizURL" type="String" label="Enter the Viz URL" required="true" description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here" default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true" />
-            <property name="hideTabs" type="Boolean" default="false" label="Hide Tabs" />
-            <property name="hideToolbar" type="Boolean" default="true" label="Hide Toolbar" />
-        </targetConfig>
-      </targetConfigs>
+    </targetConfigs>
 </LightningComponentBundle>
