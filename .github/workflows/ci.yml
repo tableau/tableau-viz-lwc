@@ -1,0 +1,47 @@
+# Unique name for this workflow
+name: CI
+
+# Definition when the workflow should run
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+# Jobs to be executed
+jobs:
+    formatting-and-lwc-tests:
+        runs-on: ubuntu-latest
+        steps:
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+
+            # Cache node_modules to speed up the process
+            - name: Restore node_modules cache
+              id: cache-npm
+              uses: actions/cache@v1
+              with:
+                  path: node_modules
+                  key: npm-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      npm-${{ env.cache-name }}-
+                      npm-
+
+            # Install npm dependencies for Prettier and Jest
+            - name: 'Install npm dependencies'
+              if: steps.cache-npm.outputs.cache-hit != 'true'
+              run: npm install
+
+            # Prettier formatting
+            - name: 'Code formatting'
+              run: npm run prettier:verify
+
+            # ESlint
+            - name: 'Linting'
+              run: npm run lint
+
+            # LWC unit tests
+            - name: 'LWC unit tests'
+              run: npm run test:unit
