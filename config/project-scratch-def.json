@@ -1,4 +1,9 @@
 {
-  "edition": "Developer",
-  "features": []
+    "edition": "Developer",
+    "features": [],
+    "settings": {
+        "mobileSettings": {
+            "enableS1EncryptedStoragePref2": false
+        }
+    }
 }
