@@ -11,9 +11,7 @@
         <target>lightningCommunity__Default</target>
     </targets>
     <targetConfigs>
-        <targetConfig
-            targets="lightning__RecordPage,lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
-        >
+    <targetConfig targets="lightning__RecordPage">
             <property
                 name="vizURL"
                 type="String"
@@ -39,6 +37,30 @@
                 type="Boolean"
                 default="false"
                 label="Filter visualization based on the page"
+            />
+        </targetConfig>
+        <targetConfig
+            targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
+        >
+            <property
+                name="vizURL"
+                type="String"
+                label="Enter the Viz URL"
+                required="true"
+                description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here"
+                default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
+            />
+            <property
+                name="hideTabs"
+                type="Boolean"
+                default="false"
+                label="Hide Tabs"
+            />
+            <property
+                name="hideToolbar"
+                type="Boolean"
+                default="true"
+                label="Hide Toolbar"
             />
         </targetConfig>
     </targetConfigs>
