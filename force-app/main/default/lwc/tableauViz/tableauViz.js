@@ -11,6 +11,8 @@ export default class TableauViz extends LightningElement {
     @api hideToolbar;
     @api filter;
 
+    viz;
+
     async renderedCallback() {
         await loadScript(this, tableauJSAPI);
 
