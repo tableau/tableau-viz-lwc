@@ -38,6 +38,13 @@
                 default="false"
                 label="Filter visualization based on the page"
             />
+            <property
+                name="height"
+                type="Integer"
+                default="550"
+                label="Height"
+                required="true"
+            />
         </targetConfig>
         <targetConfig
             targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
@@ -61,6 +68,13 @@
                 type="Boolean"
                 default="true"
                 label="Hide Toolbar"
+            />
+            <property
+                name="height"
+                type="Integer"
+                default="550"
+                label="Height"
+                required="true"
             />
         </targetConfig>
     </targetConfigs>

@@ -10,6 +10,7 @@ export default class TableauViz extends LightningElement {
     @api hideTabs;
     @api hideToolbar;
     @api filter;
+    @api height;
 
     viz;
 
@@ -17,7 +18,8 @@ export default class TableauViz extends LightningElement {
         await loadScript(this, tableauJSAPI);
 
         const containerDiv = this.template.querySelector('div');
-
+        containerDiv.style.height = this.height+"px";
+        var height = containerDiv.offsetHeight;
         let vizToLoad = this.vizURL;
         if (this.filter && this.objectApiName) {
             vizToLoad += `?${this.objectApiName}&ID=${this.recordId}`;
@@ -25,7 +27,9 @@ export default class TableauViz extends LightningElement {
 
         const options = {
             hideTabs: this.hideTabs,
-            hideToolbar: this.hideToolbar
+            hideToolbar: this.hideToolbar,
+            height: this.height,
+            width: "100%"
         };
         // eslint-disable-next-line no-undef
         this.viz = new tableau.Viz(containerDiv, vizToLoad, options);
