@@ -5,7 +5,7 @@ import { loadScript } from 'lightning/platformResourceLoader';
 const TABLEAU_JS_API = 'tableauJSAPI';
 
 const VIZ_URL_NO_FILTERS = 'vizUrl';
-const VIZ_URL_FILTERS = 'vizUrl?Account&ID=mockId';
+const VIZ_URL_FILTERS = 'vizUrl?Account%20ID=mockId';
 
 describe('tableau-viz', () => {
     afterEach(() => {
