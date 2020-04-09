@@ -22,7 +22,11 @@ export default class TableauViz extends LightningElement {
 
         let vizToLoad = this.vizURL;
         if (this.filter && this.objectApiName) {
-            vizToLoad += `?${this.objectApiName}&ID=${this.recordId}`;
+            if (vizToLoad.includes('?')) {
+                vizToLoad += `&${this.objectApiName}%20ID=${this.recordId}`;
+            } else {
+                vizToLoad += `?${this.objectApiName}%20ID=${this.recordId}`;
+            }
         }
 
         const options = {
