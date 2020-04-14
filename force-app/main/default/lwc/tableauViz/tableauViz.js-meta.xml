@@ -33,17 +33,27 @@
                 label="Hide Toolbar"
             />
             <property
+                name="height"
+                type="Integer"
+                default="550"
+                label="Height"
+                required="true"
+            />
+            <property
                 name="filter"
                 type="Boolean"
                 default="false"
                 label="Filter visualization based on the page"
             />
             <property
-                name="height"
-                type="Integer"
-                default="550"
-                label="Height"
-                required="true"
+                name="filter_name"
+                type="String"
+                label="Add more filters, the Salesforce qulified Field Name"
+            />
+            <property
+                name="sf_advanced_filter"
+                type="String"
+                label="Add more filters, the Salesforce qulified Field Name"
             />
         </targetConfig>
         <targetConfig
