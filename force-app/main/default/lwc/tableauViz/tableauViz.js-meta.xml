@@ -48,12 +48,12 @@
             <property
                 name="filter_name"
                 type="String"
-                label="Add more filters, the Salesforce qulified Field Name"
+                label="Add more filters, define the Tableau Field Name"
             />
             <property
                 name="sf_advanced_filter"
                 type="String"
-                label="Add more filters, the Salesforce qulified Field Name"
+                label="Add more filters, define the Salesforce qualified Field Name"
             />
         </targetConfig>
         <targetConfig
