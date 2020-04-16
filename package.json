@@ -1,0 +1,60 @@
+{
+    "name": "tableau-viz-lwc",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Lightning web component for embedding Tableau into Salesforce",
+    "main": "index.js",
+    "scripts": {
+        "lint": "eslint **/lwc/**",
+        "test": "npm run lint && npm run test:unit",
+        "test:unit": "sfdx-lwc-jest",
+        "test:unit:watch": "sfdx-lwc-jest --watch",
+        "test:unit:debug": "sfdx-lwc-jest --debug",
+        "test:unit:coverage": "sfdx-lwc-jest --coverage",
+        "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
+        "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tableau/tableau-viz-lwc.git"
+    },
+    "keywords": [
+        "Salesforce",
+        "Tableau",
+        "Lightning",
+        "Web",
+        "Component"
+    ],
+    "author": "Tableau",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/tableau/tableau-viz-lwc/issues"
+    },
+    "homepage": "https://github.com/tableau/tableau-viz-lwc#readme",
+    "devDependencies": {
+        "@prettier/plugin-xml": "^0.7.2",
+        "@salesforce/eslint-config-lwc": "^0.5.0",
+        "@salesforce/sfdx-lwc-jest": "^0.7.1",
+        "eslint": "^6.8.0",
+        "husky": "^4.2.3",
+        "lint-staged": "^10.1.1",
+        "prettier": "^1.19.1"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}": [
+            "prettier --write"
+        ],
+        "**/lwc/**": [
+            "eslint"
+        ]
+    },
+    "engines": {
+        "node": ">= 10.13.0",
+        "npm": ">= 6.5.0"
+    }
+}
