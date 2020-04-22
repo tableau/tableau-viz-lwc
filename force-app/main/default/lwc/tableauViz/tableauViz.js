@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord } from 'lightning/uiRecordApi';
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
@@ -11,18 +11,20 @@ export default class TableauViz extends LightningElement {
     @api hideToolbar;
     @api filter;
     @api height;
-    @api filter_name;
-    @api sf_advanced_filter;
+    @api filterName;
+    @api sfAdvancedFilter;
+    @track record;
     viz;
     sf_value;
 
     // Extract current picklist value for this record
     @wire(getRecord, {
         recordId: '$recordId',
-        fields: '$sf_advanced_filter'
+        fields: '$sfAdvancedFilter'
     })
     getRecord({ error, data }) {
         if (data) {
+            this.record = data;
             const fieldName = this.getFieldName();
             this.sf_value = data.fields[fieldName].value;
         } else if (error) {
@@ -33,8 +35,8 @@ export default class TableauViz extends LightningElement {
     }
 
     getFieldName() {
-        return this.sf_advanced_filter.substring(
-            this.sf_advanced_filter.indexOf('.') + 1
+        return this.sfAdvancedFilter.substring(
+            this.sfAdvancedFilter.indexOf('.') + 1
         );
     }
 
@@ -42,34 +44,41 @@ export default class TableauViz extends LightningElement {
         await loadScript(this, tableauJSAPI);
 
         const containerDiv = this.template.querySelector('div');
-        containerDiv.style.height = this.height + 'px';
-        let filterName = `${this.objectApiName}%20ID`;
-        let vizToLoad = this.vizURL;
-
-        //In context filtering
-        if (this.filter && this.objectApiName) {
-            if (vizToLoad.includes('?')) {
-                vizToLoad += `&${filterName}=${this.recordId}`;
-            } else {
-                vizToLoad += `?${filterName}=${this.recordId}`;
-            }
-        }
-        //Additional Filtering
-        if (this.sf_value && this.objectApiName) {
-            if (vizToLoad.includes('?')) {
-                vizToLoad += `&${this.filter_name}=${this.sf_value}`;
-            } else {
-                vizToLoad += `?${this.this.filter_name}=${this.sf_value}`;
-            }
+        if (!this.sfAdvancedFilter || !this.filterName) {
+            this.record = 'No Filter';
         }
 
-        const options = {
-            hideTabs: this.hideTabs,
-            hideToolbar: this.hideToolbar,
-            height: this.height,
-            width: '100%'
-        };
-        // eslint-disable-next-line no-undef
-        this.viz = new tableau.Viz(containerDiv, vizToLoad, options);
+        if (containerDiv) {
+            containerDiv.style.height = this.height + 'px';
+            const filterName = `${this.objectApiName}%20ID`;
+            let vizToLoad = this.vizURL;
+
+            //In context filtering
+            if (this.filter && this.objectApiName) {
+                if (vizToLoad.includes('?')) {
+                    vizToLoad += `&${filterName}=${this.recordId}`;
+                } else {
+                    vizToLoad += `?${filterName}=${this.recordId}`;
+                }
+            }
+            //Additional Filtering
+            if (this.sf_value && this.filterName) {
+                if (vizToLoad.includes('?')) {
+                    vizToLoad += `&${this.filterName}=${this.sf_value}`;
+                } else {
+                    vizToLoad += `?${this.filterName}=${this.sf_value}`;
+                }
+            }
+
+            const options = {
+                hideTabs: this.hideTabs,
+                hideToolbar: this.hideToolbar,
+                height: this.height + 'px',
+                width: '100%'
+            };
+
+            // eslint-disable-next-line no-undef
+            this.viz = new tableau.Viz(containerDiv, vizToLoad, options);
+        }
     }
 }

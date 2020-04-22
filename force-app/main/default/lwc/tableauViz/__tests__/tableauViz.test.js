@@ -75,6 +75,7 @@ describe('tableau-viz', () => {
         });
         element.hideTabs = false;
         element.hideToolbar = true;
+        element.height = 550;
         document.body.appendChild(element);
 
         return flushPromises().then(() => {
@@ -82,6 +83,7 @@ describe('tableau-viz', () => {
             const instance = global.tableauMockInstances[0];
             expect(instance.options.hideTabs).toBeFalsy();
             expect(instance.options.hideToolbar).toBeTruthy();
+            expect(instance.options.height).toBe('550px');
         });
     });
 });

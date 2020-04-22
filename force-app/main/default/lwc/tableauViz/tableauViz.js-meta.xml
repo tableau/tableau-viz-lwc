@@ -46,12 +46,12 @@
                 label="Filter visualization based on the page"
             />
             <property
-                name="filter_name"
+                name="filterName"
                 type="String"
                 label="Add more filters, define the Tableau Field Name"
             />
             <property
-                name="sf_advanced_filter"
+                name="sfAdvancedFilter"
                 type="String"
                 label="Add more filters, define the Salesforce qualified Field Name"
             />

@@ -1,5 +1,7 @@
 <template>
-    <article class="slds-card">
-        <div style="height: 500px;" lwc:dom="manual"></div>
-    </article>
+    <template if:true={record}>
+        <article class="slds-card">
+            <div lwc:dom="manual"></div>
+        </article>
+    </template>
 </template>
