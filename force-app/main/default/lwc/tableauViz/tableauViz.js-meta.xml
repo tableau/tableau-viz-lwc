@@ -17,7 +17,7 @@
                 type="String"
                 label="Enter the Viz URL"
                 required="true"
-                description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here"
+                description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
                 default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
             />
             <property
@@ -54,6 +54,7 @@
                 name="sfAdvancedFilter"
                 type="String"
                 label="Add more filters, define the Salesforce qualified Field Name"
+                description="For example, on the Opportunity page try: Opportunity.AccountId"
             />
         </targetConfig>
         <targetConfig
@@ -64,7 +65,7 @@
                 type="String"
                 label="Enter the Viz URL"
                 required="true"
-                description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here"
+                description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
                 default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
             />
             <property
