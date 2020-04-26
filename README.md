@@ -1,6 +1,7 @@
 # Lightning Web Component for embedding Tableau into Salesforce
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
+[![Community Supported](https://img.shields.io/badge/Support%20Level-Community%20Supported-457387.svg)](https://www.tableau.com/support-levels-it-and-developer-tools)
 
 This project provides a Lightning Web Component that you can customize and use to embed Tableau into Salesforce. This component uses the Tableau JavaScript API for embedding Tableau into web pages.
 
