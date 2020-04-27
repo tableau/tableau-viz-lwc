@@ -51,7 +51,7 @@ ____
 
    ```
 
-1. Create a scratch org and provide it with an alias (**lwc-recipes** in the command below):
+1. Create a scratch org and provide it with an alias (**tableau-viz-lwc** in the command below):
 
     ```
     sfdx force:org:create -s -f config/project-scratch-def.json -a tableau-viz-lwc
@@ -73,9 +73,9 @@ ____
 
     This opens Salesforce and takes you to the scratch org.
 
-1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg)), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
+1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
-1. Click Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg)) then select **Edit Page**.
+1. Click Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
 
 1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
 
@@ -93,7 +93,7 @@ ___
 Follow this set of instructions if you want to deploy the app to a more permanent environment than a Scratch org.
 This includes non source-tracked orgs such as a [free Developer Edition Org](https://developer.salesforce.com/signup) or a [Trailhead Playground](https://trailhead.salesforce.com/).
 
-Make sure to start from a brand-new environment to avoid conflicts with previous work you may have done.
+
 
 1. Authorize your Trailhead Playground or Developer org and provide it with an alias (**mydevorg** in the following command):
 
@@ -131,9 +131,9 @@ Make sure to start from a brand-new environment to avoid conflicts with previous
 
     This opens Salesforce and takes you to the scratch org.
 
-1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg)), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
+1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
-1. Click Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg)) then select **Edit Page**.
+1. Click Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
 
 1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
 
