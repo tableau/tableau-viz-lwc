@@ -75,7 +75,7 @@ ____
 
 1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
-1. Click Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
+1. Click the Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
 
 1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
 
@@ -133,7 +133,7 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
 
 1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
-1. Click Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
+1. Click the Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
 
 1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
 
