@@ -4,8 +4,9 @@ import { loadScript } from 'lightning/platformResourceLoader';
 
 const TABLEAU_JS_API = 'tableauJSAPI';
 
-const VIZ_URL_NO_FILTERS = 'vizUrl';
-const VIZ_URL_FILTERS = 'vizUrl?Account%20ID=mockId';
+const VIZ_URL_NO_FILTERS = 'https://vizURL.com';
+const VIZ_URL = 'https://vizurl.com';
+const VIZ_DISPLAY = 'https://vizurl.com/?size=';
 
 describe('tableau-viz', () => {
     afterEach(() => {
@@ -42,13 +43,19 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
+        element.height = '550';
         element.vizURL = VIZ_URL_NO_FILTERS;
+
         document.body.appendChild(element);
+
+        const div = element.shadowRoot.querySelector('div');
 
         return flushPromises().then(() => {
             expect(global.tableauMockInstances.length).toBe(1);
             const instance = global.tableauMockInstances[0];
-            expect(instance.vizToLoad).toBe(VIZ_URL_NO_FILTERS);
+            expect(instance.vizToLoad).toBe(
+                VIZ_DISPLAY + div.offsetWidth + '%2C550'
+            );
         });
     });
 
@@ -56,16 +63,19 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL_NO_FILTERS;
+        element.vizURL = VIZ_URL;
         element.filter = true;
+        element.height = '550';
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         document.body.appendChild(element);
-
+        const div = element.shadowRoot.querySelector('div');
         return flushPromises().then(() => {
             expect(global.tableauMockInstances.length).toBe(1);
             const instance = global.tableauMockInstances[0];
-            expect(instance.vizToLoad).toBe(VIZ_URL_FILTERS);
+            expect(instance.vizToLoad).toBe(
+                VIZ_DISPLAY + div.offsetWidth + '%2C550&Account+ID=mockId'
+            );
         });
     });
 
@@ -73,9 +83,10 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
+        element.vizURL = VIZ_URL;
         element.hideTabs = false;
         element.hideToolbar = true;
-        element.height = 550;
+        element.height = 650;
         document.body.appendChild(element);
 
         return flushPromises().then(() => {
@@ -83,7 +94,7 @@ describe('tableau-viz', () => {
             const instance = global.tableauMockInstances[0];
             expect(instance.options.hideTabs).toBeFalsy();
             expect(instance.options.hideToolbar).toBeTruthy();
-            expect(instance.options.height).toBe('550px');
+            expect(instance.options.height).toBe('650px');
         });
     });
 });

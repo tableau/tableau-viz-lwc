@@ -42,34 +42,33 @@ export default class TableauViz extends LightningElement {
 
     async renderedCallback() {
         await loadScript(this, tableauJSAPI);
-
-        if (!this.sfAdvancedFilter || !this.filterName) {
-            this.record = 'No Filter';
-        }
         const containerDiv = this.template.querySelector('div');
 
-        if (containerDiv) {
+        if (containerDiv && this.vizURL) {
+            //Defining the height of the div
             containerDiv.style.height = this.height + 'px';
-            const filterName = `${this.objectApiName}%20ID`;
-            let vizToLoad = this.vizURL;
+
+            //Creating a URL object
+            console.log(this.vizURL);
+            let vizToLoad = new URL(this.vizURL);
+            //Getting Width of the viez
+            let vizWidth = containerDiv.offsetHeight;
+
+            //Define size of the viz
+            vizToLoad.searchParams.append('size', vizWidth + ',' + this.height);
 
             //In context filtering
-            if (this.filter && this.objectApiName) {
-                if (vizToLoad.includes('?')) {
-                    vizToLoad += `&${filterName}=${this.recordId}`;
-                } else {
-                    vizToLoad += `?${filterName}=${this.recordId}`;
-                }
-            }
-            //Additional Filtering
-            if (this.sf_value && this.filterName) {
-                if (vizToLoad.includes('?')) {
-                    vizToLoad += `&${this.filterName}=${this.sf_value}`;
-                } else {
-                    vizToLoad += `?${this.filterName}=${this.sf_value}`;
-                }
+            if (this.filter === true && this.objectApiName) {
+                const filterNameTab = `${this.objectApiName} ID`;
+                vizToLoad.searchParams.append(filterNameTab, this.recordId);
             }
 
+            //Additional Filtering
+            if (this.sf_value && this.filterName) {
+                vizToLoad.searchParams.append(this.filterName, this.sf_value);
+            }
+
+            let vizURLString = vizToLoad.toString();
             const options = {
                 hideTabs: this.hideTabs,
                 hideToolbar: this.hideToolbar,
@@ -78,7 +77,7 @@ export default class TableauViz extends LightningElement {
             };
 
             // eslint-disable-next-line no-undef
-            this.viz = new tableau.Viz(containerDiv, vizToLoad, options);
+            this.viz = new tableau.Viz(containerDiv, vizURLString, options);
         }
     }
 }

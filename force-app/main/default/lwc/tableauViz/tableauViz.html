@@ -1,4 +1,9 @@
 <template>
+    <template if:false={sfAdvancedFilter}>
+        <article class="slds-card">
+            <div lwc:dom="manual"></div>
+        </article>
+    </template>
     <template if:true={record}>
         <article class="slds-card">
             <div lwc:dom="manual"></div>
