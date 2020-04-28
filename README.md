@@ -3,19 +3,23 @@
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
 [![Community Supported](https://img.shields.io/badge/Support%20Level-Community%20Supported-457387.svg)](https://www.tableau.com/support-levels-it-and-developer-tools)
 
-This project provides a Lightning Web Component that you can customize and use to embed Tableau into Salesforce. This component uses the Tableau JavaScript API for embedding Tableau into web pages.
+This project provides a Lightning Web Component that you can customize and use to embed Tableau into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau into web pages.
 
-> This sample application is designed to run on the Salesforce Platform.
+> This sample component is designed to run on the Salesforce Platform.
 
 ## Table of contents
 
-- [Install the tableau-viz-lwc app using a Scratch Org](#install-the-tableau-viz-lwc-app-using-a-scratch-org): This is the recommended installation option. Use this option if you are a developer who wants to experience the app and the code.
+- [Install the component using a Scratch Org](#install-the-component-using-a-scratch-org): This is the recommended installation option. Use this option if you are a developer who wants to experience the component and the code.
 
-- [Install the tableau-viz-lwc app using a Developer Edition Org or a Trailhead Playground](#install-the-tableau-viz-lwc-app-using-a-developer-edition-org-or-a-trailhead-playground): Useful when tackling Trailhead Badges or if you want the app deployed to a more permanent environment than a Scratch org.
+- [Install the component using a Developer Edition Org or a Trailhead Playground](#install-the-component-using-a-developer-edition-org-or-a-trailhead-playground): Useful when tackling Trailhead Badges or if you want the component deployed to a more permanent environment than a Scratch org.
 
+- [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app). After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.  
+
+
+- [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau to your scratch org or Trailhead Playground. 
 ____
 
-## Install the tableau-viz-lwc app using a Scratch Org
+## Install the component using a Scratch Org
 
 1. Set up your environment. Follow the steps in the [Quick Start: Lightning Web Components](https://trailhead.salesforce.com/content/learn/projects/quick-start-lightning-web-components/) Trailhead project. The steps include:
 
@@ -58,7 +62,7 @@ ____
 
     ```
 
-1. Push the app to your scratch org:
+1. Push the component to your scratch org:
 
     ```
     sfdx force:source:push
@@ -73,24 +77,14 @@ ____
 
     This opens Salesforce and takes you to the scratch org.
 
-1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
-
-1. Click the Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
-
-1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
-
-1. Select a Tableau viz to display by providing the URL for the viz in the **Enter the Viz URL** text box.
-
-  You can also control the size of the viz and whether you want to show the Tableau toolbar or any tabs for the viz.
-  
-> For this first release, we support SSO only with SAML. If you want to configure Tableau to use Salesforce IdP, follow the steps described in [Configure SAML with Salesforce](https://help.tableau.com/current/online/en-us/saml_config_salesforce.htm).
+1. Now you can [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app).
 
 
 ___
 
-## Install the tableau-viz-lwc app using a Developer Edition Org or a Trailhead Playground
+## Install the component using a Developer Edition Org or a Trailhead Playground
 
-Follow this set of instructions if you want to deploy the app to a more permanent environment than a Scratch org.
+Follow this set of instructions if you want to deploy the component to a more permanent environment than a Scratch org.
 This includes non source-tracked orgs such as a [free Developer Edition Org](https://developer.salesforce.com/signup) or a [Trailhead Playground](https://trailhead.salesforce.com/).
 
 
@@ -117,7 +111,12 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
 
 1. If you are setting up a Developer Edition: go to **Setup**, under **My Domain**, [register a My Domain](https://help.salesforce.com/articleView?id=domain_name_setup.htm&type=5).
 
-1. Run this command in a terminal to deploy the app. Replace `username` with the login name you use for `mydevorg`.
+1. Run this command in a terminal to deploy the component.
+
+    ```
+    sfdx force:source:deploy -p force-app
+    ```
+    If see an error message that asks you to specify a username or OAuth options, use the following command and replace `username` with the login name you use for `mydevorg`.
 
     ```
     sfdx force:source:deploy -p force-app -u username
@@ -129,7 +128,18 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
     sfdx force:org:open -u mydevorg
     ```
 
-    This opens Salesforce and takes you to the scratch org.
+    This opens Salesforce and takes you to your Developer Edition Org or Trailhead Playground.
+
+1. Now you can [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app).
+
+
+
+
+---
+
+## Add the Tableau Visualization component to an App
+
+After you have successfully deployed or pushed the `tableau-viz-lwc` component to your scratch org, Developer Edition Hub, or Trailhead Playground, you can use the component to add a Tableau viz to your App.
 
 1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
@@ -142,3 +152,25 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
   You can also control the size of the viz and whether you want to show the Tableau toolbar or any tabs for the viz.
   
 > For this first release, we support SSO only with SAML. If you want to configure Tableau to use Salesforce IdP, follow the steps described in [Configure SAML with Salesforce](https://help.tableau.com/current/online/en-us/saml_config_salesforce.htm).
+
+
+
+![alt text](./assets/lwc_tableau_viz_url.png "Tableau Visualization LWC")
+
+---
+
+## Troubleshooting problems deploying the LWC for Tableau
+
+- **Tip:** Be sure to run the `sfdx` commands from within the project folder.
+
+- If you encounter the following error message when trying to create a scratch org:
+
+   `ERROR running force:org:create:  You do not have access to the [ScratchOrgInfo] object`
+
+   If you have not already done so, you might need to enable Dev Hub in your Trailhead Playground. Login to your Playground and go to **Setup > Development > Dev Hub**). Or search for "Dev Hub" in the Quick Find text box. 
+
+- If you encounter the following message when trying to deploy the component:
+
+  `ERROR running force:source:deploy:  Must pass a username and/or OAuth options when creating an AuthInfo instance.`
+
+  Use the `-u usernamne` option. To determine the `username` for Developer Edition Org or Scratch org, you can use the command `sfdx force:org:list` to display information about the orgs you have created or are connected to.
