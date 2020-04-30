@@ -17,6 +17,7 @@ export default class TableauViz extends LightningElement {
     sfValue;
     errorMessage;
     flag;
+    vizToLoad;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -38,13 +39,13 @@ export default class TableauViz extends LightningElement {
     get isVizDisplayed() {
         this.createErrorMessage();
         this.flag =
-            (!this.validURL(this.vizURL) && !this.sfAdvancedFilter) ||
+            (this.validURL(this.vizURL) && !this.sfAdvancedFilter) ||
             this.sfValue;
         return this.flag;
     }
 
     createErrorMessage() {
-        if (this.validURL(this.vizURL)) {
+        if (!this.validURL(this.vizURL)) {
             this.errorMessage = 'Invalid Viz URL';
         } else if (!this.sfValue) {
             this.errorMessage = 'Invalid Salesforce qualified Field Name';
@@ -60,16 +61,13 @@ export default class TableauViz extends LightningElement {
     }
 
     validURL(str) {
-        var pattern = new RegExp(
-            '^(https?:\\/\\/)?' + // protocol
-            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
-            '((\\d{1,3}\\.){3}\\d{1,3}))' + // ip (v4) address
-            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + //port
-            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-                '(\\#[-a-z\\d_]*)?$',
-            'i'
-        );
-        return pattern.test(str);
+        try {
+            this.vizToLoad = new URL(str);
+        } catch (_) {
+            return false;
+        }
+
+        return true;
     }
 
     reduceErrors(errors) {
@@ -115,26 +113,33 @@ export default class TableauViz extends LightningElement {
             //Defining the height of the div
             containerDiv.style.height = this.height + 'px';
 
-            //Creating a URL object
-            const vizToLoad = new URL(this.vizURL);
             //Getting Width of the viz
             const vizWidth = containerDiv.offsetHeight;
 
             //Define size of the viz
-            vizToLoad.searchParams.append('size', vizWidth + ',' + this.height);
+            this.vizToLoad.searchParams.append(
+                'size',
+                vizWidth + ',' + this.height
+            );
 
             //In context filtering
             if (this.filter === true && this.objectApiName) {
                 const filterNameTab = `${this.objectApiName} ID`;
-                vizToLoad.searchParams.append(filterNameTab, this.recordId);
+                this.vizToLoad.searchParams.append(
+                    filterNameTab,
+                    this.recordId
+                );
             }
 
             //Additional Filtering
             if (this.sfValue && this.filterName) {
-                vizToLoad.searchParams.append(this.filterName, this.sfValue);
+                this.vizToLoad.searchParams.append(
+                    this.filterName,
+                    this.sfValue
+                );
             }
 
-            let vizURLString = vizToLoad.toString();
+            let vizURLString = this.vizToLoad.toString();
             const options = {
                 hideTabs: this.hideTabs,
                 hideToolbar: this.hideToolbar,
