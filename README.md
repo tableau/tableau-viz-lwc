@@ -16,7 +16,8 @@ This project provides a Lightning Web Component that you can customize and use t
 - [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app). After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.  
 
 
-- [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau to your scratch org or Trailhead Playground. 
+- [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau to your scratch org or Trailhead Playground.
+
 ____
 
 ## Install the component using a Scratch Org
@@ -32,7 +33,7 @@ ____
 
    > Note that you will use the Salesforce CLI to perform the following steps. Be sure you enable Dev Hub in your Trailhead Playground before you begin. Login to your Playground. Go to **Setup > Development > Dev Hub**).
 
----
+___
 
 1. If you haven't already done so, open a Command window and authorize your hub org and provide it with an alias (**myhuborg** in the following command):
 
@@ -78,7 +79,6 @@ ____
     This opens Salesforce and takes you to the scratch org.
 
 1. Now you can [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app).
-
 
 ___
 
@@ -135,15 +135,15 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
 
 
 
----
+___
 
 ## Add the Tableau Visualization component to an App
 
 After you have successfully deployed or pushed the `tableau-viz-lwc` component to your scratch org, Developer Edition Hub, or Trailhead Playground, you can use the component to add a Tableau viz to your App.
 
-1. From the App Launcher (![alt text](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
+1. From the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg "App Launcher")), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
-1. Click the Setup gear (![alt text](./assets/salesforce_icon-setup-large.jpg "Setup")) then select **Edit Page**.
+1. Click the Setup gear (![Setup gear](./assets/salesforce_icon-setup-large.jpg "Setup gear")) then select **Edit Page**.
 
 1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
 
@@ -155,9 +155,9 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 
 
-![alt text](./assets/lwc_tableau_viz_url.png "Tableau Visualization LWC")
+![Tableau Visualization LWC](./assets/lwc_tableau_viz_url.png "Tableau Visualization LWC")
 
----
+___
 
 ## Troubleshooting problems deploying the LWC for Tableau
 
@@ -167,10 +167,12 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
    `ERROR running force:org:create:  You do not have access to the [ScratchOrgInfo] object`
 
-   If you have not already done so, you might need to enable Dev Hub in your Trailhead Playground. Login to your Playground and go to **Setup > Development > Dev Hub**). Or search for "Dev Hub" in the Quick Find text box. 
+   If you have not already done so, you might need to enable Dev Hub in your org. Login to your org and go to **Setup > Development > Dev Hub**). Or search for "Dev Hub" in the Quick Find text box.
 
 - If you encounter the following message when trying to deploy the component:
 
   `ERROR running force:source:deploy:  Must pass a username and/or OAuth options when creating an AuthInfo instance.`
 
-  Use the `-u usernamne` option. To determine the `username` for Developer Edition Org or Scratch org, you can use the command `sfdx force:org:list` to display information about the orgs you have created or are connected to.
+  Use the `-u username` option. To determine the `username` for your Salesforce org, you can use the command `sfdx force:org:list` to display information about the orgs you have created or are connected to.
+
+> For more information about fixing problems with deployment, see [Troubleshoot Salesforce DX](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_troubleshoot.htm) in the [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm).
