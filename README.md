@@ -164,11 +164,14 @@ ___
 ## Sign up for the LWC test scenarios on the Tableau Developer Program Portal
 
 We want to hear from you!
+
 <img style="float: right;" src="./assets/smallWarrior_DataDev_nohashtag.png">
 
 Join the Developer Program and gain access to the Tableau LWC test scenarios on the Developer Program Portal.
 
 If you don't already have access, send email to [tableaulwcprerelease@tableau.com]( mailto:tableaulwcprerelease@tableau.com?subject=Tableau%20LWC%20Pre-Release) with **Tableau LWC Pre-Release** on the subject line.
+
+
 
 To get to the scenarios, go to the Tableau Pre-Release site (https://prerelease.tableau.com/) and to the Developer Program Portal. Under **Tasks**, look for the **Tableau Lightning Web Component Alpha**.
 
