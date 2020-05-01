@@ -17,7 +17,7 @@
                 type="String"
                 label="Enter the Viz URL"
                 required="true"
-                description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here"
+                description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
                 default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
             />
             <property
@@ -33,17 +33,17 @@
                 label="Hide Toolbar"
             />
             <property
-                name="filter"
-                type="Boolean"
-                default="false"
-                label="Filter visualization based on the page"
-            />
-            <property
                 name="height"
                 type="Integer"
                 default="550"
                 label="Height"
                 required="true"
+            />
+            <property
+                name="filter"
+                type="Boolean"
+                default="false"
+                label="Filter visualization based on the page"
             />
         </targetConfig>
         <targetConfig
@@ -54,7 +54,7 @@
                 type="String"
                 label="Enter the Viz URL"
                 required="true"
-                description="The Share button at the top of each view opens a dialog from which you can copy the embed code and paste it here"
+                description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
                 default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
             />
             <property

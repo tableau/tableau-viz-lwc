@@ -1,6 +1,5 @@
 import { LightningElement, api } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
-
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
 
 export default class TableauViz extends LightningElement {
@@ -11,31 +10,72 @@ export default class TableauViz extends LightningElement {
     @api hideToolbar;
     @api filter;
     @api height;
-
     viz;
+    errorMessage;
+    vizDisplayed;
+    vizToLoad;
+
+    get isVizDisplayed() {
+        this.createErrorMessage();
+        this.vizDisplayed = this.validURL(this.vizURL);
+        return this.vizDisplayed;
+    }
+
+    createErrorMessage() {
+        if (!this.validURL(this.vizURL)) {
+            this.errorMessage = 'Invalid Viz URL';
+        } else {
+            this.errorMessage = 'Invalid Input';
+        }
+    }
+
+    //Check if the URL is valid
+    validURL(str) {
+        try {
+            this.vizToLoad = new URL(str);
+        } catch (_) {
+            return false;
+        }
+
+        return true;
+    }
 
     async renderedCallback() {
         await loadScript(this, tableauJSAPI);
-
         const containerDiv = this.template.querySelector('div');
-        containerDiv.style.height = this.height + 'px';
 
-        let vizToLoad = this.vizURL;
-        if (this.filter && this.objectApiName) {
-            if (vizToLoad.includes('?')) {
-                vizToLoad += `&${this.objectApiName}%20ID=${this.recordId}`;
-            } else {
-                vizToLoad += `?${this.objectApiName}%20ID=${this.recordId}`;
+        if (this.vizDisplayed) {
+            //Defining the height of the div
+            containerDiv.style.height = this.height + 'px';
+
+            //Getting Width of the viz
+            const vizWidth = containerDiv.offsetWidth;
+
+            //Define size of the viz
+            this.vizToLoad.searchParams.append(
+                'size',
+                vizWidth + ',' + this.height
+            );
+
+            //In context filtering
+            if (this.filter === true && this.objectApiName) {
+                const filterNameTab = `${this.objectApiName} ID`;
+                this.vizToLoad.searchParams.append(
+                    filterNameTab,
+                    this.recordId
+                );
             }
-        }
 
-        const options = {
-            hideTabs: this.hideTabs,
-            hideToolbar: this.hideToolbar,
-            height: this.height,
-            width: '100%'
-        };
-        // eslint-disable-next-line no-undef
-        this.viz = new tableau.Viz(containerDiv, vizToLoad, options);
+            let vizURLString = this.vizToLoad.toString();
+            const options = {
+                hideTabs: this.hideTabs,
+                hideToolbar: this.hideToolbar,
+                height: this.height + 'px',
+                width: '100%'
+            };
+
+            // eslint-disable-next-line no-undef
+            this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+        }
     }
 }
