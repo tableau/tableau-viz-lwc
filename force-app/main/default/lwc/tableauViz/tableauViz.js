@@ -12,13 +12,13 @@ export default class TableauViz extends LightningElement {
     @api height;
     viz;
     errorMessage;
-    flag;
+    vizDisplayed;
     vizToLoad;
 
     get isVizDisplayed() {
         this.createErrorMessage();
-        this.flag = this.validURL(this.vizURL);
-        return this.flag;
+        this.vizDisplayed = this.validURL(this.vizURL);
+        return this.vizDisplayed;
     }
 
     createErrorMessage() {
@@ -43,7 +43,7 @@ export default class TableauViz extends LightningElement {
         await loadScript(this, tableauJSAPI);
         const containerDiv = this.template.querySelector('div');
 
-        if (this.flag) {
+        if (this.vizDisplayed) {
             //Defining the height of the div
             containerDiv.style.height = this.height + 'px';
 
