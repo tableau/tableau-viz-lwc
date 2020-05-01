@@ -29,6 +29,7 @@ export default class TableauViz extends LightningElement {
         }
     }
 
+    //Check if the URL is valid
     validURL(str) {
         try {
             this.vizToLoad = new URL(str);
