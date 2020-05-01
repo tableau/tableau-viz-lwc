@@ -13,8 +13,9 @@ This project provides a Lightning Web Component that you can customize and use t
 
 - [Install the component using a Developer Edition Org or a Trailhead Playground](#install-the-component-using-a-developer-edition-org-or-a-trailhead-playground): Useful when tackling Trailhead Badges or if you want the component deployed to a more permanent environment than a Scratch org.
 
-- [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app). After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.  
+- [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app): After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.  
 
+- [Sign up for the LWC test scenarios on the Tableau Developer Program Portal](#sign-up-for-the-LWC-test-scenarios-on-the-tableau-developer-program-portal):  Join the Developer Program and gain access to the private Tableau LWC test scenarios.
 
 - [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau to your scratch org or Trailhead Playground.
 
@@ -157,6 +158,27 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 ![Tableau Visualization LWC](./assets/lwc_tableau_viz_url.png "Tableau Visualization LWC")
 
+
+___ 
+
+## Sign up for the LWC test scenarios on the Tableau Developer Program Portal
+
+We want to hear from you!
+<img style="float: right;" src="./assets/smallWarrior_DataDev_nohashtag.png">
+
+Join the Developer Program and gain access to the Tableau LWC test scenarios on the Developer Program Portal.
+
+If you don't already have access, send email to [tableaulwcprerelease@tableau.com]( mailto:tableaulwcprerelease@tableau.com?subject=Tableau%20LWC%20Pre-Release) with **Tableau LWC Pre-Release** on the subject line.
+
+To get to the scenarios, go to the Tableau Pre-Release site (https://prerelease.tableau.com/) and to the Developer Program Portal. Under **Tasks**, look for the **Tableau Lightning Web Component Alpha**.
+
+- Complete the Tableau LWC test scenarios
+- Send us your feedback
+- Report any bugs you find
+- Request new features
+- Ask questions of the Development Team
+
+Welcome to the #DataDev Community!
 ___
 
 ## Troubleshooting problems deploying the LWC for Tableau
