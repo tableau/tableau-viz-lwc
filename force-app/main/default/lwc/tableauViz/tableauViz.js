@@ -48,7 +48,7 @@ export default class TableauViz extends LightningElement {
             containerDiv.style.height = this.height + 'px';
 
             //Getting Width of the viz
-            const vizWidth = containerDiv.offsetHeight;
+            const vizWidth = containerDiv.offsetWidth;
 
             //Define size of the viz
             this.vizToLoad.searchParams.append(
