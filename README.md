@@ -2,6 +2,10 @@
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
 
+___
+
+#### *Developer Preview*
+___
 
 This project provides a Lightning Web Component that you can customize and use to embed Tableau into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau into web pages.
 
@@ -150,7 +154,9 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 1. Select a Tableau viz to display by providing the URL for the viz in the **Enter the Viz URL** text box.
 
-  You can also control the size of the viz and whether you want to show the Tableau toolbar or any tabs for the viz.
+   To find the URL for a viz on Tableau Server or Tableau Online, click **Share** on the toolbar and select **Copy Link** from the Share dialog box. For Tableau Public, copy the URL for the viz from the address bar in your browser.
+
+   In Salesforce, use the options for the **Tableau Visualization** component to control the size of the viz and whether you want to show the Tableau toolbar or any tabs for the viz.
   
 > For this first release, we support SSO only with SAML. If you want to configure Tableau to use Salesforce IdP, follow the steps described in [Configure SAML with Salesforce](https://help.tableau.com/current/online/en-us/saml_config_salesforce.htm).
 
