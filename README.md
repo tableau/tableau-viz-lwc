@@ -1,7 +1,7 @@
 # Lightning Web Component for embedding Tableau into Salesforce
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
-[![Community Supported](https://img.shields.io/badge/Support%20Level-Community%20Supported-457387.svg)](https://www.tableau.com/support-levels-it-and-developer-tools)
+
 
 This project provides a Lightning Web Component that you can customize and use to embed Tableau into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau into web pages.
 
@@ -165,7 +165,8 @@ ___
 
 We want to hear from you!
 
-<img style="float: right;" src="./assets/smallWarrior_DataDev_nohashtag.png">
+![Flex DataDev Warrior](./assets/smallWarrior_DataDev_nohashtag.png)
+
 
 Join the Developer Program and gain access to the Tableau LWC test scenarios on the Developer Program Portal.
 
@@ -181,7 +182,7 @@ To get to the scenarios, go to the Tableau Pre-Release site (https://prerelease.
 - Request new features
 - Ask questions of the Development Team
 
-Welcome to the #DataDev Community!
+Welcome to the **#DataDev** Community!
 ___
 
 ## Troubleshooting problems deploying the LWC for Tableau
