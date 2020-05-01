@@ -154,7 +154,7 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 1. Select a Tableau viz to display by providing the URL for the viz in the **Enter the Viz URL** text box.
 
-   To find the URL for a viz on Tableau Server or Tableau Online, click **Share** on the toolbar and select **Copy Link** from the Share dialog box. For Tableau Public, copy the URL for the viz from the address bar in your browser.
+   To find the URL for a viz on Tableau Server or Tableau Online, click **Share** on the toolbar and select **Copy Link** from the Share View dialog box. For Tableau Public, copy the URL for the viz from the address bar in your browser.
 
    In Salesforce, use the options for the **Tableau Visualization** component to control the size of the viz and whether you want to show the Tableau toolbar or any tabs for the viz.
   
