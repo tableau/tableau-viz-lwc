@@ -6,7 +6,7 @@ const TABLEAU_JS_API = 'tableauJSAPI';
 
 const VIZ_URL_NO_FILTERS = 'https://vizURL.com';
 const VIZ_URL = 'https://vizurl.com';
-const VIZ_DISPLAY = 'https://vizurl.com/?:size=';
+const VIZ_DISPLAY = 'https://vizurl.com/?%3Asize=';
 
 describe('tableau-viz', () => {
     afterEach(() => {
