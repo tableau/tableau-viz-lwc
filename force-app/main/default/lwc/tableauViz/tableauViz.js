@@ -53,7 +53,7 @@ export default class TableauViz extends LightningElement {
 
             //Define size of the viz
             this.vizToLoad.searchParams.append(
-                'size',
+                ':size',
                 vizWidth + ',' + this.height
             );
 
