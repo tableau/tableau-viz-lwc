@@ -53,13 +53,13 @@ export default class TableauViz extends LightningElement {
 
             //Define size of the viz
             this.vizToLoad.searchParams.append(
-                'size',
+                ':size',
                 vizWidth + ',' + this.height
             );
 
             //In context filtering
             if (this.filter === true && this.objectApiName) {
-                const filterNameTab = `${this.objectApiName} ID`;
+                const filterNameTab = `${this.objectApiName} ID `;
                 this.vizToLoad.searchParams.append(
                     filterNameTab,
                     this.recordId
