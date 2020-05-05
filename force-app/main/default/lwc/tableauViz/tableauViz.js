@@ -59,7 +59,7 @@ export default class TableauViz extends LightningElement {
 
             //In context filtering
             if (this.filter === true && this.objectApiName) {
-                const filterNameTab = `${this.objectApiName} ID `;
+                const filterNameTab = `${this.objectApiName} ID`;
                 this.vizToLoad.searchParams.append(
                     filterNameTab,
                     this.recordId
