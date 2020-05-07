@@ -45,6 +45,17 @@
                 default="false"
                 label="Filter visualization based on the page"
             />
+            <property
+                name="filterName"
+                type="String"
+                label="Add more filters, define the Tableau Field Name"
+            />
+            <property
+                name="sfAdvancedFilter"
+                type="String"
+                label="Add more filters, define the Salesforce qualified Field Name"
+                description="For example, on the Opportunity page try: Opportunity.AccountId"
+            />
         </targetConfig>
         <targetConfig
             targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
