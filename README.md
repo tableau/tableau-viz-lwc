@@ -163,7 +163,7 @@ We want to hear from you!
 
 Join the Developer Program and gain access to the Tableau LWC test scenarios on the Developer Program Portal.
 
-1. To join the Developer Program, go to [(https://www.tableau.com/developer)](https://www.tableau.com/developer) and use your Tableau login to sign up. After you join, you can sign up and get a Tableau Online developer site.
+1. To join the Developer Program, go to [(https://www.tableau.com/developer)](https://www.tableau.com/developer) and use your Tableau login to sign up. After you join, you can sign up and get a Tableau Online developer site [(https://www.tableau.com/developer/get-site)](https://www.tableau.com/developer/get-site). With this free developer site, you can try the single sign-on experience using Salesforce as your SAML IdP and configuring SAML on Tableau Online, or you can just use the site to embed a viz from Tableau Online.
 
 1. To get to the LWC scenarios, go to the Tableau Pre-Release site (https://prerelease.tableau.com/) and follow the links to the Developer Program Portal. The portal will appear under **My Projects**.
 
