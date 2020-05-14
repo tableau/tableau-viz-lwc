@@ -163,17 +163,24 @@ We want to hear from you!
 
 Join the Developer Program and gain access to the Tableau LWC test scenarios on the Developer Program Portal.
 
-If you don't already have access, send email to [tableaulwcprerelease@tableau.com](mailto:tableaulwcprerelease@tableau.com?subject=Tableau%20LWC%20Pre-Release) with **Tableau LWC Pre-Release** on the subject line.
+1. To join the Developer Program, go to [(https://www.tableau.com/developer)](https://www.tableau.com/developer) and use your Tableau login to sign up. After you join, you can sign up and get a Tableau Online developer site [(https://www.tableau.com/developer/get-site)](https://www.tableau.com/developer/get-site). With this free developer site, you can try the single sign-on experience using Salesforce as your SAML IdP and configuring SAML on Tableau Online, or you can just use the site to embed a viz from Tableau Online.
 
-To get to the scenarios, go to the Tableau Pre-Release site (https://prerelease.tableau.com/) and to the Developer Program Portal. Under **Tasks**, look for the **Tableau Lightning Web Component Alpha**.
+1. To get to the LWC scenarios, go to the Tableau Pre-Release site (https://prerelease.tableau.com/) and follow the links to the Developer Program Portal. The portal will appear under **My Projects**.
 
--   Complete the Tableau LWC test scenarios
--   Send us your feedback
--   Report any bugs you find
--   Request new features
--   Ask questions of the Development Team
+    If you don't already have access to Developer Program Portal, send email to [tableaulwcprerelease@tableau.com](mailto:tableaulwcprerelease@tableau.com?subject=Tableau%20LWC%20Pre-Release) with **Tableau LWC Pre-Release** on the subject line.
+
+1. On the Developer Program Portal, choose the **Tableau Lightning Web Component Alpha**, which appears under **Tasks** in the left-hand navigation pane.
+
+1. Complete the Tableau LWC test scenarios.
+
+    - Send us your feedback
+    - Report any bugs you find
+    - Request new features
+    - Ask questions of the Development Team
 
 Welcome to the **#DataDev** Community!
+
+![Tableau LWC test scenarios](assets/lwc_alpha.gif)
 
 ---
 
