@@ -180,6 +180,8 @@ Join the Developer Program and gain access to the Tableau LWC test scenarios on 
 
 Welcome to the **#DataDev** Community!
 
+![Tableau LWC test scenarios](assets/lwc_alpha.gif)
+
 ---
 
 ## Troubleshooting problems deploying the LWC for Tableau
