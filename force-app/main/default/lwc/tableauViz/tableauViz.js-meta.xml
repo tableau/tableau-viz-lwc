@@ -56,6 +56,10 @@
                 label="Add more filters, define the Salesforce qualified Field Name"
                 description="For example, on the Opportunity page try: Opportunity.AccountId"
             />
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
         </targetConfig>
         <targetConfig
             targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
