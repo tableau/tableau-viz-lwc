@@ -18,7 +18,7 @@
                 label="Enter the Viz URL"
                 required="true"
                 description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
-                default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
+                default="https://public.tableau.com/views/LinkedIn-PerformanceOverview/LinkedIn-PerformanceOverview?:showVizHome=no&amp;:embed=true"
             />
             <property
                 name="hideTabs"
@@ -70,7 +70,7 @@
                 label="Enter the Viz URL"
                 required="true"
                 description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
-                default="https://public.tableau.com/views/MarketingLeads-Salesforce/MarketingLeads-Salesforce?:showVizHome=no&amp;:embed=true"
+                default="https://public.tableau.com/views/LinkedIn-PerformanceOverview/LinkedIn-PerformanceOverview?:showVizHome=no&amp;:embed=true"
             />
             <property
                 name="hideTabs"
