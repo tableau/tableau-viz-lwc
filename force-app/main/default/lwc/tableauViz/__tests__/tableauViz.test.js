@@ -1,6 +1,12 @@
 import { createElement } from 'lwc';
 import TableauViz from 'c/tableauViz';
 import { loadScript } from 'lightning/platformResourceLoader';
+import { getRecord } from 'lightning/uiRecordApi';
+import { registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
+
+// Support for mocking wired record
+const mockGetRecord = require('./data/getRecord.json');
+const getRecordWireAdapter = registerLdsTestWireAdapter(getRecord);
 
 const TABLEAU_JS_API = 'tableauJSAPI';
 
@@ -39,7 +45,7 @@ describe('tableau-viz', () => {
         expect(loadScript.mock.calls[0][1]).toEqual(TABLEAU_JS_API);
     });
 
-    it('calls the right viz URL without filters', () => {
+    it('calls the right viz URL without filters', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -50,16 +56,16 @@ describe('tableau-viz', () => {
 
         const div = element.shadowRoot.querySelector('div');
 
-        return flushPromises().then(() => {
-            expect(global.tableauMockInstances.length).toBe(1);
-            const instance = global.tableauMockInstances[0];
-            expect(instance.vizToLoad).toBe(
-                VIZ_DISPLAY + div.offsetWidth + '%2C550'
-            );
-        });
+        await flushPromises();
+
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            VIZ_DISPLAY + div.offsetWidth + '%2C550'
+        );
     });
 
-    it('calls the right viz URL with filters', () => {
+    it('calls the right viz URL with filters', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -70,16 +76,17 @@ describe('tableau-viz', () => {
         element.recordId = 'mockId';
         document.body.appendChild(element);
         const div = element.shadowRoot.querySelector('div');
-        return flushPromises().then(() => {
-            expect(global.tableauMockInstances.length).toBe(1);
-            const instance = global.tableauMockInstances[0];
-            expect(instance.vizToLoad).toBe(
-                VIZ_DISPLAY + div.offsetWidth + '%2C550&Account+ID=mockId'
-            );
-        });
+
+        await flushPromises();
+
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            VIZ_DISPLAY + div.offsetWidth + '%2C550&Account+ID=mockId'
+        );
     });
 
-    it('passes the rigth options to the viz', () => {
+    it('passes the rigth options to the viz', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -89,12 +96,40 @@ describe('tableau-viz', () => {
         element.height = 650;
         document.body.appendChild(element);
 
-        return flushPromises().then(() => {
-            expect(global.tableauMockInstances.length).toBe(1);
-            const instance = global.tableauMockInstances[0];
-            expect(instance.options.hideTabs).toBeFalsy();
-            expect(instance.options.hideToolbar).toBeTruthy();
-            expect(instance.options.height).toBe('650px');
+        await flushPromises();
+
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.options.hideTabs).toBeFalsy();
+        expect(instance.options.hideToolbar).toBeTruthy();
+        expect(instance.options.height).toBe('650px');
+    });
+
+    it('supports custom filter options', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
         });
+        element.vizURL = VIZ_URL;
+        element.hideTabs = false;
+        element.hideToolbar = true;
+        element.filter = false;
+        element.height = 650;
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
+        element.sfAdvancedFilter = 'Account.Name';
+        element.filterName = 'Name';
+
+        document.body.appendChild(element);
+        getRecordWireAdapter.emit(mockGetRecord);
+        const div = element.shadowRoot.querySelector('div');
+
+        await flushPromises();
+
+        // THe wired emit causes a reload ... hence 2
+        expect(global.tableauMockInstances.length).toBe(2);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            VIZ_DISPLAY + div.offsetWidth + '%2C650&Name=SpacelySprockets'
+        );
     });
 });
