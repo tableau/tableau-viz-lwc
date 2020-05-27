@@ -18,6 +18,7 @@ export default class TableauViz extends LightningElement {
     errorMessage;
     vizDisplayed;
     vizToLoad;
+    recordId;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -37,6 +38,11 @@ export default class TableauViz extends LightningElement {
     }
 
     get isVizDisplayed() {
+        this.vizDisplayed = this.checkForErrors();
+        return this.vizDisplayed;
+    }
+
+    checkForErrors() {
         this.createErrorMessage();
         this.vizDisplayed =
             (this.validURL(this.vizURL) && !this.sfAdvancedFilter) ||
@@ -119,7 +125,7 @@ export default class TableauViz extends LightningElement {
             //Define size of the viz
             this.vizToLoad.searchParams.append(
                 ':size',
-                vizWidth + ',' + this.height
+                `${vizWidth},${this.height}`
             );
 
             //In context filtering
