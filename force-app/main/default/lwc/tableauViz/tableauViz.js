@@ -13,10 +13,9 @@ export default class TableauViz extends LightningElement {
     @api height;
     @api filterName;
     @api sfAdvancedFilter;
+
     viz;
     sfValue;
-    errorMessage;
-    vizDisplayed;
     vizToLoad;
     recordId;
 
@@ -37,27 +36,21 @@ export default class TableauViz extends LightningElement {
         }
     }
 
-    get isVizDisplayed() {
-        this.vizDisplayed = this.checkForErrors();
-        return this.vizDisplayed;
-    }
-
-    checkForErrors() {
-        this.createErrorMessage();
-        this.vizDisplayed =
-            (this.validURL(this.vizURL) && !this.sfAdvancedFilter) ||
-            this.sfValue;
-        return this.vizDisplayed;
-    }
-
-    createErrorMessage() {
-        if (!this.validURL(this.vizURL)) {
-            this.errorMessage = 'Invalid Viz URL';
-        } else if (!this.sfValue) {
-            this.errorMessage = 'Invalid Salesforce qualified Field Name';
-        } else {
-            this.errorMessage = 'Invalid Input';
+    get errorMessage() {
+        // Advanced filter checks
+        if (this.sfAdvancedFilter) {
+            // Check field value
+            if (!this.sfValue) {
+                return 'Invalid Salesforce qualified Field Name';
+            }
         }
+        // Regular check
+        else {
+            if (!this.validURL(this.vizURL)) {
+                return 'Invalid Viz URL';
+            }
+        }
+        return undefined;
     }
 
     getFieldName() {
@@ -72,7 +65,6 @@ export default class TableauViz extends LightningElement {
         } catch (_) {
             return false;
         }
-
         return true;
     }
 
@@ -111,50 +103,49 @@ export default class TableauViz extends LightningElement {
                 .filter(message => !!message)
         );
     }
+
     async renderedCallback() {
         await loadScript(this, tableauJSAPI);
+
+        // Halt custom rendering in case of error
+        if (this.errorMessage) {
+            return;
+        }
+
         const containerDiv = this.template.querySelector('div');
 
-        if (this.vizDisplayed) {
-            //Defining the height of the div
-            containerDiv.style.height = this.height + 'px';
+        //Defining the height of the div
+        containerDiv.style.height = this.height + 'px';
 
-            //Getting Width of the viz
-            const vizWidth = containerDiv.offsetWidth;
+        //Getting Width of the viz
+        const vizWidth = containerDiv.offsetWidth;
 
-            //Define size of the viz
-            this.vizToLoad.searchParams.append(
-                ':size',
-                `${vizWidth},${this.height}`
-            );
+        //Define size of the viz
+        this.vizToLoad.searchParams.append(
+            ':size',
+            `${vizWidth},${this.height}`
+        );
 
-            //In context filtering
-            if (this.filter === true && this.objectApiName) {
-                const filterNameTab = `${this.objectApiName} ID`;
-                this.vizToLoad.searchParams.append(
-                    filterNameTab,
-                    this.recordId
-                );
-            }
-
-            //Additional Filtering
-            if (this.sfValue && this.filterName) {
-                this.vizToLoad.searchParams.append(
-                    this.filterName,
-                    this.sfValue
-                );
-            }
-
-            let vizURLString = this.vizToLoad.toString();
-            const options = {
-                hideTabs: this.hideTabs,
-                hideToolbar: this.hideToolbar,
-                height: this.height + 'px',
-                width: '100%'
-            };
-
-            // eslint-disable-next-line no-undef
-            this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+        //In context filtering
+        if (this.filter === true && this.objectApiName) {
+            const filterNameTab = `${this.objectApiName} ID`;
+            this.vizToLoad.searchParams.append(filterNameTab, this.recordId);
         }
+
+        //Additional Filtering
+        if (this.sfValue && this.filterName) {
+            this.vizToLoad.searchParams.append(this.filterName, this.sfValue);
+        }
+
+        let vizURLString = this.vizToLoad.toString();
+        const options = {
+            hideTabs: this.hideTabs,
+            hideToolbar: this.hideToolbar,
+            height: `${this.height}px`,
+            width: '100%'
+        };
+
+        // eslint-disable-next-line no-undef
+        this.viz = new tableau.Viz(containerDiv, vizURLString, options);
     }
 }
