@@ -13,50 +13,27 @@ export default class TableauViz extends LightningElement {
     @api height;
     @api filterName;
     @api sfAdvancedFilter;
+
     viz;
     sfValue;
     errorMessage;
-    vizDisplayed;
-    vizToLoad;
-    recordId;
 
     @wire(getRecord, {
         recordId: '$recordId',
         fields: '$sfAdvancedFilter'
     })
     getRecord({ error, data }) {
-        if (this.sfAdvancedFilter) {
+        if (data) {
             const fieldName = this.getFieldName();
             if (data.fields[fieldName]) {
                 this.sfValue = data.fields[fieldName].value;
-            } else if (error) {
-                this.errorMessage = `Failed to retrieve record data. ${this.reduceErrors(
-                    error
-                )}`;
+            } else {
+                this.errorMessage = `Failed to retrieve value for field ${fieldName}`;
             }
-        }
-    }
-
-    get isVizDisplayed() {
-        this.vizDisplayed = this.checkForErrors();
-        return this.vizDisplayed;
-    }
-
-    checkForErrors() {
-        this.createErrorMessage();
-        this.vizDisplayed =
-            (this.validURL(this.vizURL) && !this.sfAdvancedFilter) ||
-            this.sfValue;
-        return this.vizDisplayed;
-    }
-
-    createErrorMessage() {
-        if (!this.validURL(this.vizURL)) {
-            this.errorMessage = 'Invalid Viz URL';
-        } else if (!this.sfValue) {
-            this.errorMessage = 'Invalid Salesforce qualified Field Name';
-        } else {
-            this.errorMessage = 'Invalid Input';
+        } else if (error) {
+            this.errorMessage = `Failed to retrieve record data. ${this.reduceErrors(
+                error
+            )}`;
         }
     }
 
@@ -64,16 +41,6 @@ export default class TableauViz extends LightningElement {
         return this.sfAdvancedFilter.substring(
             this.sfAdvancedFilter.indexOf('.') + 1
         );
-    }
-
-    validURL(str) {
-        try {
-            this.vizToLoad = new URL(str);
-        } catch (_) {
-            return false;
-        }
-
-        return true;
     }
 
     reduceErrors(errors) {
@@ -111,50 +78,63 @@ export default class TableauViz extends LightningElement {
                 .filter(message => !!message)
         );
     }
+
     async renderedCallback() {
         await loadScript(this, tableauJSAPI);
+
+        // Validate viz URL
+        let vizToLoad;
+        try {
+            vizToLoad = new URL(this.vizURL);
+        } catch (_) {
+            this.errorMessage = 'Invalid Viz URL';
+            return;
+        }
+
+        // Advanced filter checks
+        if (this.sfAdvancedFilter) {
+            // Check qualified field name
+            if ((this.sfAdvancedFilter.match(/\./g) || []).length !== 1) {
+                this.errorMessage = `Invalid Salesforce qualified field name: ${this.sfAdvancedFilter}`;
+                return;
+            }
+            // Abort rendering if field value is not yet retrieved
+            if (!this.sfValue) {
+                return;
+            }
+        }
+
         const containerDiv = this.template.querySelector('div');
 
-        if (this.vizDisplayed) {
-            //Defining the height of the div
-            containerDiv.style.height = this.height + 'px';
+        //Defining the height of the div
+        containerDiv.style.height = `${this.height}px`;
 
-            //Getting Width of the viz
-            const vizWidth = containerDiv.offsetWidth;
+        //Getting Width of the viz
+        const vizWidth = containerDiv.offsetWidth;
 
-            //Define size of the viz
-            this.vizToLoad.searchParams.append(
-                ':size',
-                `${vizWidth},${this.height}`
-            );
+        //Define size of the viz
+        vizToLoad.searchParams.append(':size', `${vizWidth},${this.height}`);
 
-            //In context filtering
-            if (this.filter === true && this.objectApiName) {
-                const filterNameTab = `${this.objectApiName} ID`;
-                this.vizToLoad.searchParams.append(
-                    filterNameTab,
-                    this.recordId
-                );
-            }
-
-            //Additional Filtering
-            if (this.sfValue && this.filterName) {
-                this.vizToLoad.searchParams.append(
-                    this.filterName,
-                    this.sfValue
-                );
-            }
-
-            let vizURLString = this.vizToLoad.toString();
-            const options = {
-                hideTabs: this.hideTabs,
-                hideToolbar: this.hideToolbar,
-                height: this.height + 'px',
-                width: '100%'
-            };
-
-            // eslint-disable-next-line no-undef
-            this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+        //In context filtering
+        if (this.filter === true && this.objectApiName) {
+            const filterNameTab = `${this.objectApiName} ID`;
+            vizToLoad.searchParams.append(filterNameTab, this.recordId);
         }
+
+        //Additional Filtering
+        if (this.sfValue && this.filterName) {
+            vizToLoad.searchParams.append(this.filterName, this.sfValue);
+        }
+
+        const vizURLString = vizToLoad.toString();
+        const options = {
+            hideTabs: this.hideTabs,
+            hideToolbar: this.hideToolbar,
+            height: `${this.height}px`,
+            width: '100%'
+        };
+
+        // eslint-disable-next-line no-undef
+        this.viz = new tableau.Viz(containerDiv, vizURLString, options);
     }
 }
