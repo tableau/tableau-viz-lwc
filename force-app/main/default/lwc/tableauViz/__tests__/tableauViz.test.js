@@ -54,10 +54,10 @@ describe('tableau-viz', () => {
 
         document.body.appendChild(element);
 
-        const div = element.shadowRoot.querySelector('div');
-
         await flushPromises();
 
+        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
+        expect(div).not.toBeNull();
         expect(global.tableauMockInstances.length).toBe(1);
         const instance = global.tableauMockInstances[0];
         expect(instance.vizToLoad).toBe(
@@ -75,10 +75,11 @@ describe('tableau-viz', () => {
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         document.body.appendChild(element);
-        const div = element.shadowRoot.querySelector('div');
 
         await flushPromises();
 
+        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
+        expect(div).not.toBeNull();
         expect(global.tableauMockInstances.length).toBe(1);
         const instance = global.tableauMockInstances[0];
         expect(instance.vizToLoad).toBe(
@@ -105,6 +106,69 @@ describe('tableau-viz', () => {
         expect(instance.options.height).toBe('650px');
     });
 
+    it('reports error when invalid viz URL', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = 'invalid';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe('Invalid Viz URL');
+    });
+
+    it('reports error when advanced filter and invalid qualified field format ', async () => {
+        const INVALID_FIELD = 'invalid';
+
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.sfAdvancedFilter = INVALID_FIELD;
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            `Invalid Salesforce qualified field name: ${INVALID_FIELD}`
+        );
+    });
+
+    it('reports error when advanced filter and field value is missing ', async () => {
+        const MISSING_FIELD = 'MissingField';
+
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
+        element.sfAdvancedFilter = `Account.${MISSING_FIELD}`;
+        element.filterName = 'Name';
+        document.body.appendChild(element);
+
+        getRecordWireAdapter.emit(mockGetRecord);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            `Failed to retrieve value for field ${MISSING_FIELD}`
+        );
+    });
+
     it('supports custom filter options', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
@@ -118,15 +182,15 @@ describe('tableau-viz', () => {
         element.recordId = 'mockId';
         element.sfAdvancedFilter = 'Account.Name';
         element.filterName = 'Name';
-
         document.body.appendChild(element);
+
         getRecordWireAdapter.emit(mockGetRecord);
-        const div = element.shadowRoot.querySelector('div');
 
         await flushPromises();
 
-        // THe wired emit causes a reload ... hence 2
-        expect(global.tableauMockInstances.length).toBe(2);
+        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
+        expect(div).not.toBeNull();
+        expect(global.tableauMockInstances.length).toBe(1);
         const instance = global.tableauMockInstances[0];
         expect(instance.vizToLoad).toBe(
             VIZ_DISPLAY + div.offsetWidth + '%2C650&Name=SpacelySprockets'

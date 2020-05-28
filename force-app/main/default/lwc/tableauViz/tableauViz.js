@@ -16,56 +16,31 @@ export default class TableauViz extends LightningElement {
 
     viz;
     sfValue;
-    vizToLoad;
-    recordId;
+    errorMessage;
 
     @wire(getRecord, {
         recordId: '$recordId',
         fields: '$sfAdvancedFilter'
     })
     getRecord({ error, data }) {
-        if (this.sfAdvancedFilter) {
+        if (data) {
             const fieldName = this.getFieldName();
             if (data.fields[fieldName]) {
                 this.sfValue = data.fields[fieldName].value;
-            } else if (error) {
-                this.errorMessage = `Failed to retrieve record data. ${this.reduceErrors(
-                    error
-                )}`;
+            } else {
+                this.errorMessage = `Failed to retrieve value for field ${fieldName}`;
             }
+        } else if (error) {
+            this.errorMessage = `Failed to retrieve record data. ${this.reduceErrors(
+                error
+            )}`;
         }
-    }
-
-    get errorMessage() {
-        // Advanced filter checks
-        if (this.sfAdvancedFilter) {
-            // Check field value
-            if (!this.sfValue) {
-                return 'Invalid Salesforce qualified Field Name';
-            }
-        }
-        // Regular check
-        else {
-            if (!this.validURL(this.vizURL)) {
-                return 'Invalid Viz URL';
-            }
-        }
-        return undefined;
     }
 
     getFieldName() {
         return this.sfAdvancedFilter.substring(
             this.sfAdvancedFilter.indexOf('.') + 1
         );
-    }
-
-    validURL(str) {
-        try {
-            this.vizToLoad = new URL(str);
-        } catch (_) {
-            return false;
-        }
-        return true;
     }
 
     reduceErrors(errors) {
@@ -107,37 +82,51 @@ export default class TableauViz extends LightningElement {
     async renderedCallback() {
         await loadScript(this, tableauJSAPI);
 
-        // Halt custom rendering in case of error
-        if (this.errorMessage) {
+        // Validate viz URL
+        let vizToLoad;
+        try {
+            vizToLoad = new URL(this.vizURL);
+        } catch (_) {
+            this.errorMessage = 'Invalid Viz URL';
             return;
+        }
+
+        // Advanced filter checks
+        if (this.sfAdvancedFilter) {
+            // Check qualified field name
+            if ((this.sfAdvancedFilter.match(/\./g) || []).length !== 1) {
+                this.errorMessage = `Invalid Salesforce qualified field name: ${this.sfAdvancedFilter}`;
+                return;
+            }
+            // Abort rendering if field value is not yet retrieved
+            if (!this.sfValue) {
+                return;
+            }
         }
 
         const containerDiv = this.template.querySelector('div');
 
         //Defining the height of the div
-        containerDiv.style.height = this.height + 'px';
+        containerDiv.style.height = `${this.height}px`;
 
         //Getting Width of the viz
         const vizWidth = containerDiv.offsetWidth;
 
         //Define size of the viz
-        this.vizToLoad.searchParams.append(
-            ':size',
-            `${vizWidth},${this.height}`
-        );
+        vizToLoad.searchParams.append(':size', `${vizWidth},${this.height}`);
 
         //In context filtering
         if (this.filter === true && this.objectApiName) {
             const filterNameTab = `${this.objectApiName} ID`;
-            this.vizToLoad.searchParams.append(filterNameTab, this.recordId);
+            vizToLoad.searchParams.append(filterNameTab, this.recordId);
         }
 
         //Additional Filtering
         if (this.sfValue && this.filterName) {
-            this.vizToLoad.searchParams.append(this.filterName, this.sfValue);
+            vizToLoad.searchParams.append(this.filterName, this.sfValue);
         }
 
-        let vizURLString = this.vizToLoad.toString();
+        const vizURLString = vizToLoad.toString();
         const options = {
             hideTabs: this.hideTabs,
             hideToolbar: this.hideToolbar,
