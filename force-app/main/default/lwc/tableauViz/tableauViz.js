@@ -17,6 +17,7 @@ export default class TableauViz extends LightningElement {
     viz;
     sfValue;
     errorMessage;
+    valueRetrieved;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -35,6 +36,12 @@ export default class TableauViz extends LightningElement {
                 error
             )}`;
         }
+    }
+
+    // Is field value is retrieved
+    get checkAdvancedFilter() {
+        this.valueRetrieved = this.sfValue;
+        return this.valueRetrieved;
     }
 
     getFieldName() {
@@ -84,6 +91,7 @@ export default class TableauViz extends LightningElement {
 
         // Validate viz URL
         let vizToLoad;
+
         try {
             vizToLoad = new URL(this.vizURL);
         } catch (_) {
@@ -96,10 +104,6 @@ export default class TableauViz extends LightningElement {
             // Check qualified field name
             if ((this.sfAdvancedFilter.match(/\./g) || []).length !== 1) {
                 this.errorMessage = `Invalid Salesforce qualified field name: ${this.sfAdvancedFilter}`;
-                return;
-            }
-            // Abort rendering if field value is not yet retrieved
-            if (!this.sfValue) {
                 return;
             }
         }
@@ -122,11 +126,12 @@ export default class TableauViz extends LightningElement {
         }
 
         //Additional Filtering
-        if (this.sfValue && this.filterName) {
+        if (this.checkAdvancedFilter && this.filterName) {
             vizToLoad.searchParams.append(this.filterName, this.sfValue);
         }
 
         const vizURLString = vizToLoad.toString();
+        console.log(vizURLString);
         const options = {
             hideTabs: this.hideTabs,
             hideToolbar: this.hideToolbar,
