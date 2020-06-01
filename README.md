@@ -16,7 +16,8 @@ This project provides a Lightning Web Component that you can customize and use t
 
 -   [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app): After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.
 
--   [Try Advanced Filtering](#try-advanced-filtering)
+-   [Try Advanced Filtering](#try-advanced-filtering): After you
+    have installed the component and tried out adding a Tableau viz or two, you can try filtering a viz based on the context of the hosting record page.
 
 -   [Sign up for the LWC test scenarios on the Tableau Developer Program Portal](#sign-up-for-the-LWC-test-scenarios-on-the-tableau-developer-program-portal): Join the Developer Program and gain access to the private Tableau LWC test scenarios.
 
