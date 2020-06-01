@@ -8,15 +8,35 @@ This project provides a Lightning Web Component that you can customize and use t
 
 ## Table of contents
 
+-   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the easiest way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code and customization.
+
 -   [Install the component using a Scratch Org](#install-the-component-using-a-scratch-org): This is the recommended installation option. Use this option if you are a developer who wants to experience the component and the code.
 
 -   [Install the component using a Developer Edition Org or a Trailhead Playground](#install-the-component-using-a-developer-edition-org-or-a-trailhead-playground): Useful when tackling Trailhead Badges or if you want the component deployed to a more permanent environment than a Scratch org.
 
 -   [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app): After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.
 
+-   [Try Advanced Filtering](#try-advanced-filtering)
+
 -   [Sign up for the LWC test scenarios on the Tableau Developer Program Portal](#sign-up-for-the-LWC-test-scenarios-on-the-tableau-developer-program-portal): Join the Developer Program and gain access to the private Tableau LWC test scenarios.
 
 -   [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau to your scratch org or Trailhead Playground.
+
+---
+
+## Install the Beta Managed Package
+
+The package (Tableau Viz LWC) is a container for the Tableau Visualization component available in this GitHub repository. You can install the Beta package in sandbox or Developer Edition organizations on Salesforce, or in test organizations furnished through the Environment Hub. You can learn more about [Beta Versions of Managed Package](https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/packaging_about_beta_packages.htm) on the Salesforce website.
+
+1. Click the following link to install the beta package:
+
+    [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage)
+
+1. This package requires a password, use the following:
+
+    `datadev20`
+
+1. After you install the package, you can [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app).
 
 ---
 
@@ -135,7 +155,7 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
 
 ## Add the Tableau Visualization component to an App
 
-After you have successfully deployed or pushed the `tableau-viz-lwc` component to your scratch org, Developer Edition Hub, or Trailhead Playground, you can use the component to add a Tableau viz to your App.
+After you have successfully deployed or pushed the `tableau-viz-lwc` component to your scratch org, Developer Edition Hub, or Trailhead Playground, or after you have installed the Beta version of the Tableau Viz LWC, you can use the component to add a Tableau viz to your App.
 
 1. From the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg 'App Launcher')), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
@@ -152,6 +172,30 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 > For this first release, we support SSO only with SAML. If you want to configure Tableau to use Salesforce IdP, follow the steps described in [Configure SAML with Salesforce](https://help.tableau.com/current/online/en-us/saml_config_salesforce.htm).
 
 ![Tableau Visualization LWC](./assets/lwc_tableau_viz_url.png 'Tableau Visualization LWC')
+
+---
+
+## Try advanced filtering
+
+The Beta version of the Tableau LWC supports advanced filtering. On record pages you now have more control over how your Tableau vizzes are filtered. You can filter a viz based on the context of the hosting page. When you add the Tableau Visualization component to record page, two text boxes are available that you can use to define the Tableau and Salesforce fields. The Tableau field needs to be on the viz that you are embedding. The Salesforce field must be a qualified field on the page where you are embedding the viz. When the values of these two fields match, the LWC will automatically filter the Tableau viz
+
+To test out this filtering, you can add the **Tableau Visualization** component to a record page. For example, if you have a Tableau viz that contains data that is related to sales information, you can add that viz to your opportunity record pages.
+
+1. In your Trailhead Playground or Developer or scratch org, click the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg 'App Launcher')), find and select **Sales**, then click the **Opportunities** tab. Select an opportunity, for example, **Burlington Textiles** from the All Opportunities list.
+
+1. Click the Setup gear (![Setup gear](./assets/salesforce_icon-setup-large.jpg 'Setup gear')) then select **Edit Page**.
+
+1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
+
+1. On the account record page, enter the URL of the Tableau viz that contains the sales data you want to display.
+
+1. Select **Filter visualization based on the page**, and define the advanced filters using the Tableau field and Salesforce fields.
+
+    The Tableau field needs to be the name of a field in the viz that you are embedding. For example, the viz might contain a field for the account ID. The Salesforce field needs to specify a qualified field name for that page. For example, on the opportunity record page, you could use `Opportunity.AccountId`. When the values from these two fields match, the LWC will automatically filter the Tableau viz.
+
+    ![Tableau Visualization LWC Filter Settings](./assets/lwc_filtering.png 'Tableau Visualization LWC Filter Settings')
+
+1. Save your changes to the page. Select other opportunity pages and repeat the steps you made here, adding the URL for the viz and the setting up the same fields for filtering.
 
 ---
 
