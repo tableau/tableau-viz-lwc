@@ -131,7 +131,6 @@ export default class TableauViz extends LightningElement {
         }
 
         const vizURLString = vizToLoad.toString();
-        console.log(vizURLString);
         const options = {
             hideTabs: this.hideTabs,
             hideToolbar: this.hideToolbar,
