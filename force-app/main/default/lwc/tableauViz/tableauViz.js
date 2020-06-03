@@ -17,11 +17,19 @@ export default class TableauViz extends LightningElement {
     @track advancedFilterValue;
     @track errorMessage;
 
+    // Issue 30: There are timing problems with using sfAdvancedFilter
+    // to trigger the wire service. Sometimes it is undefined even though
+    // it has a value when renderedCallback is called. This gives us a
+    // way to force the wired service to rerun from renderedCallback if
+    // needed
+    trigger;
+
     viz;
 
     @wire(getRecord, {
         recordId: '$recordId',
-        fields: '$sfAdvancedFilter'
+        fields: '$sfAdvancedFilter',
+        optionalFields: '$trigger'
     })
     getRecord({ error, data }) {
         if (data) {
@@ -130,6 +138,7 @@ export default class TableauViz extends LightningElement {
     // wait until the data is loaded. The tracked properties will trigger a refresh
     validateFiltersReady() {
         if (this.sfAdvancedFilter && !this.advancedFilterValue) {
+            this.trigger = this.sfAdvancedFilter;
             return false;
         }
         return true;
