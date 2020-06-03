@@ -190,9 +190,11 @@ To have the visualization filtered based upon the page it is embedded in, the Ta
 
 1. In your Salesforce org, select a record page where you want to embed the viz (for example, Users or Opportunities).
 
-1. Edit the record page and enter the URL of the Tableau viz that contains the data you want to display. The Tableau visualization must include that a field that holds the record IDs (for example, user or account IDs).
+1. Edit the record page and configure the component by entering the URL of the Tableau viz that contains the data you want to display. The Tableau visualization must include that a field that holds the record IDs (for example, user or account IDs).
 
-1. Select **Filter visualization based on the page** and save your selections.
+1. Select **Filter visualization based on the page** and save your changes to the page.
+
+    When the record ID of the page matches the corresponding value in a field in the Tableau viz, the LWC applies that filter. For example, LWC filters the viz to show just the sales data for the user on the user's page.
 
 ### Advanced filtering
 
@@ -207,10 +209,16 @@ To test out this filtering, you can add the **Tableau Visualization** component 
 
 1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
 
-1. On the account record page, enter the URL of the Tableau viz that contains the sales data you want to display.
+1. Configure the component.
+
+    - Enter the URL of the Tableau viz that contains the sales data you want to display.
 
 
-    The Tableau field needs to be the name of a field in the viz that you are embedding. For example, the viz might contain a field for the account ID. The Salesforce field needs to specify a qualified field name for that page. For example, on the opportunity record page, you could use `Opportunity.AccountId`. When the values from these two fields match, the LWC will automatically filter the Tableau viz.
+    - Provide the name of the the Tableau field to use for filtering. The Tableau field needs to be the name of a field in the viz that you are embedding. For example, the viz might contain a field for the account ID.
+
+    - Provide the name of the the Salesforce field to use in filtering. The Salesforce field needs to specify a qualified field name for that page. For example, on the opportunity record page, you could use `Opportunity.AccountId`.
+
+    When the values from these two fields match, the LWC will automatically filter the Tableau viz.
 
     ![Tableau Visualization LWC Filter Settings](./assets/lwc_filtering.png 'Tableau Visualization LWC Filter Settings')
 
