@@ -19,7 +19,7 @@ export default class TableauViz extends LightningElement {
     @api sfAdvancedFilter;
 
     viz;
-    sfValue;
+    advancedFilterValue;
     errorMessage;
 
     @wire(getRecord, {
@@ -28,8 +28,11 @@ export default class TableauViz extends LightningElement {
     })
     getRecord({ error, data }) {
         if (data) {
-            this.sfValue = getFieldValue(data, this.sfAdvancedFilter);
-            if (this.sfValue === undefined) {
+            this.advancedFilterValue = getFieldValue(
+                data,
+                this.sfAdvancedFilter
+            );
+            if (this.advancedFilterValue === undefined) {
                 this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`;
             }
         } else if (error) {
@@ -49,7 +52,7 @@ export default class TableauViz extends LightningElement {
         }
 
         // Halt rendering if advanced filter value is not yet loaded
-        if (this.sfAdvancedFilter && !this.sfValue) {
+        if (this.sfAdvancedFilter && !this.advancedFilterValue) {
             return;
         }
 
@@ -66,25 +69,8 @@ export default class TableauViz extends LightningElement {
             'div.tabVizPlaceholder'
         );
 
-        //Defining the height of the div
-        containerDiv.style.height = `${this.height}px`;
-
-        //Getting Width of the viz
-        const vizWidth = containerDiv.offsetWidth;
-
-        //Define size of the viz
-        vizToLoad.searchParams.append(':size', `${vizWidth},${this.height}`);
-
-        //In context filtering
-        if (this.filter === true && this.objectApiName) {
-            const filterNameTab = `${this.objectApiName} ID`;
-            vizToLoad.searchParams.append(filterNameTab, this.recordId);
-        }
-
-        //Additional Filtering
-        if (this.filterName && this.sfValue) {
-            vizToLoad.searchParams.append(this.filterName, this.sfValue);
-        }
+        this.setVizDimensions(vizToLoad, containerDiv);
+        this.setVizFilters(vizToLoad);
 
         const vizURLString = vizToLoad.toString();
         const options = {
@@ -103,5 +89,36 @@ export default class TableauViz extends LightningElement {
             return templateError;
         }
         return templateMain;
+    }
+
+    // changing the property name breaks redeployment
+    // so doing this to make it easier to read.
+    get filterOnRecordId() {
+        return this.filter;
+    }
+
+    // Height is set by the user
+    // Width is based on the containerDiv to which the viz is added
+    // The ':size' parameter is added to the url to communicate this
+    setVizDimensions(vizToLoad, containerDiv) {
+        containerDiv.style.height = `${this.height}px`;
+        const vizWidth = containerDiv.offsetWidth;
+        vizToLoad.searchParams.append(':size', `${vizWidth},${this.height}`);
+    }
+
+    setVizFilters(vizToLoad) {
+        // In context filtering
+        if (this.filterOnRecordId === true && this.objectApiName) {
+            const filterNameTab = `${this.objectApiName} ID`;
+            vizToLoad.searchParams.append(filterNameTab, this.recordId);
+        }
+
+        // Additional Filtering
+        if (this.filterName && this.advancedFilterValue) {
+            vizToLoad.searchParams.append(
+                this.filterName,
+                this.advancedFilterValue
+            );
+        }
     }
 }

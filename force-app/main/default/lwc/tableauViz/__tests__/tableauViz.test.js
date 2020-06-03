@@ -68,6 +68,28 @@ describe('tableau-viz', () => {
         );
     });
 
+    it('calls the right viz URL without filters on RecordPage', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.filter = false;
+        element.height = '550';
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
+        expect(div).not.toBeNull();
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            VIZ_DISPLAY + div.offsetWidth + '%2C550'
+        );
+    });
+
     it('calls the right viz URL with filters', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
