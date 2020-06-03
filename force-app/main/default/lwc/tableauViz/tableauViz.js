@@ -138,9 +138,6 @@ export default class TableauViz extends LightningElement {
     // wait until the data is loaded. The tracked properties will trigger a refresh
     validateFiltersReady() {
         if (this.sfAdvancedFilter && !this.advancedFilterValue) {
-            console.log(
-                `Triggering record reload to get ${this.sfAdvancedFilter} value`
-            );
             this.trigger = this.sfAdvancedFilter;
             return false;
         }
