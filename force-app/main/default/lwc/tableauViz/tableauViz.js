@@ -13,9 +13,9 @@ export default class TableauViz extends LightningElement {
     @api vizURL;
     @api hideTabs;
     @api hideToolbar;
-    @api filter;
+    @api filterOnRecordId;
     @api height;
-    @api filterName;
+    @api tabAdvancedFilter;
     @api sfAdvancedFilter;
 
     viz;
@@ -46,13 +46,22 @@ export default class TableauViz extends LightningElement {
         // Wait for lib to load
         await loadScript(this, tableauJSAPI);
 
+        // Advanced filter checks
+        if (
+            (this.sfAdvancedFilter && !this.tabAdvancedFilter) ||
+            (!this.sfAdvancedFilter && this.tabAdvancedFilter)
+        ) {
+            this.errorMessage =
+                'Advanced filtering requires both Tableau and Salesforce fields.';
+        }
+
         // Halt rendering if there's an error
         if (this.errorMessage) {
             return;
         }
 
         // Halt rendering if advanced filter value is not yet loaded
-        if (this.sfAdvancedFilter && !this.advancedFilterValue) {
+        if (this.sfAdvancedFilter && this.advancedFilterValue === undefined) {
             return;
         }
 
@@ -91,12 +100,6 @@ export default class TableauViz extends LightningElement {
         return templateMain;
     }
 
-    // changing the property name breaks redeployment
-    // so doing this to make it easier to read.
-    get filterOnRecordId() {
-        return this.filter;
-    }
-
     // Height is set by the user
     // Width is based on the containerDiv to which the viz is added
     // The ':size' parameter is added to the url to communicate this
@@ -114,9 +117,9 @@ export default class TableauViz extends LightningElement {
         }
 
         // Additional Filtering
-        if (this.filterName && this.advancedFilterValue) {
+        if (this.tabAdvancedFilter && this.advancedFilterValue) {
             vizToLoad.searchParams.append(
-                this.filterName,
+                this.tabAdvancedFilter,
                 this.advancedFilterValue
             );
         }
