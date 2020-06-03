@@ -8,20 +8,19 @@ This project provides a Lightning Web Component that you can customize and use t
 
 ## Table of contents
 
--   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the easiest way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code and customization.
+-   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the easiest way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code and customization. Use this option to install the component on Trailhead Playgrounds so you can use it when tackling Trailhead Badges.
 
--   [Install the component using a Scratch Org](#install-the-component-using-a-scratch-org): This is the recommended installation option. Use this option if you are a developer who wants to experience the component and the code.
+-   [Install the component using a Scratch Org](#install-the-component-using-a-scratch-org): This is the recommended installation option if you are a developer. Use this option if you are a developer who wants to experience the component and the code.
 
--   [Install the component using a Developer Edition Org or a Trailhead Playground](#install-the-component-using-a-developer-edition-org-or-a-trailhead-playground): Useful when tackling Trailhead Badges or if you want the component deployed to a more permanent environment than a Scratch org.
+-   [Install the component using a Developer Edition Org](#install-the-component-using-a-developer-edition-org): Useful if you want the component deployed to a more permanent environment than a Scratch org.
 
--   [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app): After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.
+-   [Add the Tableau Visualization component to a Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page): After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.
 
--   [Try Filtering](#try-filtering): After you
-    have installed the component and tried out adding a Tableau viz or two, you can try filtering a viz based on the context of the hosting record page.
+-   [Try Filtering](#try-filtering): If you place the component on a record page you can try filtering a visualization based on the context of the hosting record page, or you can specify the fields in Tableau and Salesforce to use for filtering.
 
 -   [Sign up for the LWC test scenarios on the Tableau Developer Program Portal](#sign-up-for-the-LWC-test-scenarios-on-the-tableau-developer-program-portal): Join the Developer Program and gain access to the private Tableau LWC test scenarios.
 
--   [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau to your scratch org or Trailhead Playground.
+-   [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau.
 
 ---
 
@@ -39,7 +38,7 @@ The package (Tableau Viz LWC) is a container for the Tableau Visualization compo
 
     `datadev20`
 
-1. After you install the package, you can [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app).
+1. After you install the package, you can [Add the Tableau Visualization component to a Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page).
 
 > **Note:** The Tableau Viz LWC package is a beta package and can't be used in production environments until it is officially released.
 
@@ -103,16 +102,16 @@ The package (Tableau Viz LWC) is a container for the Tableau Visualization compo
 
     This opens Salesforce and takes you to the scratch org.
 
-1. Now you can [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app).
+1. Now you can [Add the Tableau Visualization component to an Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page).
 
 ---
 
-## Install the component using a Developer Edition Org or a Trailhead Playground
+## Install the component using a Developer Edition Org
 
 Follow this set of instructions if you want to deploy the component to a more permanent environment than a Scratch org.
-This includes non source-tracked orgs such as a [free Developer Edition Org](https://developer.salesforce.com/signup) or a [Trailhead Playground](https://trailhead.salesforce.com/).
+This includes non source-tracked orgs such as a [free Developer Edition Org](https://developer.salesforce.com/signup).
 
-1. Authorize your Trailhead Playground or Developer org and provide it with an alias (**mydevorg** in the following command):
+1. Authorize your Developer org and provide it with an alias (**mydevorg** in the following command):
 
     ```
     sfdx force:auth:web:login -d -a mydevorg
@@ -152,15 +151,15 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
     sfdx force:org:open -u mydevorg
     ```
 
-    This opens Salesforce and takes you to your Developer Edition Org or Trailhead Playground.
+    This opens Salesforce and takes you to your Developer Edition Org.
 
-1. Now you can [Add the Tableau Visualization component to an App](#add-the-tableau-visualization-component-to-an-app).
+1. Now you can [Add the Tableau Visualization component to a Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page).
 
 ---
 
-## Add the Tableau Visualization component to an App
+## Add the Tableau Visualization component to a Lightning Web page
 
-After you have successfully deployed or pushed the `tableau-viz-lwc` component to your scratch org, Developer Edition Hub, or Trailhead Playground, or after you have installed the beta version of the Tableau Viz LWC, you can use the component to add a Tableau viz to your App.
+After you have successfully deployed or pushed the `tableau-viz-lwc` component to your Salesforce org, you can use the component to add a Tableau viz to a Lightning Web page.
 
 1. From the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg 'App Launcher')), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
 
@@ -182,7 +181,7 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 ## Try filtering
 
-The beta release of the Tableau LWC supports two types of filtering. For record pages, you can automatically filter the Tableau visualization based upon the page it is embedded in (_context filtering_), or you can specify fields in Tableau and in Salesforce to create more sophisticated filtering.
+The beta release of the Tableau LWC supports two ways of filtering the Tableau visualization. These methods of filtering only work on Lightning record pages. Filtering is not available for Home or Apps. For record pages, you can automatically filter the Tableau visualization based upon the page it is embedded in (_context filtering_), or you can specify fields in Tableau and in Salesforce to create more sophisticated filtering.
 
 ### Context filtering
 
