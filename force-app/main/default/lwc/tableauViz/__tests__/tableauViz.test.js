@@ -65,6 +65,28 @@ describe('tableau-viz', () => {
         );
     });
 
+    it('calls the right viz URL without filters on RecordPage', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.filter = false;
+        element.height = '550';
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
+        expect(div).not.toBeNull();
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            VIZ_DISPLAY + div.offsetWidth + '%2C550'
+        );
+    });
+
     it('calls the right viz URL with filters', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
@@ -122,14 +144,71 @@ describe('tableau-viz', () => {
         expect(errorEl.textContent).toBe('Invalid Viz URL');
     });
 
-    it('reports error when advanced filter and invalid qualified field format ', async () => {
-        const INVALID_FIELD = 'invalid';
+    it('reports error when invalid javascript viz URL', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        // eslint-disable-next-line no-script-url
+        element.vizURL = 'javascript:void(0)';
+        document.body.appendChild(element);
 
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe('Invalid Viz URL');
+    });
+
+    it('reports error when advanced filter missing SF Field', async () => {
+        const INVALID_FIELD = 'invalid';
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.filterName = INVALID_FIELD;
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Advanced filtering requires both Tableau and Salesforce fields.'
+        );
+    });
+
+    it('reports error when AdvancedFilter missing Tableau field', async () => {
+        const INVALID_FIELD = 'invalid';
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
         element.sfAdvancedFilter = INVALID_FIELD;
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Advanced filtering requires both Tableau and Salesforce fields.'
+        );
+    });
+
+    it('reports error when advanced filter and invalid qualified field format ', async () => {
+        const INVALID_FIELD = 'invalid';
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.sfAdvancedFilter = INVALID_FIELD;
+        element.filterName = 'Name';
         document.body.appendChild(element);
 
         await flushPromises();

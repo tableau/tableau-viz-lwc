@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord } from 'lightning/uiRecordApi';
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
@@ -14,9 +14,10 @@ export default class TableauViz extends LightningElement {
     @api filterName;
     @api sfAdvancedFilter;
 
+    @track advancedFilterValue;
+    @track errorMessage;
+
     viz;
-    sfValue;
-    errorMessage;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -24,9 +25,9 @@ export default class TableauViz extends LightningElement {
     })
     getRecord({ error, data }) {
         if (data) {
-            const fieldName = this.getFieldName();
+            const fieldName = this.advancedFilterFieldName;
             if (data.fields[fieldName]) {
-                this.sfValue = data.fields[fieldName].value;
+                this.advancedFilterValue = data.fields[fieldName].value;
             } else {
                 this.errorMessage = `Failed to retrieve value for field ${fieldName}`;
             }
@@ -37,10 +38,20 @@ export default class TableauViz extends LightningElement {
         }
     }
 
-    getFieldName() {
+    get advancedFilterFieldName() {
         return this.sfAdvancedFilter.substring(
             this.sfAdvancedFilter.indexOf('.') + 1
         );
+    }
+
+    // changing the property name breaks redeployment
+    // so doing this to make it easier to read.
+    get filterOnRecordId() {
+        return this.filter;
+    }
+
+    get tabAdvancedFilter() {
+        return this.filterName;
     }
 
     reduceErrors(errors) {
@@ -79,54 +90,94 @@ export default class TableauViz extends LightningElement {
         );
     }
 
-    async renderedCallback() {
-        await loadScript(this, tableauJSAPI);
-
-        // Validate viz URL
-        let vizToLoad;
+    validateInputs() {
+        // eslint-disable-next-line no-unused-vars
+        let vizUrl;
         try {
-            vizToLoad = new URL(this.vizURL);
+            vizUrl = new URL(this.vizURL);
+            if (
+                !(vizUrl.protocol === 'http:') &&
+                !(vizUrl.protocol === 'https:')
+            ) {
+                throw Error();
+            }
         } catch (_) {
             this.errorMessage = 'Invalid Viz URL';
-            return;
+            return false;
         }
 
         // Advanced filter checks
-        if (this.sfAdvancedFilter) {
-            // Check qualified field name
-            if ((this.sfAdvancedFilter.match(/\./g) || []).length !== 1) {
-                this.errorMessage = `Invalid Salesforce qualified field name: ${this.sfAdvancedFilter}`;
-                return;
-            }
-            // Abort rendering if field value is not yet retrieved
-            if (!this.sfValue) {
-                return;
-            }
+        if (
+            (this.sfAdvancedFilter && !this.tabAdvancedFilter) ||
+            (!this.sfAdvancedFilter && this.tabAdvancedFilter)
+        ) {
+            this.errorMessage =
+                'Advanced filtering requires both Tableau and Salesforce fields.';
+            return false;
         }
 
-        const containerDiv = this.template.querySelector('div');
+        if (this.sfAdvancedFilter) {
+            // Check qualified field name. Make sure 'Object.Field'
+            if ((this.sfAdvancedFilter.match(/\./g) || []).length !== 1) {
+                this.errorMessage = `Invalid Salesforce qualified field name: ${this.sfAdvancedFilter}`;
+                return false;
+            }
+        }
+        return true;
+    }
 
-        //Defining the height of the div
+    // Make sure that if we have advanced filters on a record page that we
+    // wait until the data is loaded. The tracked properties will trigger a refresh
+    validateFiltersReady() {
+        if (this.sfAdvancedFilter && !this.advancedFilterValue) {
+            return false;
+        }
+        return true;
+    }
+
+    // Height is set by the user
+    // Width is based on the containerDiv to which the viz is added
+    // The ':size' parameter is added to the url to communicate this
+    setVizDimensions(vizToLoad, containerDiv) {
         containerDiv.style.height = `${this.height}px`;
-
-        //Getting Width of the viz
         const vizWidth = containerDiv.offsetWidth;
 
-        //Define size of the viz
         vizToLoad.searchParams.append(':size', `${vizWidth},${this.height}`);
+    }
 
+    setVizFilters(vizToLoad) {
         //In context filtering
-        if (this.filter === true && this.objectApiName) {
+        if (this.filterOnRecordId === true && this.objectApiName) {
             const filterNameTab = `${this.objectApiName} ID`;
             vizToLoad.searchParams.append(filterNameTab, this.recordId);
         }
 
         //Additional Filtering
-        if (this.sfValue && this.filterName) {
-            vizToLoad.searchParams.append(this.filterName, this.sfValue);
+        if (this.sfAdvancedFilter) {
+            vizToLoad.searchParams.append(
+                this.tabAdvancedFilter,
+                this.advancedFilterValue
+            );
+        }
+    }
+
+    async renderedCallback() {
+        await loadScript(this, tableauJSAPI);
+
+        if (!this.validateInputs()) {
+            return;
         }
 
-        const vizURLString = vizToLoad.toString();
+        if (!this.validateFiltersReady()) {
+            return;
+        }
+
+        let vizToLoad = new URL(this.vizURL);
+        const containerDiv = this.template.querySelector('div');
+
+        this.setVizDimensions(vizToLoad, containerDiv);
+        this.setVizFilters(vizToLoad);
+
         const options = {
             hideTabs: this.hideTabs,
             hideToolbar: this.hideToolbar,
@@ -135,6 +186,6 @@ export default class TableauViz extends LightningElement {
         };
 
         // eslint-disable-next-line no-undef
-        this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+        this.viz = new tableau.Viz(containerDiv, vizToLoad.toString(), options);
     }
 }
