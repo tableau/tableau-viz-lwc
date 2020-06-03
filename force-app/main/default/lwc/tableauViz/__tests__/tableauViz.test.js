@@ -1,4 +1,3 @@
-/* eslint-disable @lwc/lwc/no-unexpected-wire-adapter-usages */
 import { createElement } from 'lwc';
 import TableauViz from 'c/tableauViz';
 import { loadScript } from 'lightning/platformResourceLoader';
@@ -46,6 +45,25 @@ describe('tableau-viz', () => {
         expect(loadScript.mock.calls[0][1]).toEqual(TABLEAU_JS_API);
     });
 
+    it('passes the rigth options to the Tableau JS API', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.hideTabs = false;
+        element.hideToolbar = true;
+        element.height = 650;
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.options.hideTabs).toBeFalsy();
+        expect(instance.options.hideToolbar).toBeTruthy();
+        expect(instance.options.height).toBe('650px');
+    });
+
     it('calls the right viz URL without filters', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
@@ -73,7 +91,7 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.filter = false;
+        element.filterOnRecordId = false;
         element.height = '550';
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
@@ -90,12 +108,12 @@ describe('tableau-viz', () => {
         );
     });
 
-    it('calls the right viz URL with filters', async () => {
+    it('calls the right viz URL with record id filter', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.filter = true;
+        element.filterOnRecordId = true;
         element.height = '550';
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
@@ -114,23 +132,32 @@ describe('tableau-viz', () => {
         );
     });
 
-    it('passes the rigth options to the viz', async () => {
+    it('calls the right viz URL with advanced filters', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.hideTabs = false;
-        element.hideToolbar = true;
+        element.filterOnRecordId = false;
         element.height = 650;
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
+        element.sfAdvancedFilter = 'Account.Name';
+        element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
+
+        getRecordWireAdapter.emit(mockGetRecord);
 
         await flushPromises();
 
+        const vizPlaceholder = element.shadowRoot.querySelector(
+            'div.tabVizPlaceholder'
+        );
+        expect(vizPlaceholder).not.toBeNull();
         expect(global.tableauMockInstances.length).toBe(1);
         const instance = global.tableauMockInstances[0];
-        expect(instance.options.hideTabs).toBeFalsy();
-        expect(instance.options.hideToolbar).toBeTruthy();
-        expect(instance.options.height).toBe('650px');
+        expect(instance.vizToLoad).toBe(
+            `${VIZ_DISPLAY}${vizPlaceholder.offsetWidth}%2C650&Name=SpacelySprockets`
+        );
     });
 
     it('reports error when invalid viz URL', async () => {
@@ -147,6 +174,47 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toBe('Invalid Viz URL');
+        expect(global.tableauMockInstances.length).toBe(0);
+    });
+
+    it('reports error when advanced filter and missing tableau field', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.sfAdvancedFilter = 'mockValue';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Advanced filtering requires both Tableau and Salesforce fields.'
+        );
+        expect(global.tableauMockInstances.length).toBe(0);
+    });
+
+    it('reports error when advanced filter and missing Salesforce field', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURL = VIZ_URL;
+        element.tabAdvancedFilter = 'mockValue';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Advanced filtering requires both Tableau and Salesforce fields.'
+        );
+        expect(global.tableauMockInstances.length).toBe(0);
     });
 
     it('reports error when advanced filter and getRecord fails', async () => {
@@ -155,6 +223,7 @@ describe('tableau-viz', () => {
         });
         element.vizURL = VIZ_URL;
         element.sfAdvancedFilter = 'mockValue';
+        element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
         getRecordWireAdapter.error();
@@ -166,6 +235,7 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toMatch(/Failed to retrieve record data/);
+        expect(global.tableauMockInstances.length).toBe(0);
     });
 
     it('reports error when advanced filter and field value is missing', async () => {
@@ -178,7 +248,7 @@ describe('tableau-viz', () => {
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         element.sfAdvancedFilter = MISSING_FIELD;
-        element.filterName = 'Name';
+        element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
         getRecordWireAdapter.emit(mockGetRecord);
@@ -192,33 +262,6 @@ describe('tableau-viz', () => {
         expect(errorEl.textContent).toBe(
             `Failed to retrieve value for field ${MISSING_FIELD}`
         );
-    });
-
-    it('supports custom filter options', async () => {
-        const element = createElement('c-tableau-viz', {
-            is: TableauViz
-        });
-        element.vizURL = VIZ_URL;
-        element.filter = false;
-        element.height = 650;
-        element.objectApiName = 'Account';
-        element.recordId = 'mockId';
-        element.sfAdvancedFilter = 'Account.Name';
-        element.filterName = 'Name';
-        document.body.appendChild(element);
-
-        getRecordWireAdapter.emit(mockGetRecord);
-
-        await flushPromises();
-
-        const vizPlaceholder = element.shadowRoot.querySelector(
-            'div.tabVizPlaceholder'
-        );
-        expect(vizPlaceholder).not.toBeNull();
-        expect(global.tableauMockInstances.length).toBe(1);
-        const instance = global.tableauMockInstances[0];
-        expect(instance.vizToLoad).toBe(
-            `${VIZ_DISPLAY}${vizPlaceholder.offsetWidth}%2C650&Name=SpacelySprockets`
-        );
+        expect(global.tableauMockInstances.length).toBe(0);
     });
 });
