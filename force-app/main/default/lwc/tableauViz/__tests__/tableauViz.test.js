@@ -50,8 +50,30 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.height = '550';
-        element.vizURL = VIZ_URL_NO_FILTERS;
+        element.vizURLString = VIZ_URL_NO_FILTERS;
 
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
+        expect(div).not.toBeNull();
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            VIZ_DISPLAY + div.offsetWidth + '%2C550'
+        );
+    });
+
+    it('calls the right viz URL without filters on RecordPage', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURLString = VIZ_URL;
+        element.filterOnRecordId = false;
+        element.height = '550';
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
         document.body.appendChild(element);
 
         await flushPromises();
@@ -69,8 +91,8 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
-        element.filter = true;
+        element.vizURLString = VIZ_URL;
+        element.filterOnRecordId = true;
         element.height = '550';
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
@@ -91,7 +113,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizURLString = VIZ_URL;
         element.hideTabs = false;
         element.hideToolbar = true;
         element.height = 650;
@@ -110,7 +132,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = 'invalid';
+        element.vizURLString = 'invalid';
         document.body.appendChild(element);
 
         await flushPromises();
@@ -122,14 +144,71 @@ describe('tableau-viz', () => {
         expect(errorEl.textContent).toBe('Invalid Viz URL');
     });
 
-    it('reports error when advanced filter and invalid qualified field format ', async () => {
-        const INVALID_FIELD = 'invalid';
-
+    it('reports error when invalid javascript viz URL', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        // eslint-disable-next-line no-script-url
+        element.vizURLString = 'javascript:void(0)';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe('Invalid Viz URL');
+    });
+
+    it('reports error when advanced filter missing SF Field', async () => {
+        const INVALID_FIELD = 'invalid';
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURLString = VIZ_URL;
+        element.tabAdvancedFilter = INVALID_FIELD;
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Advanced filtering requires both Tableau and Salesforce fields.'
+        );
+    });
+
+    it('reports error when AdvancedFilter missing Tableau field', async () => {
+        const INVALID_FIELD = 'invalid';
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURLString = VIZ_URL;
         element.sfAdvancedFilter = INVALID_FIELD;
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Advanced filtering requires both Tableau and Salesforce fields.'
+        );
+    });
+
+    it('reports error when advanced filter and invalid qualified field format ', async () => {
+        const INVALID_FIELD = 'invalid';
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizURLString = VIZ_URL;
+        element.sfAdvancedFilter = INVALID_FIELD;
+        element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
         await flushPromises();
@@ -149,11 +228,11 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizURLString = VIZ_URL;
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         element.sfAdvancedFilter = `Account.${MISSING_FIELD}`;
-        element.filterName = 'Name';
+        element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
         getRecordWireAdapter.emit(mockGetRecord);
@@ -173,15 +252,15 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizURLString = VIZ_URL;
         element.hideTabs = false;
         element.hideToolbar = true;
-        element.filter = false;
+        element.filterOnRecordId = false;
         element.height = 650;
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         element.sfAdvancedFilter = 'Account.Name';
-        element.filterName = 'Name';
+        element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
         getRecordWireAdapter.emit(mockGetRecord);

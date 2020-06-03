@@ -13,7 +13,7 @@
     <targetConfigs>
     <targetConfig targets="lightning__RecordPage">
             <property
-                name="vizURL"
+                name="vizURLString"
                 type="String"
                 label="Enter the Viz URL"
                 required="true"
@@ -46,7 +46,7 @@
                 label="Filter visualization based on the page"
             />
             <property
-                name="filterName"
+                name="tabAdvancedFilter"
                 type="String"
                 label="Add more filters, define the Tableau Field Name"
             />
@@ -65,7 +65,7 @@
             targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
         >
             <property
-                name="vizURL"
+                name="vizURLString"
                 type="String"
                 label="Enter the Viz URL"
                 required="true"
