@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/no-unexpected-wire-adapter-usages */
 import { createElement } from 'lwc';
 import TableauViz from 'c/tableauViz';
 import { loadScript } from 'lightning/platformResourceLoader';
@@ -56,12 +57,14 @@ describe('tableau-viz', () => {
 
         await flushPromises();
 
-        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
-        expect(div).not.toBeNull();
+        const vizPlaceholder = element.shadowRoot.querySelector(
+            'div.tabVizPlaceholder'
+        );
+        expect(vizPlaceholder).not.toBeNull();
         expect(global.tableauMockInstances.length).toBe(1);
         const instance = global.tableauMockInstances[0];
         expect(instance.vizToLoad).toBe(
-            VIZ_DISPLAY + div.offsetWidth + '%2C550'
+            VIZ_DISPLAY + vizPlaceholder.offsetWidth + '%2C550'
         );
     });
 
@@ -78,12 +81,14 @@ describe('tableau-viz', () => {
 
         await flushPromises();
 
-        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
-        expect(div).not.toBeNull();
+        const vizPlaceholder = element.shadowRoot.querySelector(
+            'div.tabVizPlaceholder'
+        );
+        expect(vizPlaceholder).not.toBeNull();
         expect(global.tableauMockInstances.length).toBe(1);
         const instance = global.tableauMockInstances[0];
         expect(instance.vizToLoad).toBe(
-            VIZ_DISPLAY + div.offsetWidth + '%2C550&Account+ID=mockId'
+            `${VIZ_DISPLAY}${vizPlaceholder.offsetWidth}%2C550&Account+ID=mockId`
         );
     });
 
@@ -122,15 +127,15 @@ describe('tableau-viz', () => {
         expect(errorEl.textContent).toBe('Invalid Viz URL');
     });
 
-    it('reports error when advanced filter and invalid qualified field format ', async () => {
-        const INVALID_FIELD = 'invalid';
-
+    it('reports error when advanced filter and getRecord fails', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.sfAdvancedFilter = INVALID_FIELD;
+        element.sfAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
+
+        getRecordWireAdapter.error();
 
         await flushPromises();
 
@@ -138,13 +143,11 @@ describe('tableau-viz', () => {
             'h3.slds-text-color_destructive'
         );
         expect(errorEl).not.toBeNull();
-        expect(errorEl.textContent).toBe(
-            `Invalid Salesforce qualified field name: ${INVALID_FIELD}`
-        );
+        expect(errorEl.textContent).toMatch(/Failed to retrieve record data/);
     });
 
-    it('reports error when advanced filter and field value is missing ', async () => {
-        const MISSING_FIELD = 'MissingField';
+    it('reports error when advanced filter and field value is missing', async () => {
+        const MISSING_FIELD = 'Account.MissingField';
 
         const element = createElement('c-tableau-viz', {
             is: TableauViz
@@ -152,7 +155,7 @@ describe('tableau-viz', () => {
         element.vizURL = VIZ_URL;
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
-        element.sfAdvancedFilter = `Account.${MISSING_FIELD}`;
+        element.sfAdvancedFilter = MISSING_FIELD;
         element.filterName = 'Name';
         document.body.appendChild(element);
 
@@ -174,8 +177,6 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.hideTabs = false;
-        element.hideToolbar = true;
         element.filter = false;
         element.height = 650;
         element.objectApiName = 'Account';
@@ -188,12 +189,14 @@ describe('tableau-viz', () => {
 
         await flushPromises();
 
-        const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
-        expect(div).not.toBeNull();
+        const vizPlaceholder = element.shadowRoot.querySelector(
+            'div.tabVizPlaceholder'
+        );
+        expect(vizPlaceholder).not.toBeNull();
         expect(global.tableauMockInstances.length).toBe(1);
         const instance = global.tableauMockInstances[0];
         expect(instance.vizToLoad).toBe(
-            VIZ_DISPLAY + div.offsetWidth + '%2C650&Name=SpacelySprockets'
+            `${VIZ_DISPLAY}${vizPlaceholder.offsetWidth}%2C650&Name=SpacelySprockets`
         );
     });
 });

@@ -1,7 +1,11 @@
 import { LightningElement, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
-import { getRecord } from 'lightning/uiRecordApi';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
+import { reduceErrors } from './errorUtils.js';
+
+import templateMain from './tableauViz.html';
+import templateError from './tableauVizError.html';
 
 export default class TableauViz extends LightningElement {
     @api objectApiName;
@@ -24,63 +28,30 @@ export default class TableauViz extends LightningElement {
     })
     getRecord({ error, data }) {
         if (data) {
-            const fieldName = this.getFieldName();
-            if (data.fields[fieldName]) {
-                this.sfValue = data.fields[fieldName].value;
-            } else {
-                this.errorMessage = `Failed to retrieve value for field ${fieldName}`;
+            this.sfValue = getFieldValue(data, this.sfAdvancedFilter);
+            if (this.sfValue === undefined) {
+                this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`;
             }
         } else if (error) {
-            this.errorMessage = `Failed to retrieve record data. ${this.reduceErrors(
+            this.errorMessage = `Failed to retrieve record data: ${reduceErrors(
                 error
             )}`;
         }
     }
 
-    getFieldName() {
-        return this.sfAdvancedFilter.substring(
-            this.sfAdvancedFilter.indexOf('.') + 1
-        );
-    }
+    async renderedCallback() {
+        // Wait for lib to load
+        await loadScript(this, tableauJSAPI);
 
-    reduceErrors(errors) {
-        if (!Array.isArray(errors)) {
-            errors = [errors];
+        // Halt rendering if there's an error
+        if (this.errorMessage) {
+            return;
         }
 
-        return (
-            errors
-                // Remove null/undefined items
-                .filter(error => !!error)
-                // Extract an error message
-                .map(error => {
-                    // UI API read errors
-                    if (Array.isArray(error.body)) {
-                        return error.body.map(e => e.message);
-                    }
-                    // UI API DML, Apex and network errors
-                    else if (
-                        error.body &&
-                        typeof error.body.message === 'string'
-                    ) {
-                        return error.body.message;
-                    }
-                    // JS errors
-                    else if (typeof error.message === 'string') {
-                        return error.message;
-                    }
-                    // Unknown error shape so try HTTP status text
-                    return error.statusText;
-                })
-                // Flatten
-                .reduce((prev, curr) => prev.concat(curr), [])
-                // Remove empty strings
-                .filter(message => !!message)
-        );
-    }
-
-    async renderedCallback() {
-        await loadScript(this, tableauJSAPI);
+        // Halt rendering if advanced filter value is not yet loaded
+        if (this.sfAdvancedFilter && !this.sfValue) {
+            return;
+        }
 
         // Validate viz URL
         let vizToLoad;
@@ -91,20 +62,9 @@ export default class TableauViz extends LightningElement {
             return;
         }
 
-        // Advanced filter checks
-        if (this.sfAdvancedFilter) {
-            // Check qualified field name
-            if ((this.sfAdvancedFilter.match(/\./g) || []).length !== 1) {
-                this.errorMessage = `Invalid Salesforce qualified field name: ${this.sfAdvancedFilter}`;
-                return;
-            }
-            // Abort rendering if field value is not yet retrieved
-            if (!this.sfValue) {
-                return;
-            }
-        }
-
-        const containerDiv = this.template.querySelector('div');
+        const containerDiv = this.template.querySelector(
+            'div.tabVizPlaceholder'
+        );
 
         //Defining the height of the div
         containerDiv.style.height = `${this.height}px`;
@@ -122,7 +82,7 @@ export default class TableauViz extends LightningElement {
         }
 
         //Additional Filtering
-        if (this.sfValue && this.filterName) {
+        if (this.filterName && this.sfValue) {
             vizToLoad.searchParams.append(this.filterName, this.sfValue);
         }
 
@@ -136,5 +96,12 @@ export default class TableauViz extends LightningElement {
 
         // eslint-disable-next-line no-undef
         this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+    }
+
+    render() {
+        if (this.errorMessage) {
+            return templateError;
+        }
+        return templateMain;
     }
 }
