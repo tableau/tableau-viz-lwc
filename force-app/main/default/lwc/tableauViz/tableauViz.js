@@ -6,7 +6,7 @@ import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
 export default class TableauViz extends LightningElement {
     @api objectApiName;
     @api recordId;
-    @api vizURLString;
+    @api vizURL;
     @api hideTabs;
     @api hideToolbar;
     @api filterOnRecordId;
@@ -18,7 +18,6 @@ export default class TableauViz extends LightningElement {
     @track errorMessage;
 
     viz;
-    vizUrl;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -85,7 +84,7 @@ export default class TableauViz extends LightningElement {
         // eslint-disable-next-line no-unused-vars
         let vizUrl;
         try {
-            vizUrl = new URL(this.vizURLString);
+            vizUrl = new URL(this.vizURL);
             if (
                 !(vizUrl.protocol === 'http:') &&
                 !(vizUrl.protocol === 'https:')
@@ -163,7 +162,7 @@ export default class TableauViz extends LightningElement {
             return;
         }
 
-        let vizToLoad = new URL(this.vizURLString);
+        let vizToLoad = new URL(this.vizURL);
         const containerDiv = this.template.querySelector('div');
 
         this.setVizDimensions(vizToLoad, containerDiv);
