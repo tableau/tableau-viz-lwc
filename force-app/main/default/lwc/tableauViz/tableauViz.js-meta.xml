@@ -40,13 +40,13 @@
                 required="true"
             />
             <property
-                name="filterOnRecordId"
+                name="filter"
                 type="Boolean"
                 default="false"
                 label="Filter visualization based on the page"
             />
             <property
-                name="tabAdvancedFilter"
+                name="filterName"
                 type="String"
                 label="Add more filters, define the Tableau Field Name"
             />

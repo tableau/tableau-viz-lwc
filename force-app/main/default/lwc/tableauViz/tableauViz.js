@@ -9,9 +9,9 @@ export default class TableauViz extends LightningElement {
     @api vizURL;
     @api hideTabs;
     @api hideToolbar;
-    @api filterOnRecordId;
+    @api filter;
     @api height;
-    @api tabAdvancedFilter;
+    @api filterName;
     @api sfAdvancedFilter;
 
     @track advancedFilterValue;
@@ -42,6 +42,16 @@ export default class TableauViz extends LightningElement {
         return this.sfAdvancedFilter.substring(
             this.sfAdvancedFilter.indexOf('.') + 1
         );
+    }
+
+    // changing the property name breaks redeployment
+    // so doing this to make it easier to read.
+    get filterOnRecordId() {
+        return this.filter;
+    }
+
+    get tabAdvancedFilter() {
+        return this.filterName;
     }
 
     reduceErrors(errors) {

@@ -70,7 +70,7 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.filterOnRecordId = false;
+        element.filter = false;
         element.height = '550';
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
@@ -92,7 +92,7 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.filterOnRecordId = true;
+        element.filter = true;
         element.height = '550';
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
@@ -167,7 +167,7 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.tabAdvancedFilter = INVALID_FIELD;
+        element.filterName = INVALID_FIELD;
         document.body.appendChild(element);
 
         await flushPromises();
@@ -208,7 +208,7 @@ describe('tableau-viz', () => {
         });
         element.vizURL = VIZ_URL;
         element.sfAdvancedFilter = INVALID_FIELD;
-        element.tabAdvancedFilter = 'Name';
+        element.filterName = 'Name';
         document.body.appendChild(element);
 
         await flushPromises();
@@ -232,7 +232,7 @@ describe('tableau-viz', () => {
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         element.sfAdvancedFilter = `Account.${MISSING_FIELD}`;
-        element.tabAdvancedFilter = 'Name';
+        element.filterName = 'Name';
         document.body.appendChild(element);
 
         getRecordWireAdapter.emit(mockGetRecord);
@@ -255,12 +255,12 @@ describe('tableau-viz', () => {
         element.vizURL = VIZ_URL;
         element.hideTabs = false;
         element.hideToolbar = true;
-        element.filterOnRecordId = false;
+        element.filter = false;
         element.height = 650;
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         element.sfAdvancedFilter = 'Account.Name';
-        element.tabAdvancedFilter = 'Name';
+        element.filterName = 'Name';
         document.body.appendChild(element);
 
         getRecordWireAdapter.emit(mockGetRecord);
