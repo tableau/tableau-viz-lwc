@@ -40,7 +40,7 @@
                 required="true"
             />
             <property
-                name="filter"
+                name="filterOnRecordId"
                 type="Boolean"
                 default="false"
                 label="Filter visualization based on the page"
