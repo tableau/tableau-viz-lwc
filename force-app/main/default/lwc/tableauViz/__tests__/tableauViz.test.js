@@ -38,6 +38,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
+        element.vizURL = VIZ_URL;
         document.body.appendChild(element);
 
         // Validation that the loadScript promise is called once.

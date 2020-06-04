@@ -43,9 +43,6 @@ export default class TableauViz extends LightningElement {
     }
 
     async renderedCallback() {
-        // Wait for lib to load
-        await loadScript(this, tableauJSAPI);
-
         // Advanced filter checks
         if (
             (this.sfAdvancedFilter && !this.tabAdvancedFilter) ||
@@ -53,15 +50,6 @@ export default class TableauViz extends LightningElement {
         ) {
             this.errorMessage =
                 'Advanced filtering requires both Tableau and Salesforce fields.';
-        }
-
-        // Halt rendering if there's an error
-        if (this.errorMessage) {
-            return;
-        }
-
-        // Halt rendering if advanced filter value is not yet loaded
-        if (this.sfAdvancedFilter && this.advancedFilterValue === undefined) {
             return;
         }
 
@@ -71,6 +59,19 @@ export default class TableauViz extends LightningElement {
             vizToLoad = new URL(this.vizURL);
         } catch (_) {
             this.errorMessage = 'Invalid Viz URL';
+            return;
+        }
+
+        // Halt rendering if there's an error
+        if (this.errorMessage) {
+            return;
+        }
+
+        // Wait for lib to load
+        await loadScript(this, tableauJSAPI);
+
+        // Halt rendering if advanced filter value is not yet loaded
+        if (this.sfAdvancedFilter && this.advancedFilterValue === undefined) {
             return;
         }
 
