@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/no-unexpected-wire-adapter-usages */
 import { createElement } from 'lwc';
 import TableauViz from 'c/tableauViz';
 import { loadScript } from 'lightning/platformResourceLoader';
@@ -30,7 +31,7 @@ describe('tableau-viz', () => {
     // timing when the platformResourceLoader promises.
     function flushPromises() {
         // eslint-disable-next-line no-undef
-        return new Promise(resolve => setImmediate(resolve));
+        return new Promise((resolve) => setImmediate(resolve));
     }
 
     it('loads the Tableau JS API static resource', () => {
