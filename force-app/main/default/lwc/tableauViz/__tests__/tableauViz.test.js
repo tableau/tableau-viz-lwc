@@ -179,12 +179,30 @@ describe('tableau-viz', () => {
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
-    it('reports error when advanced filter and missing tableau field', async () => {
+    it('reports error when invalid javascript viz URL', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        // eslint-disable-next-line no-script-url
+        element.vizURL = 'javascript:void(0)';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe('Invalid Viz URL');
+        expect(global.tableauMockInstances.length).toBe(0);
+    });
+
+    it('reports error when advanced filter and missing Salesforce field', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.sfAdvancedFilter = 'mockValue';
+        element.tabAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
         await flushPromises();
@@ -199,12 +217,12 @@ describe('tableau-viz', () => {
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
-    it('reports error when advanced filter and missing Salesforce field', async () => {
+    it('reports error when advanced filter and missing Tableau field', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
         element.vizURL = VIZ_URL;
-        element.tabAdvancedFilter = 'mockValue';
+        element.sfAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
         await flushPromises();

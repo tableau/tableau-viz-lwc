@@ -43,27 +43,8 @@ export default class TableauViz extends LightningElement {
     }
 
     async renderedCallback() {
-        // Advanced filter checks
-        if (
-            (this.sfAdvancedFilter && !this.tabAdvancedFilter) ||
-            (!this.sfAdvancedFilter && this.tabAdvancedFilter)
-        ) {
-            this.errorMessage =
-                'Advanced filtering requires both Tableau and Salesforce fields.';
-            return;
-        }
-
-        // Validate viz URL
-        let vizToLoad;
-        try {
-            vizToLoad = new URL(this.vizURL);
-        } catch (_) {
-            this.errorMessage = 'Invalid Viz URL';
-            return;
-        }
-
-        // Halt rendering if there's an error
-        if (this.errorMessage) {
+        // Verify inputs and halt rendering if there's an error
+        if (!this.validateInputs() || this.errorMessage) {
             return;
         }
 
@@ -79,10 +60,13 @@ export default class TableauViz extends LightningElement {
             'div.tabVizPlaceholder'
         );
 
+        // Configure viz URL
+        const vizToLoad = new URL(this.vizURL);
         this.setVizDimensions(vizToLoad, containerDiv);
         this.setVizFilters(vizToLoad);
-
         const vizURLString = vizToLoad.toString();
+
+        // Set viz Options
         const options = {
             hideTabs: this.hideTabs,
             hideToolbar: this.hideToolbar,
@@ -99,6 +83,34 @@ export default class TableauViz extends LightningElement {
             return templateError;
         }
         return templateMain;
+    }
+
+    validateInputs() {
+        // Validate viz url
+        try {
+            const vizUrl = new URL(this.vizURL);
+            if (
+                !(vizUrl.protocol === 'http:') &&
+                !(vizUrl.protocol === 'https:')
+            ) {
+                throw Error();
+            }
+        } catch (_) {
+            this.errorMessage = 'Invalid Viz URL';
+            return false;
+        }
+
+        // Advanced filter checks
+        if (
+            (this.sfAdvancedFilter && !this.tabAdvancedFilter) ||
+            (!this.sfAdvancedFilter && this.tabAdvancedFilter)
+        ) {
+            this.errorMessage =
+                'Advanced filtering requires both Tableau and Salesforce fields.';
+            return false;
+        }
+
+        return true;
     }
 
     // Height is set by the user
