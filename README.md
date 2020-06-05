@@ -31,14 +31,14 @@ The package (Tableau Viz LWC) is a container for the Tableau Visualization compo
 1. Click one of the following links to install the beta package;
    | For | Use |
    |------------|------------------|
-   | Dev orgs: | [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage)|
+   | Dev orgs and Trailheads: | [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage)|
    | Scratch orgs and sandboxes: | [Tableau Viz LWC Sandbox](https://tabsoft.co/LWCSandboxbetapackage) |
 
 1. This package requires a password, use the following:
 
     `datadev20`
 
-1. After you install the package, you can [Add the Tableau Visualization component to a Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page).
+1. After you install the package, you can [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page).
 
 > **Note:** The Tableau Viz LWC package is a beta package and can't be used in production environments until it is officially released.
 
@@ -102,7 +102,7 @@ The package (Tableau Viz LWC) is a container for the Tableau Visualization compo
 
     This opens Salesforce and takes you to the scratch org.
 
-1. Now you can [Add the Tableau Visualization component to an Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page).
+1. Now you can [Add the Tableau Visualization component to an Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page).
 
 ---
 
@@ -153,7 +153,7 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
 
     This opens Salesforce and takes you to your Developer Edition Org.
 
-1. Now you can [Add the Tableau Visualization component to a Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page).
+1. Now you can [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page).
 
 ---
 
