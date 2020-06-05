@@ -14,7 +14,7 @@ This project provides a Lightning Web Component that you can customize and use t
 
 -   [Install the component using a Developer Edition Org](#install-the-component-using-a-developer-edition-org): Useful if you want the component deployed to a more permanent environment than a Scratch org.
 
--   [Add the Tableau Visualization component to a Lightning Web page](#add-the-tableau-visualization-component-to-a-lightning-web-page): After you have installed the component on your org, you can add a Tableau viz to an App in Salesforce.
+-   [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page): After you have installed the component on your org, you can add a Tableau viz to a Lightning page in Salesforce.
 
 -   [Try Filtering](#try-filtering): If you place the component on a record page you can try filtering a visualization based on the context of the hosting record page, or you can specify the fields in Tableau and Salesforce to use for filtering.
 
@@ -157,11 +157,11 @@ This includes non source-tracked orgs such as a [free Developer Edition Org](htt
 
 ---
 
-## Add the Tableau Visualization component to a Lightning Web page
+## Add the Tableau Visualization component to a Lightning page
 
-After you have successfully deployed or pushed the `tableau-viz-lwc` component to your Salesforce org, you can use the component to add a Tableau viz to a Lightning Web page.
+After you have successfully deployed or pushed the `tableau-viz-lwc` component to your Salesforce org, you can use the component to add a Tableau viz to a Lightning page.
 
-1. From the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg 'App Launcher')), find and select **Sales** (or any other App that provides page where you can embed the Tableau Lightning Web Component).
+1. From the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg 'App Launcher')), find and select **Sales** (or any other App that provides a page where you can embed the Tableau Lightning Web Component).
 
 1. Click the Setup gear (![Setup gear](./assets/salesforce_icon-setup-large.jpg 'Setup gear')) then select **Edit Page**.
 
@@ -181,7 +181,7 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 ## Try filtering
 
-The beta release of the Tableau LWC supports two ways of filtering the Tableau visualization. These methods of filtering only work on Lightning record pages. Filtering is not available for Home or Apps. For record pages, you can automatically filter the Tableau visualization based upon the page it is embedded in (_context filtering_), or you can specify fields in Tableau and in Salesforce to create more sophisticated filtering.
+The beta release of the Tableau LWC supports two ways of filtering the Tableau visualization. These methods of filtering only work on Lightning record pages. Filtering is not available for Home pages or App pages. For record pages, you can automatically filter the Tableau visualization based upon the page it is embedded in (_context filtering_), or you can specify fields in Tableau and in Salesforce to create more sophisticated filtering.
 
 ### Context filtering
 
