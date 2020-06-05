@@ -1,7 +1,11 @@
-import { LightningElement, api, track, wire } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
-import { getRecord } from 'lightning/uiRecordApi';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
+import { reduceErrors } from './errorUtils.js';
+
+import templateMain from './tableauViz.html';
+import templateError from './tableauVizError.html';
 
 export default class TableauViz extends LightningElement {
     @api objectApiName;
@@ -9,13 +13,13 @@ export default class TableauViz extends LightningElement {
     @api vizURL;
     @api hideTabs;
     @api hideToolbar;
-    @api filter;
+    @api filterOnRecordId;
     @api height;
-    @api filterName;
+    @api tabAdvancedFilter;
     @api sfAdvancedFilter;
 
-    @track advancedFilterValue;
-    @track errorMessage;
+    advancedFilterValue;
+    errorMessage;
 
     // Issue 30: There are timing problems with using sfAdvancedFilter
     // to trigger the wire service. Sometimes it is undefined even though
@@ -33,76 +37,67 @@ export default class TableauViz extends LightningElement {
     })
     getRecord({ error, data }) {
         if (data) {
-            const fieldName = this.advancedFilterFieldName;
-            if (data.fields[fieldName]) {
-                this.advancedFilterValue = data.fields[fieldName].value;
-            } else {
-                this.errorMessage = `Failed to retrieve value for field ${fieldName}`;
+            this.advancedFilterValue = getFieldValue(
+                data,
+                this.sfAdvancedFilter
+            );
+            if (this.advancedFilterValue === undefined) {
+                this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`;
             }
         } else if (error) {
-            this.errorMessage = `Failed to retrieve record data. ${this.reduceErrors(
+            this.errorMessage = `Failed to retrieve record data: ${reduceErrors(
                 error
             )}`;
         }
     }
 
-    get advancedFilterFieldName() {
-        return this.sfAdvancedFilter.substring(
-            this.sfAdvancedFilter.indexOf('.') + 1
-        );
-    }
-
-    // changing the property name breaks redeployment
-    // so doing this to make it easier to read.
-    get filterOnRecordId() {
-        return this.filter;
-    }
-
-    get tabAdvancedFilter() {
-        return this.filterName;
-    }
-
-    reduceErrors(errors) {
-        if (!Array.isArray(errors)) {
-            errors = [errors];
+    async renderedCallback() {
+        // Verify inputs and halt rendering if there's an error
+        if (!this.validateInputs() || this.errorMessage) {
+            return;
         }
 
-        return (
-            errors
-                // Remove null/undefined items
-                .filter(error => !!error)
-                // Extract an error message
-                .map(error => {
-                    // UI API read errors
-                    if (Array.isArray(error.body)) {
-                        return error.body.map(e => e.message);
-                    }
-                    // UI API DML, Apex and network errors
-                    else if (
-                        error.body &&
-                        typeof error.body.message === 'string'
-                    ) {
-                        return error.body.message;
-                    }
-                    // JS errors
-                    else if (typeof error.message === 'string') {
-                        return error.message;
-                    }
-                    // Unknown error shape so try HTTP status text
-                    return error.statusText;
-                })
-                // Flatten
-                .reduce((prev, curr) => prev.concat(curr), [])
-                // Remove empty strings
-                .filter(message => !!message)
+        // Wait for lib to load
+        await loadScript(this, tableauJSAPI);
+
+        // Halt rendering if advanced filter value is not yet loaded
+        if (!this.validateFiltersReady()) {
+            return;
+        }
+
+        const containerDiv = this.template.querySelector(
+            'div.tabVizPlaceholder'
         );
+
+        // Configure viz URL
+        const vizToLoad = new URL(this.vizURL);
+        this.setVizDimensions(vizToLoad, containerDiv);
+        this.setVizFilters(vizToLoad);
+        const vizURLString = vizToLoad.toString();
+
+        // Set viz Options
+        const options = {
+            hideTabs: this.hideTabs,
+            hideToolbar: this.hideToolbar,
+            height: `${this.height}px`,
+            width: '100%'
+        };
+
+        // eslint-disable-next-line no-undef
+        this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+    }
+
+    render() {
+        if (this.errorMessage) {
+            return templateError;
+        }
+        return templateMain;
     }
 
     validateInputs() {
-        // eslint-disable-next-line no-unused-vars
-        let vizUrl;
+        // Validate viz url
         try {
-            vizUrl = new URL(this.vizURL);
+            const vizUrl = new URL(this.vizURL);
             if (
                 !(vizUrl.protocol === 'http:') &&
                 !(vizUrl.protocol === 'https:')
@@ -124,18 +119,11 @@ export default class TableauViz extends LightningElement {
             return false;
         }
 
-        if (this.sfAdvancedFilter) {
-            // Check qualified field name. Make sure 'Object.Field'
-            if ((this.sfAdvancedFilter.match(/\./g) || []).length !== 1) {
-                this.errorMessage = `Invalid Salesforce qualified field name: ${this.sfAdvancedFilter}`;
-                return false;
-            }
-        }
         return true;
     }
 
     // Make sure that if we have advanced filters on a record page that we
-    // wait until the data is loaded. The tracked properties will trigger a refresh
+    // wait until the data is loaded.
     validateFiltersReady() {
         if (this.sfAdvancedFilter && !this.advancedFilterValue) {
             this.trigger = this.sfAdvancedFilter;
@@ -150,51 +138,22 @@ export default class TableauViz extends LightningElement {
     setVizDimensions(vizToLoad, containerDiv) {
         containerDiv.style.height = `${this.height}px`;
         const vizWidth = containerDiv.offsetWidth;
-
         vizToLoad.searchParams.append(':size', `${vizWidth},${this.height}`);
     }
 
     setVizFilters(vizToLoad) {
-        //In context filtering
+        // In context filtering
         if (this.filterOnRecordId === true && this.objectApiName) {
             const filterNameTab = `${this.objectApiName} ID`;
             vizToLoad.searchParams.append(filterNameTab, this.recordId);
         }
 
-        //Additional Filtering
-        if (this.sfAdvancedFilter) {
+        // Additional Filtering
+        if (this.tabAdvancedFilter && this.advancedFilterValue) {
             vizToLoad.searchParams.append(
                 this.tabAdvancedFilter,
                 this.advancedFilterValue
             );
         }
-    }
-
-    async renderedCallback() {
-        await loadScript(this, tableauJSAPI);
-
-        if (!this.validateInputs()) {
-            return;
-        }
-
-        if (!this.validateFiltersReady()) {
-            return;
-        }
-
-        let vizToLoad = new URL(this.vizURL);
-        const containerDiv = this.template.querySelector('div');
-
-        this.setVizDimensions(vizToLoad, containerDiv);
-        this.setVizFilters(vizToLoad);
-
-        const options = {
-            hideTabs: this.hideTabs,
-            hideToolbar: this.hideToolbar,
-            height: `${this.height}px`,
-            width: '100%'
-        };
-
-        // eslint-disable-next-line no-undef
-        this.viz = new tableau.Viz(containerDiv, vizToLoad.toString(), options);
     }
 }
