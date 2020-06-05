@@ -31,7 +31,7 @@ describe('tableau-viz', () => {
     // timing when the platformResourceLoader promises.
     function flushPromises() {
         // eslint-disable-next-line no-undef
-        return new Promise(resolve => setImmediate(resolve));
+        return new Promise((resolve) => setImmediate(resolve));
     }
 
     it('loads the Tableau JS API static resource', () => {
