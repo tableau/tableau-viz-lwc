@@ -1,5 +1,10 @@
 <template>
     <article class="slds-card">
         <div class="tabVizPlaceholder" lwc:dom="manual"></div>
+        <!-- The below is part of fix for issue #30 and is needed -->
+        <!-- to force rerender after the wire adapter loads the advanced -->
+        <!-- filter. the @track was not forcing it to happen. More follow -->
+        <!-- is needed with SF folks on whether this is an AppBuilder bug -->
+        <span style="display: none;">{advancedFilterValue}</span>
     </article>
 </template>
