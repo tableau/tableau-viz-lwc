@@ -125,7 +125,7 @@ export default class TableauViz extends LightningElement {
     // Make sure that if we have advanced filters on a record page that we
     // wait until the data is loaded.
     validateFiltersReady() {
-        if (this.sfAdvancedFilter && !this.advancedFilterValue) {
+        if (this.sfAdvancedFilter && this.advancedFilterValue === undefined) {
             this.trigger = this.sfAdvancedFilter;
             return false;
         }
