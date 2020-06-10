@@ -29,10 +29,10 @@ This project provides a Lightning Web Component that you can customize and use t
 The package (Tableau Viz LWC) is a container for the Tableau Visualization component available in this GitHub repository. You can install the beta package in sandbox or Developer Edition organizations on Salesforce, or in test organizations furnished through the Environment Hub. You can learn more about [Beta Versions of Managed Package](https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/packaging_about_beta_packages.htm) on the Salesforce website.
 
 1. Click one of the following links to install the beta package;
-   | For | Use |
-   |------------|------------------|
-   | Dev orgs and Trailheads: | [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage)|
-   | Scratch orgs and sandboxes: | [Tableau Viz LWC Sandbox](https://tabsoft.co/LWCSandboxbetapackage) |
+   | For                                 | Use                                                                 |
+   |-------------------------------------|---------------------------------------------------------------------|
+   | Dev orgs and Trailhead Playgrounds: | [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage)                |
+   | Scratch orgs and sandboxes:         | [Tableau Viz LWC Sandbox](https://tabsoft.co/LWCSandboxbetapackage) |
 
 1. This package requires a password, use the following:
 
