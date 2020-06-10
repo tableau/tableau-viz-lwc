@@ -53,8 +53,8 @@
             <property
                 name="sfAdvancedFilter"
                 type="String"
-                label="Add more filters, define the Salesforce qualified Field Name"
-                description="For example, on the Opportunity page try: Opportunity.AccountId"
+                datasource="apex://ObjectFieldPickList"
+                label="Add more filters, select a Salesforce object field"
             />
             <supportedFormFactors>
                 <supportedFormFactor type="Small" />
