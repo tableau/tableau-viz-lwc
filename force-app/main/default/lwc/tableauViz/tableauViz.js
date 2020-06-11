@@ -45,11 +45,10 @@ export default class TableauViz extends LightningElement {
         }
     }
 
-    connectedCallback() {
-        loadScript(this, tableauJSAPI).then(() => {
-            this.isLibLoaded = true;
-            this.renderViz();
-        });
+    async connectedCallback() {
+        await loadScript(this, tableauJSAPI);
+        this.isLibLoaded = true;
+        this.renderViz();
     }
 
     renderedCallback() {
