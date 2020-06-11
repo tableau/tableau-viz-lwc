@@ -21,6 +21,7 @@ export default class TableauViz extends LightningElement {
     viz;
     advancedFilterValue;
     errorMessage;
+    isLibLoaded = false;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -34,6 +35,8 @@ export default class TableauViz extends LightningElement {
             );
             if (this.advancedFilterValue === undefined) {
                 this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`;
+            } else {
+                this.renderViz();
             }
         } else if (error) {
             this.errorMessage = `Failed to retrieve record data: ${reduceErrors(
@@ -42,14 +45,26 @@ export default class TableauViz extends LightningElement {
         }
     }
 
-    async renderedCallback() {
-        // Verify inputs and halt rendering if there's an error
+    async connectedCallback() {
+        await loadScript(this, tableauJSAPI);
+        this.isLibLoaded = true;
+        this.renderViz();
+    }
+
+    renderedCallback() {
+        this.renderViz();
+    }
+
+    renderViz() {
+        // Halt rendering if inputs are invalid or if there's an error
         if (!this.validateInputs() || this.errorMessage) {
             return;
         }
 
-        // Wait for lib to load
-        await loadScript(this, tableauJSAPI);
+        // Halt rendering if lib is not loaded
+        if (!this.isLibLoaded) {
+            return;
+        }
 
         // Halt rendering if advanced filter value is not yet loaded
         if (this.sfAdvancedFilter && this.advancedFilterValue === undefined) {
