@@ -29,14 +29,14 @@ This project provides a Lightning Web Component that you can customize and use t
 The package (Tableau Viz LWC) is a container for the Tableau Visualization component available in this GitHub repository. You can install the beta package in sandbox or Developer Edition organizations on Salesforce, or in test organizations furnished through the Environment Hub. You can learn more about [Beta Versions of Managed Package](https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/packaging_about_beta_packages.htm) on the Salesforce website.
 
 1. Click one of the following links to install the beta package;
-   | For                                 | Use                                                                 |
+   | For | Use |
    |-------------------------------------|---------------------------------------------------------------------|
-   | Dev orgs and Trailhead Playgrounds: | [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage)                |
-   | Scratch orgs and sandboxes:         | [Tableau Viz LWC Sandbox](https://tabsoft.co/LWCSandboxbetapackage) |
+   | Dev orgs and Trailhead Playgrounds: | [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage) |
+   | Scratch orgs and sandboxes: | [Tableau Viz LWC Sandbox](https://tabsoft.co/LWCSandboxbetapackage) |
 
 1. This package requires a password, use the following:
 
-    `datadev20`
+    `datadev2020`
 
 1. After you install the package, you can [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page).
 
@@ -202,7 +202,7 @@ The Tableau field needs to be on the viz that you are embedding. The Salesforce 
 
 To test out this filtering, you can add the **Tableau Visualization** component to a record page. For example, if you have a Tableau viz that contains data that is related to sales information, you can add that viz to your opportunity record pages.
 
-1. In your Salesforce org, click the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg 'App Launcher')), find and select **Sales**, then click the **Opportunities** tab. Select an opportunity, for example, **Burlington Textiles** from the All Opportunities list.
+1. In your Salesforce org, click the App Launcher (![App Launcher](./assets/salesforce_icon-applauncher-large.jpg 'App Launcher')), find and select **Sales**, then click the **Accounts** tab. Select an account, for example, **Burlington Textiles** from the All Accounts list.
 
 1. Click the Setup gear (![Setup gear](./assets/salesforce_icon-setup-large.jpg 'Setup gear')) then select **Edit Page**.
 
@@ -213,9 +213,9 @@ To test out this filtering, you can add the **Tableau Visualization** component 
     - Enter the URL of the Tableau viz that contains the sales data you want to display.
 
 
-    - Provide the name of the the Tableau field to use for filtering. The Tableau field needs to be the name of a field in the viz that you are embedding. For example, the viz might contain a field for the account ID.
+    - Provide the name of the the Tableau field to use for filtering. The Tableau field needs to be the name of a field in the viz that you are embedding. For example, the viz might contain a field for the `User ID`.
 
-    - Provide the name of the the Salesforce field to use in filtering. The Salesforce field needs to specify a qualified field name for that page. For example, on the opportunity record page, you could use `Opportunity.AccountId`.
+    - Provide the name of the the Salesforce field to use in filtering. You can select the qualified field names for the page from the drop-down list. For example, on the account record page, you could select `Owner ID`.
 
     When the values from these two fields match, the LWC will automatically filter the Tableau viz.
 
