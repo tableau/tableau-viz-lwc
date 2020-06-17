@@ -46,7 +46,7 @@ After you install the package, you can [Add the Tableau Visualization component 
     - Install Visual Studio Code
     - Install the Visual Studio Code Salesforce extensions, including the Lightning Web Components extension
 
-    **Tip:** You do not need to complete the last module and create the Hello World Lightning Web Component. We use the Trailhead here just to help you set up your environment.
+    **Tip:** You do not need to complete the last module and create the Hello World Lightning Web Component. We use the Trail here just to help you set up your environment.
 
     **Note:** You will use the Salesforce CLI to perform the following steps. Be sure you enable Dev Hub in your Trailhead Playground before you begin. Login to your Playground. Go to **Setup > Development > Dev Hub**).
 
