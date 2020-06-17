@@ -1,14 +1,15 @@
 # Lightning Web Component for embedding Tableau into Salesforce - Developer Preview
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
+![GitHub version](https://img.shields.io/badge/release-beta-blue)
 
-This project provides a Lightning Web Component that you can customize and use to embed Tableau into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau into web pages.
+This project provides a Lightning web component that you can customize, deploy, and use to embed a Tableau visualization into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau views into web pages.
 
 > This sample component is designed to run on the Salesforce Platform.
 
 ## Table of contents
 
--   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the recommended way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code. Use this option to install the component on Trailhead Playgrounds so you can use it when tackling Trailhead Badges.
+-   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the recommended way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code. Use this option to install the component on Trailhead Playgrounds so you can use it when tackling Trailhead Badges. The beta package is only available to Developer Program members. Sign up to receive the instructions.
 
 -   [Install the component using a Scratch Org](#install-the-component-using-a-scratch-org): This is the recommended installation option if you are a developer. Use this option if you wants to explore and modify the component's code.
 
@@ -18,7 +19,7 @@ This project provides a Lightning Web Component that you can customize and use t
 
 -   [Try Filtering](#try-filtering): If you place the component on a record page you can try filtering a visualization based on the context of the hosting record page, or you can specify the fields in Tableau and Salesforce to use for filtering.
 
--   [Sign up for the LWC test scenarios on the Tableau Developer Program Portal](#sign-up-for-the-LWC-test-scenarios-on-the-tableau-developer-program-portal): Join the Developer Program and gain access to the private Tableau LWC test scenarios.
+-   [Sign up for the Tableau LWC Beta on the Tableau Developer Program Portal](#sign-up-for-the-tableau-LWC-beta-on-the-tableau-developer-program-portal): Join the Developer Program and gain access to the Tableau Viz Lightning Web Component Beta.
 
 -   [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau.
 
@@ -26,19 +27,11 @@ This project provides a Lightning Web Component that you can customize and use t
 
 ## Install the beta managed package
 
+The managed package is the easiest way to install the Lightning Web Component for Tableau. The managed package is only available when you join the beta program. If you haven't already done so, go [Sign up for the Tableau LWC Beta on the Tableau Developer Program Portal](#sign-up-for-the-tableau-LWC-beta-on-the-tableau-developer-program-portal).
+
 The package (Tableau Viz LWC) is a container for the Tableau Visualization component available in this GitHub repository. You can install the beta package in sandbox or Developer Edition organizations on Salesforce, or in test organizations furnished through the Environment Hub. You can learn more about [Beta Versions of Managed Package](https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/packaging_about_beta_packages.htm) on the Salesforce website.
 
-1. Click one of the following links to install the beta package;
-   | For | Use |
-   |-------------------------------------|---------------------------------------------------------------------|
-   | Dev orgs and Trailhead Playgrounds: | [Tableau Viz LWC](https://tabsoft.co/LWCbetapackage) |
-   | Scratch orgs and sandboxes: | [Tableau Viz LWC Sandbox](https://tabsoft.co/LWCSandboxbetapackage) |
-
-1. This package requires a password, use the following:
-
-    `datadev2020`
-
-1. After you install the package, you can [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page).
+After you install the package, you can [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page).
 
 > **Note:** The Tableau Viz LWC package is a beta package and can't be used in production environments until it is officially released.
 
@@ -53,11 +46,9 @@ The package (Tableau Viz LWC) is a container for the Tableau Visualization compo
     - Install Visual Studio Code
     - Install the Visual Studio Code Salesforce extensions, including the Lightning Web Components extension
 
----
+    **Tip:** You do not need to complete the last module and create the Hello World Lightning Web Component. We use the Trail here just to help you set up your environment.
 
-> Note that you will use the Salesforce CLI to perform the following steps. Be sure you enable Dev Hub in your Trailhead Playground before you begin. Login to your Playground. Go to **Setup > Development > Dev Hub**).
-
----
+    **Note:** You will use the Salesforce CLI to perform the following steps. Be sure you enable Dev Hub in your Trailhead Playground before you begin. Login to your Playground. Go to **Setup > Development > Dev Hub**).
 
 1. If you haven't already done so, open a Command window and authorize your hub org and provide it with an alias (**myhuborg** in the following command):
 
@@ -80,7 +71,7 @@ The package (Tableau Viz LWC) is a container for the Tableau Visualization compo
 
     ```
 
-1. Create a scratch org and provide it with an alias (**tableau-viz-lwc** in the command below):
+1) Create a scratch org and provide it with an alias (**tableau-viz-lwc** in the command below):
 
     ```
     sfdx force:org:create -s -f config/project-scratch-def.json -a tableau-viz-lwc
@@ -225,32 +216,28 @@ To test out this filtering, you can add the **Tableau Visualization** component 
 
 ---
 
-## Sign up for the LWC test scenarios on the Tableau Developer Program Portal
+## Sign up for the Tableau LWC Beta on the Tableau Developer Program Portal
 
 We want to hear from you!
 
 ![Flex DataDev Warrior](./assets/smallWarrior_DataDev_nohashtag.png)
 
-Join the Developer Program and gain access to the Tableau LWC test scenarios on the Developer Program Portal.
+Join the Developer Program and gain access to the Tableau Viz Lightning Web Component Beta on the Developer Program Portal.
 
 1. To join the Developer Program, go to [(https://www.tableau.com/developer)](https://www.tableau.com/developer) and use your Tableau login to sign up. After you join, you can sign up and get a Tableau Online developer site [(https://www.tableau.com/developer/get-site)](https://www.tableau.com/developer/get-site). With this free developer site, you can try the single sign-on experience using Salesforce as your SAML IdP and configuring SAML on Tableau Online, or you can just use the site to embed a viz from Tableau Online.
 
-1. To get to the LWC scenarios, go to the Tableau Pre-Release site (https://prerelease.tableau.com/) and follow the links to the Developer Program Portal. The portal will appear under **My Projects**.
+1. After you sign up for the Developer Program, we'll contact you with information about joining the Tableau LWC Beta on the Tableau Pre-Release site (https://prerelease.tableau.com/).
 
     If you don't already have access to Developer Program Portal, send email to [tableaulwcprerelease@tableau.com](mailto:tableaulwcprerelease@tableau.com?subject=Tableau%20LWC%20Pre-Release) with **Tableau LWC Pre-Release** on the subject line.
 
-1. On the Developer Program Portal, choose the **Tableau Lightning Web Component Alpha**, which appears under **Tasks** in the left-hand navigation pane.
-
-1. Complete the Tableau LWC test scenarios.
+1. Try out the Tableau Viz Lightning component!
 
     - Send us your feedback
-    - Report any bugs you find
-    - Request new features
+    - Check the current [Issues](https://github.com/tableau/tableau-viz-lwc/issues) and add any new ones you find
+    - Request new features (add them to [Issues](https://github.com/tableau/tableau-viz-lwc/issues))
     - Ask questions of the Development Team
 
 Welcome to the **#DataDev** Community!
-
-![Tableau LWC test scenarios](assets/lwc_alpha.gif)
 
 ---
 
