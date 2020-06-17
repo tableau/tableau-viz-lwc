@@ -9,7 +9,7 @@ This project provides a Lightning web component that you can customize, deploy, 
 
 ## Table of contents
 
--   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the recommended way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code. Use this option to install the component on Trailhead Playgrounds so you can use it when tackling Trailhead Badges. The managed package is only available if you are signed up for the Tableau Viz LWC beta program.
+-   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the recommended way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code. Use this option to install the component on Trailhead Playgrounds so you can use it when tackling Trailhead Badges. The beta package is only available to Developer Program members. Sign up to receive the instructions.
 
 -   [Install the component using a Scratch Org](#install-the-component-using-a-scratch-org): This is the recommended installation option if you are a developer. Use this option if you wants to explore and modify the component's code.
 
