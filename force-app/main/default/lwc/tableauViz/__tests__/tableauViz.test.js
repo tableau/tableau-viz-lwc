@@ -51,7 +51,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.hideTabs = false;
         element.hideToolbar = true;
         element.height = 650;
@@ -71,7 +71,7 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.height = '550';
-        element.vizURL = VIZ_URL_NO_FILTERS;
+        element.vizUrl = VIZ_URL_NO_FILTERS;
 
         document.body.appendChild(element);
 
@@ -201,7 +201,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.tabAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
@@ -221,7 +221,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.sfAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
@@ -241,7 +241,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.sfAdvancedFilter = 'mockValue';
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
@@ -264,7 +264,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         element.sfAdvancedFilter = MISSING_FIELD;
