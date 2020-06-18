@@ -13,7 +13,7 @@
     <targetConfigs>
     <targetConfig targets="lightning__RecordPage">
             <property
-                name="vizURL"
+                name="vizUrl"
                 type="String"
                 label="Enter the Viz URL"
                 required="true"
@@ -65,7 +65,7 @@
             targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
         >
             <property
-                name="vizURL"
+                name="vizUrl"
                 type="String"
                 label="Enter the Viz URL"
                 required="true"

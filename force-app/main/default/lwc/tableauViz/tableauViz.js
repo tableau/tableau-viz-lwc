@@ -10,7 +10,7 @@ import templateError from './tableauVizError.html';
 export default class TableauViz extends LightningElement {
     @api objectApiName;
     @api recordId;
-    @api vizURL;
+    @api vizUrl;
     @api hideTabs;
     @api hideToolbar;
     @api filterOnRecordId;
@@ -76,7 +76,7 @@ export default class TableauViz extends LightningElement {
         );
 
         // Configure viz URL
-        const vizToLoad = new URL(this.vizURL);
+        const vizToLoad = new URL(this.vizUrl);
         this.setVizDimensions(vizToLoad, containerDiv);
         this.setVizFilters(vizToLoad);
         const vizURLString = vizToLoad.toString();
@@ -103,11 +103,8 @@ export default class TableauViz extends LightningElement {
     validateInputs() {
         // Validate viz url
         try {
-            const vizUrl = new URL(this.vizURL);
-            if (
-                !(vizUrl.protocol === 'http:') &&
-                !(vizUrl.protocol === 'https:')
-            ) {
+            const u = new URL(this.vizUrl);
+            if (!(u.protocol === 'http:') && !(u.protocol === 'https:')) {
                 throw Error();
             }
         } catch (_) {
