@@ -38,7 +38,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         document.body.appendChild(element);
 
         // Validation that the loadScript promise is called once.
@@ -51,7 +51,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.hideTabs = false;
         element.hideToolbar = true;
         element.height = 650;
@@ -71,7 +71,7 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.height = '550';
-        element.vizURL = VIZ_URL_NO_FILTERS;
+        element.vizUrl = VIZ_URL_NO_FILTERS;
 
         document.body.appendChild(element);
 
@@ -92,7 +92,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.filterOnRecordId = false;
         element.height = '550';
         element.objectApiName = 'Account';
@@ -114,7 +114,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.filterOnRecordId = true;
         element.height = '550';
         element.objectApiName = 'Account';
@@ -138,7 +138,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.filterOnRecordId = false;
         element.height = 650;
         element.objectApiName = 'Account';
@@ -166,7 +166,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = 'invalid';
+        element.vizUrl = 'invalid';
         document.body.appendChild(element);
 
         await flushPromises();
@@ -184,7 +184,7 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         // eslint-disable-next-line no-script-url
-        element.vizURL = 'javascript:void(0)';
+        element.vizUrl = 'javascript:void(0)';
         document.body.appendChild(element);
 
         await flushPromises();
@@ -201,7 +201,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.tabAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
@@ -221,7 +221,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.sfAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
@@ -241,7 +241,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.sfAdvancedFilter = 'mockValue';
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
@@ -264,7 +264,7 @@ describe('tableau-viz', () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
-        element.vizURL = VIZ_URL;
+        element.vizUrl = VIZ_URL;
         element.objectApiName = 'Account';
         element.recordId = 'mockId';
         element.sfAdvancedFilter = MISSING_FIELD;
