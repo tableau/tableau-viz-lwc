@@ -3,6 +3,7 @@ import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
 import { reduceErrors } from './errorUtils.js';
+import getTableauServerInfo from '@salesforce/apex/TableauServerInfo.getTableauServerInfo';
 
 import templateMain from './tableauViz.html';
 import templateError from './tableauVizError.html';
@@ -22,6 +23,7 @@ export default class TableauViz extends LightningElement {
     advancedFilterValue;
     errorMessage;
     isLibLoaded = false;
+    isVizLoaded = false;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -55,9 +57,9 @@ export default class TableauViz extends LightningElement {
         this.renderViz();
     }
 
-    renderViz() {
+    async renderViz() {
         // Halt rendering if inputs are invalid or if there's an error
-        if (!this.validateInputs() || this.errorMessage) {
+        if (!(await this.validateInputs()) || this.errorMessage) {
             return;
         }
 
@@ -89,8 +91,11 @@ export default class TableauViz extends LightningElement {
             width: '100%'
         };
 
-        // eslint-disable-next-line no-undef
-        this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+        if (!this.isVizLoaded) {
+            // eslint-disable-next-line no-undef
+            this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+            this.isVizLoaded = true;
+        }
     }
 
     render() {
@@ -100,15 +105,32 @@ export default class TableauViz extends LightningElement {
         return templateMain;
     }
 
-    validateInputs() {
+    async validateInputs() {
         // Validate viz url
         try {
             const u = new URL(this.vizUrl);
-            if (!(u.protocol === 'http:') && !(u.protocol === 'https:')) {
-                throw Error();
+            if (!(u.protocol === 'https:')) {
+                throw Error('Viz URL must be HTTPS.');
             }
-        } catch (_) {
-            this.errorMessage = 'Invalid Viz URL';
+
+            // TODO: Should we lock down to this particular REST API version? How are we going to update it?
+            const serverInfoUrl = new URL('api/3.4/serverInfo', u.origin);
+            // If it's Tableau Public, skip for now.
+            // TODO: remove if Public REST API is available.
+            if (serverInfoUrl.hostname !== 'public.tableau.com') {
+                // Request the Tableau ServerInfo. The callout currently returns a boolean. But we can get more if needed.
+                const isTableauServer = await getTableauServerInfo({
+                    url: serverInfoUrl.href
+                });
+                if (!isTableauServer) {
+                    throw Error(
+                        'Make sure the URL is pointing to a Tableau Server.'
+                    );
+                }
+            }
+        } catch (error) {
+            this.errorMessage =
+                'Invalid Viz URL' + (error.message ? ': ' + error.message : '');
             return false;
         }
 

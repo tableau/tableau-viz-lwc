@@ -4,6 +4,18 @@ import TableauViz from 'c/tableauViz';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord } from 'lightning/uiRecordApi';
 import { registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
+import getTableauServerInfo from '@salesforce/apex/TableauServerInfo.getTableauServerInfo';
+
+// Mocking Apex method getTableauServerInfo
+jest.mock(
+    '@salesforce/apex/TableauServerInfo.getTableauServerInfo',
+    () => {
+        return {
+            default: jest.fn()
+        };
+    },
+    { virtual: true }
+);
 
 // Support for mocking wired record
 const mockGetRecord = require('./data/getRecord.json');
@@ -16,6 +28,10 @@ const VIZ_URL = 'https://vizurl.com';
 const VIZ_DISPLAY = 'https://vizurl.com/?%3Asize=';
 
 describe('tableau-viz', () => {
+    beforeEach(() => {
+        getTableauServerInfo.mockResolvedValue(true);
+    });
+
     afterEach(() => {
         // The jsdom instance is shared across test cases in a single file so reset the DOM
         while (document.body.firstChild) {
@@ -47,7 +63,7 @@ describe('tableau-viz', () => {
         expect(loadScript.mock.calls[0][1]).toEqual(TABLEAU_JS_API);
     });
 
-    it('passes the rigth options to the Tableau JS API', async () => {
+    it('passes the right options to the Tableau JS API', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -162,7 +178,7 @@ describe('tableau-viz', () => {
         );
     });
 
-    it('reports error when invalid viz URL', async () => {
+    it('reports error when invalid viz URL failed creating URL object', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -175,7 +191,9 @@ describe('tableau-viz', () => {
             'h3.slds-text-color_destructive'
         );
         expect(errorEl).not.toBeNull();
-        expect(errorEl.textContent).toBe('Invalid Viz URL');
+        expect(errorEl.textContent).toBe(
+            'Invalid Viz URL: Invalid URL: invalid'
+        );
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
@@ -193,7 +211,65 @@ describe('tableau-viz', () => {
             'h3.slds-text-color_destructive'
         );
         expect(errorEl).not.toBeNull();
-        expect(errorEl.textContent).toBe('Invalid Viz URL');
+        expect(errorEl.textContent).toBe(
+            'Invalid Viz URL: Viz URL must be HTTPS.'
+        );
+        expect(global.tableauMockInstances.length).toBe(0);
+    });
+
+    it('reports error when invalid viz URL is HTTP', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizUrl = 'http://fakeurl.com';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Invalid Viz URL: Viz URL must be HTTPS.'
+        );
+        expect(global.tableauMockInstances.length).toBe(0);
+    });
+
+    it('skip validing viz URL for Tableau Public', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizUrl = 'https://public.tableau.com';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).toBeNull();
+    });
+
+    it('reports error when invalid viz URL is not pointing to a tableau server', async () => {
+        // For this particular test, we want the HTTPRequest callout to be failed.
+        getTableauServerInfo.mockResolvedValue(false);
+
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizUrl = VIZ_URL;
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Invalid Viz URL: Make sure the URL is pointing to a Tableau Server.'
+        );
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
