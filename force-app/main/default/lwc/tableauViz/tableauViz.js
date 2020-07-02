@@ -107,6 +107,12 @@ export default class TableauViz extends LightningElement {
             if (u.protocol !== 'https:') {
                 throw Error('Viz URL must be HTTPS.');
             }
+
+            if (u.toString().replace(u.origin, '').startsWith('/#/')) {
+                throw Error(
+                    "Viz URL shouldn't have '#' after the hostname. Removing '#' might make it work."
+                );
+            }
         } catch (error) {
             this.errorMessage =
                 'Invalid Viz URL' + (error.message ? ': ' + error.message : '');

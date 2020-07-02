@@ -220,6 +220,26 @@ describe('tableau-viz', () => {
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
+    it('reports error when invalid viz URL contains # after the hostname', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizUrl =
+            'https://vizurl.com/#/views/WorldIndicators/Population';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            "Invalid Viz URL: Viz URL shouldn't have '#' after the hostname. Removing '#' might make it work."
+        );
+        expect(global.tableauMockInstances.length).toBe(0);
+    });
+
     it('reports error when advanced filter and missing Salesforce field', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
