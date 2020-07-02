@@ -220,7 +220,7 @@ describe('tableau-viz', () => {
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
-    it('reports error when invalid viz URL contains # after the hostname', async () => {
+    it('reports error when invalid viz URL contains # right after the hostname', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -235,7 +235,7 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toBe(
-            "Invalid Viz URL: Viz URL shouldn't have '#' after the hostname. Removing '#' might make it work."
+            "Invalid Viz URL: Viz URL shouldn't have '#' right after the hostname. Removing '#' might make it work."
         );
         expect(global.tableauMockInstances.length).toBe(0);
     });

@@ -110,7 +110,7 @@ export default class TableauViz extends LightningElement {
 
             if (u.toString().replace(u.origin, '').startsWith('/#/')) {
                 throw Error(
-                    "Viz URL shouldn't have '#' after the hostname. Removing '#' might make it work."
+                    "Viz URL shouldn't have '#' right after the hostname. Removing '#' might make it work."
                 );
             }
         } catch (error) {
