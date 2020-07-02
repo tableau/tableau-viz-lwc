@@ -47,7 +47,7 @@ describe('tableau-viz', () => {
         expect(loadScript.mock.calls[0][1]).toEqual(TABLEAU_JS_API);
     });
 
-    it('passes the rigth options to the Tableau JS API', async () => {
+    it('passes the right options to the Tableau JS API', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -162,7 +162,7 @@ describe('tableau-viz', () => {
         );
     });
 
-    it('reports error when invalid viz URL', async () => {
+    it('reports error when invalid viz URL failed creating URL object', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
         });
@@ -175,7 +175,9 @@ describe('tableau-viz', () => {
             'h3.slds-text-color_destructive'
         );
         expect(errorEl).not.toBeNull();
-        expect(errorEl.textContent).toBe('Invalid Viz URL');
+        expect(errorEl.textContent).toBe(
+            'Invalid Viz URL: Invalid URL: invalid'
+        );
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
@@ -193,7 +195,28 @@ describe('tableau-viz', () => {
             'h3.slds-text-color_destructive'
         );
         expect(errorEl).not.toBeNull();
-        expect(errorEl.textContent).toBe('Invalid Viz URL');
+        expect(errorEl.textContent).toBe(
+            'Invalid Viz URL: Viz URL must be HTTPS.'
+        );
+        expect(global.tableauMockInstances.length).toBe(0);
+    });
+
+    it('reports error when invalid viz URL is HTTP', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizUrl = 'http://fakeurl.com';
+        document.body.appendChild(element);
+
+        await flushPromises();
+
+        const errorEl = element.shadowRoot.querySelector(
+            'h3.slds-text-color_destructive'
+        );
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toBe(
+            'Invalid Viz URL: Viz URL must be HTTPS.'
+        );
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
