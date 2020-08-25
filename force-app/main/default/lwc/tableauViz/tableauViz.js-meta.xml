@@ -15,22 +15,22 @@
             <property
                 name="vizUrl"
                 type="String"
-                label="Enter the Viz URL"
+                label="The URL for the Tableau view"
                 required="true"
-                description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
+                description="Click the Share button for the Tableau view. From the Share View dialog box, click Copy Link and paste the URL link here."
                 default="https://public.tableau.com/views/LinkedIn-PerformanceOverview/LinkedIn-PerformanceOverview?:showVizHome=no&amp;:embed=true"
             />
             <property
-                name="hideTabs"
+                name="showTabs"
                 type="Boolean"
                 default="false"
-                label="Hide Tabs"
+                label="Show Tabs"
             />
             <property
-                name="hideToolbar"
+                name="showToolbar"
                 type="Boolean"
-                default="true"
-                label="Hide Toolbar"
+                default="false"
+                label="Show Toolbar"
             />
             <property
                 name="height"
@@ -43,12 +43,13 @@
                 name="filterOnRecordId"
                 type="Boolean"
                 default="false"
-                label="Filter visualization based on the page"
+                label="Filter the Tableau view based on the current Salesforce record"
             />
             <property
                 name="tabAdvancedFilter"
                 type="String"
-                label="Add more filters, define the Tableau Field Name"
+                label="Add more filters, define the Tableau field name"
+                description="Enter the name of the Tableau field you want to filter on. The field needs to be in the Tableau view you are embedding."
             />
             <property
                 name="sfAdvancedFilter"
@@ -67,22 +68,22 @@
             <property
                 name="vizUrl"
                 type="String"
-                label="Enter the Viz URL"
+                label="The URL for the Tableau view"
                 required="true"
-                description="The Share button at the top of each view opens a dialog from which you can copy the embed URL and paste it here"
+                description="Click the Share button for the Tableau view. From the Share View dialog box, click Copy Link and paste the URL link here."
                 default="https://public.tableau.com/views/LinkedIn-PerformanceOverview/LinkedIn-PerformanceOverview?:showVizHome=no&amp;:embed=true"
             />
             <property
-                name="hideTabs"
+                name="showTabs"
                 type="Boolean"
                 default="false"
-                label="Hide Tabs"
+                label="Show Tabs"
             />
             <property
-                name="hideToolbar"
+                name="showToolbar"
                 type="Boolean"
-                default="true"
-                label="Hide Toolbar"
+                default="false"
+                label="Show Toolbar"
             />
             <property
                 name="height"
