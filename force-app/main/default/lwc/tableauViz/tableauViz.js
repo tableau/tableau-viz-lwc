@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
@@ -10,7 +10,7 @@ import templateError from './tableauVizError.html';
 export default class TableauViz extends LightningElement {
     @api objectApiName;
     @api recordId;
-    @api vizUrl;
+    @track _vizUrl;
     @api hideTabs;
     @api hideToolbar;
     @api filterOnRecordId;
@@ -22,6 +22,15 @@ export default class TableauViz extends LightningElement {
     advancedFilterValue;
     errorMessage;
     isLibLoaded = false;
+
+    @api
+    get vizUrl() {
+        return this._vizUrl;
+    }
+
+    set vizUrl(val) {
+        this._vizUrl = val;
+    }
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -71,12 +80,16 @@ export default class TableauViz extends LightningElement {
             return;
         }
 
+        if (this.viz) {
+            this.viz.dispose();
+        }
+
         const containerDiv = this.template.querySelector(
             'div.tabVizPlaceholder'
         );
 
         // Configure viz URL
-        const vizToLoad = new URL(this.vizUrl);
+        const vizToLoad = new URL(this._vizUrl);
         this.setVizDimensions(vizToLoad, containerDiv);
         this.setVizFilters(vizToLoad);
         const vizURLString = vizToLoad.toString();
@@ -103,7 +116,7 @@ export default class TableauViz extends LightningElement {
     validateInputs() {
         // Validate viz url
         try {
-            const u = new URL(this.vizUrl);
+            const u = new URL(this._vizUrl);
             if (u.protocol !== 'https:') {
                 throw Error('Viz URL must be HTTPS.');
             }
