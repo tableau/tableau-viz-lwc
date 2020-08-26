@@ -48,14 +48,14 @@
             <property
                 name="tabAdvancedFilter"
                 type="String"
-                label="Add more filters, define the Tableau field name"
+                label="Add additional filter, define the Tableau field name"
                 description="Enter the name of the Tableau field you want to filter on. The field needs to be in the Tableau view you are embedding."
             />
             <property
                 name="sfAdvancedFilter"
                 type="String"
                 datasource="apex://ObjectFieldPickList"
-                label="Add more filters, select a Salesforce object field"
+                label="Add additional filter, select a Salesforce object field"
             />
             <supportedFormFactors>
                 <supportedFormFactor type="Small" />
