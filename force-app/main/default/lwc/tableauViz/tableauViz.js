@@ -106,18 +106,17 @@ export default class TableauViz extends LightningElement {
             const u = new URL(this.vizUrl);
             if (u.protocol !== 'https:') {
                 throw Error(
-                    'Make sure the link to the Tableau view is using HTTPS.'
+                    'Invalid URL. Make sure the link to the Tableau view is using HTTPS.'
                 );
             }
 
             if (u.toString().replace(u.origin, '').startsWith('/#/')) {
                 throw Error(
-                    "Enter the link for a Tableau view. Click Copy Link to copy the URL from the Share View dialog box in Tableau. The link for the Tableau view must not include a '#' after the name of the server."
+                    "Invalid URL. Enter the link for a Tableau view. Click Copy Link to copy the URL from the Share View dialog box in Tableau. The link for the Tableau view must not include a '#' after the name of the server."
                 );
             }
         } catch (error) {
-            this.errorMessage =
-                'Invalid URL' + (error.message ? ': ' + error.message : '');
+            this.errorMessage = error.message ? error.message : 'Invalid URL';
             return false;
         }
 

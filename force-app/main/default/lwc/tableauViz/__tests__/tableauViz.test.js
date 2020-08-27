@@ -52,8 +52,8 @@ describe('tableau-viz', () => {
             is: TableauViz
         });
         element.vizUrl = VIZ_URL;
-        element.hideTabs = false;
-        element.hideToolbar = true;
+        element.showTabs = true;
+        element.showToolbar = false;
         element.height = 650;
         document.body.appendChild(element);
 
@@ -175,9 +175,7 @@ describe('tableau-viz', () => {
             'h3.slds-text-color_destructive'
         );
         expect(errorEl).not.toBeNull();
-        expect(errorEl.textContent).toBe(
-            'Invalid Viz URL: Invalid URL: invalid'
-        );
+        expect(errorEl.textContent).toBe('Invalid URL: invalid');
         expect(global.tableauMockInstances.length).toBe(0);
     });
 
@@ -196,7 +194,7 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toBe(
-            'Invalid Viz URL: Viz URL must be HTTPS.'
+            'Invalid URL. Make sure the link to the Tableau view is using HTTPS.'
         );
         expect(global.tableauMockInstances.length).toBe(0);
     });
@@ -215,7 +213,7 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toBe(
-            'Invalid Viz URL: Viz URL must be HTTPS.'
+            'Invalid URL. Make sure the link to the Tableau view is using HTTPS.'
         );
         expect(global.tableauMockInstances.length).toBe(0);
     });
@@ -235,7 +233,7 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toBe(
-            "Invalid Viz URL: Viz URL shouldn't have '#' right after the hostname. Removing '#' might make it work."
+            "Invalid URL. Enter the link for a Tableau view. Click Copy Link to copy the URL from the Share View dialog box in Tableau. The link for the Tableau view must not include a '#' after the name of the server."
         );
         expect(global.tableauMockInstances.length).toBe(0);
     });
@@ -255,7 +253,7 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toBe(
-            'Advanced filtering requires both Tableau and Salesforce fields.'
+            'Advanced filtering requires that you select both Tableau and Salesforce fields. The fields should represent corresponding data, for example, user or account identifiers.'
         );
         expect(global.tableauMockInstances.length).toBe(0);
     });
@@ -275,7 +273,7 @@ describe('tableau-viz', () => {
         );
         expect(errorEl).not.toBeNull();
         expect(errorEl.textContent).toBe(
-            'Advanced filtering requires both Tableau and Salesforce fields.'
+            'Advanced filtering requires that you select both Tableau and Salesforce fields. The fields should represent corresponding data, for example, user or account identifiers.'
         );
         expect(global.tableauMockInstances.length).toBe(0);
     });
