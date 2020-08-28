@@ -24,6 +24,7 @@ This project provides a Lightning web component that you can customize, deploy, 
 -   [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau.
 
 ---
+
 > For a demonstration of the Tableau LWC in action, see the [Tableau Viz Lightning web component video](https://www.youtube.com/watch?v=JozeD7nZMEQ&feature=youtu.be) from Trailheadx conference.
 
 ## Install the beta managed package
@@ -203,7 +204,6 @@ To test out this filtering, you can add the **Tableau Visualization** component 
 1. Configure the component.
 
     - Enter the URL of the Tableau viz that contains the sales data you want to display.
-
 
     - Provide the name of the the Tableau field to use for filtering. The Tableau field needs to be the name of a field in the viz that you are embedding. For example, the viz might contain a field for the `User ID`.
 
