@@ -11,8 +11,8 @@ export default class TableauViz extends LightningElement {
     @api objectApiName;
     @api recordId;
     @api vizUrl;
-    @api hideTabs;
-    @api hideToolbar;
+    @api showTabs;
+    @api showToolbar;
     @api filterOnRecordId;
     @api height;
     @api tabAdvancedFilter;
@@ -83,8 +83,8 @@ export default class TableauViz extends LightningElement {
 
         // Set viz Options
         const options = {
-            hideTabs: this.hideTabs,
-            hideToolbar: this.hideToolbar,
+            hideTabs: !this.showTabs,
+            hideToolbar: !this.showToolbar,
             height: `${this.height}px`,
             width: '100%'
         };
@@ -105,17 +105,18 @@ export default class TableauViz extends LightningElement {
         try {
             const u = new URL(this.vizUrl);
             if (u.protocol !== 'https:') {
-                throw Error('Viz URL must be HTTPS.');
+                throw Error(
+                    'Invalid URL. Make sure the link to the Tableau view is using HTTPS.'
+                );
             }
 
             if (u.toString().replace(u.origin, '').startsWith('/#/')) {
                 throw Error(
-                    "Viz URL shouldn't have '#' right after the hostname. Removing '#' might make it work."
+                    "Invalid URL. Enter the link for a Tableau view. Click Copy Link to copy the URL from the Share View dialog box in Tableau. The link for the Tableau view must not include a '#' after the name of the server."
                 );
             }
         } catch (error) {
-            this.errorMessage =
-                'Invalid Viz URL' + (error.message ? ': ' + error.message : '');
+            this.errorMessage = error.message ? error.message : 'Invalid URL';
             return false;
         }
 
@@ -125,7 +126,7 @@ export default class TableauViz extends LightningElement {
             (!this.sfAdvancedFilter && this.tabAdvancedFilter)
         ) {
             this.errorMessage =
-                'Advanced filtering requires both Tableau and Salesforce fields.';
+                'Advanced filtering requires that you select both Tableau and Salesforce fields. The fields should represent corresponding data, for example, user or account identifiers.';
             return false;
         }
 
