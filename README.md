@@ -25,7 +25,7 @@ This project provides a Lightning web component that you can customize, deploy, 
 
 ---
 
-> For a demonstration of the Tableau LWC in action, see the [Tableau Viz Lightning web component video](https://www.youtube.com/watch?v=JozeD7nZMEQ&feature=youtu.be) from Trailheadx conference.
+> For a demonstration of the Tableau LWC in action, see the [Tableau Viz Lightning web component video](https://www.youtube.com/watch?v=JozeD7nZMEQ&feature=youtu.be) from the Trailheadx conference.
 
 ## Install the beta managed package
 
