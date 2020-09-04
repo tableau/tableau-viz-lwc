@@ -79,6 +79,7 @@ export default class TableauViz extends LightningElement {
         const vizToLoad = new URL(this.vizUrl);
         this.setVizDimensions(vizToLoad, containerDiv);
         this.setVizFilters(vizToLoad);
+        TableauViz.checkForMobileApp(vizToLoad, window.navigator.userAgent);
         const vizURLString = vizToLoad.toString();
 
         // Set viz Options
@@ -156,5 +157,56 @@ export default class TableauViz extends LightningElement {
                 this.advancedFilterValue
             );
         }
+    }
+
+    static checkForMobileApp(vizToLoad, userAgent) {
+        const mobileRegex = /SalesforceMobileSDK/g;
+        if (!mobileRegex.test(userAgent)) {
+            return;
+        }
+
+        const deviceIdRegex = /uid_([\w|-]+)/g;
+        const deviceNameRegex = /(iPhone|Android|iPad)/g;
+
+        const deviceIdMatches = deviceIdRegex.exec(userAgent);
+        const deviceId =
+            deviceIdMatches == null
+                ? TableauViz.generateRandomDeviceId()
+                : deviceIdMatches[1];
+        const deviceNameMatches = deviceNameRegex.exec(userAgent);
+        const deviceName =
+            deviceNameMatches == null
+                ? 'SFMobileApp'
+                : `SFMobileApp_${deviceNameMatches[1]}`;
+
+        vizToLoad.searchParams.append(':use_rt', 'y');
+        vizToLoad.searchParams.append(':client_id', 'TableauVizLWC');
+        vizToLoad.searchParams.append(':device_id', deviceId);
+        vizToLoad.searchParams.append(':device_name', deviceName);
+    }
+
+    /* ***********************
+     * This function just needs to generate a random id so that if the user-agent for this mobile device
+     * doesn't contain a uid_ field, we can have a random id that is not likely to collide if the same user logs
+     * in to SF Mobile from a different mobile device that also doesn't have a uid_ field.
+     * ***********************/
+    static generateRandomDeviceId() {
+        function getRandomSymbol(symbol) {
+            var array;
+
+            if (symbol === 'y') {
+                array = ['8', '9', 'a', 'b'];
+                return array[Math.floor(Math.random() * array.length)];
+            }
+
+            array = new Uint8Array(1);
+            window.crypto.getRandomValues(array);
+            return (array[0] % 16).toString(16);
+        }
+
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+            /[xy]/g,
+            getRandomSymbol
+        );
     }
 }

@@ -325,4 +325,97 @@ describe('tableau-viz', () => {
         );
         expect(global.tableauMockInstances.length).toBe(0);
     });
+
+    describe('Test mobile detection', () => {
+        it('Detects that this is mobile', () => {
+            const appendFn = jest.fn();
+            const vizToLoad = {
+                searchParams: {
+                    append: appendFn
+                }
+            };
+
+            const device = 'iPhone';
+            const id = '9456F6A5-A240-4653-948C-0AC79890275E';
+            const userAgent = `SalesforceMobileSDK/7.1.2 iOS/13.6 (${device}) Chatter/226.030(6201285) Hybrid uid_${id}`;
+
+            TableauViz.checkForMobileApp(vizToLoad, userAgent);
+            expect(appendFn.mock.calls.length).toBe(4);
+            expect(appendFn.mock.calls[0][0]).toBe(':use_rt');
+            expect(appendFn.mock.calls[0][1]).toBe('y');
+            expect(appendFn.mock.calls[1][0]).toBe(':client_id');
+            expect(appendFn.mock.calls[1][1]).toBe('TableauVizLWC');
+            expect(appendFn.mock.calls[2][0]).toBe(':device_id');
+            expect(appendFn.mock.calls[2][1]).toBe(id);
+            expect(appendFn.mock.calls[3][0]).toBe(':device_name');
+            expect(appendFn.mock.calls[3][1]).toBe(`SFMobileApp_${device}`);
+        });
+
+        it('Detects that this is not mobile', () => {
+            const appendFn = jest.fn();
+            const vizToLoad = {
+                searchParams: {
+                    append: appendFn
+                }
+            };
+
+            const userAgent = `Some random browser that doesn't use the SDK`;
+
+            TableauViz.checkForMobileApp(vizToLoad, userAgent);
+            expect(appendFn.mock.calls.length).toBe(0);
+        });
+
+        it('Detects that this is an Android', () => {
+            const appendFn = jest.fn();
+            const vizToLoad = {
+                searchParams: {
+                    append: appendFn
+                }
+            };
+
+            const device = 'Android';
+            const id = '9456F6A50AC79890275E';
+            const userAgent = `SalesforceMobileSDK/7.1.2 (${device}) Chatter/226.030(6201285) Hybrid uid_${id}`;
+
+            TableauViz.checkForMobileApp(vizToLoad, userAgent);
+            expect(appendFn.mock.calls.length).toBe(4);
+            expect(appendFn.mock.calls[0][0]).toBe(':use_rt');
+            expect(appendFn.mock.calls[0][1]).toBe('y');
+            expect(appendFn.mock.calls[1][0]).toBe(':client_id');
+            expect(appendFn.mock.calls[1][1]).toBe('TableauVizLWC');
+            expect(appendFn.mock.calls[2][0]).toBe(':device_id');
+            expect(appendFn.mock.calls[2][1]).toBe(id);
+            expect(appendFn.mock.calls[3][0]).toBe(':device_name');
+            expect(appendFn.mock.calls[3][1]).toBe(`SFMobileApp_${device}`);
+        });
+
+        it('Generates an ID if none are in the user agent string', () => {
+            const appendFn = jest.fn();
+            const vizToLoad = {
+                searchParams: {
+                    append: appendFn
+                }
+            };
+
+            const randomID = '1234';
+            const randomIDGenerator = jest.fn();
+            TableauViz.generateRandomDeviceId = randomIDGenerator;
+            randomIDGenerator.mockReturnValueOnce(randomID);
+
+            const device = 'Android';
+            const userAgent = `SalesforceMobileSDK/7.1.2 (${device}) Chatter/226.030(6201285) Hybrid`;
+
+            TableauViz.checkForMobileApp(vizToLoad, userAgent);
+            expect(appendFn.mock.calls.length).toBe(4);
+            expect(randomIDGenerator.mock.calls.length).toBe(1);
+            expect(appendFn.mock.calls[0][0]).toBe(':use_rt');
+            expect(appendFn.mock.calls[0][1]).toBe('y');
+            expect(appendFn.mock.calls[1][0]).toBe(':client_id');
+            expect(appendFn.mock.calls[1][1]).toBe('TableauVizLWC');
+            expect(appendFn.mock.calls[2][0]).toBe(':device_id');
+            expect(appendFn.mock.calls[2][1]).toBe(randomID);
+            expect(appendFn.mock.calls[3][0]).toBe(':device_name');
+            expect(appendFn.mock.calls[3][1]).toBe(`SFMobileApp_${device}`);
+        });
+    });
 });
