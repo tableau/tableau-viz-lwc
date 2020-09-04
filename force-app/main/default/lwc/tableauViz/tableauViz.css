@@ -1,0 +1,13 @@
+/* *************************
+* Support scrolling on phones
+* With this style we create a slim margin on the right
+* that users can scroll the entire screen via. Without
+* this, if the viz takes up the entire screen, the user
+* will not be able to scroll to other parts of the SF
+* page
+*************************** */
+@media (max-width: 500px) {
+    .tabVizPlaceholder {
+        margin-right: 10px;
+    }
+}
