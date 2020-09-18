@@ -1,4 +1,4 @@
-global class ObjectFieldPickList extends VisualEditor.DynamicPickList {
+global with sharing class ObjectFieldPickList extends VisualEditor.DynamicPickList {
     @TestVisible
     private static final String RECORD_PAGE = 'RecordPage';
 
