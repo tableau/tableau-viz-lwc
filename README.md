@@ -211,7 +211,6 @@ To test out this filtering, you can add the **Tableau Visualization** component 
 
     ![Tableau Visualization LWC Filter Settings](./assets/lwc_filtering.png 'Tableau Visualization LWC Filter Settings')
 
-    <img src=">
 
 1. Save your changes to the page.
 
