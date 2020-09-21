@@ -1,41 +1,39 @@
-# Lightning Web Component for embedding Tableau into Salesforce - Developer Preview
+# Lightning Web Component for embedding Tableau into Salesforce
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
-![GitHub version](https://img.shields.io/badge/release-beta-blue)
+![GitHub version](https://img.shields.io/badge/release-blue)
 
 This project provides a Lightning web component that you can customize, deploy, and use to embed a Tableau visualization into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau views into web pages.
 
-> This sample component is designed to run on the Salesforce Platform.
+> This sample component is designed to run on the Salesforce Lightning Platform.
 
 ## Table of contents
 
--   [Install the Beta Managed Package](#install-the-beta-managed-package): This is the recommended way to install the Lightning Web Component for Tableau. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code. Use this option to install the component on Trailhead Playgrounds so you can use it when tackling Trailhead Badges. The beta package is only available to Developer Program members. Sign up to receive the instructions.
+-   [Install the Tableau Viz Lightning web component from the Salesforce AppExchange](#install-the-tableau-viz-lightning-web-component-from-the-appexchange): This is the easiest way to install the Lightning web component for embedding Tableau views. Use this option if you want to get started using the component as quickly as possible, and you aren't a developer who is interested in the code. Use this option to install the component on Trailhead Playgrounds so you can use it when tackling Trailhead Badges.
 
 -   [Install the component using a Scratch Org](#install-the-component-using-a-scratch-org): This is the recommended installation option if you are a developer. Use this option if you wants to explore and modify the component's code.
 
--   [Install the component using a Developer Edition Org or a Sandbox](#install-the-component-using-a-developer-edition-org-or-a-sandbox): Consider this option if you want the component deployed to a more permanent development/demo environment than a Scratch org.
+-   [Install the component using a Developer Edition Org or a Sandbox](#install-the-component-using-a-developer-edition-org-or-a-sandbox): Consider this option if you want the component deployed to a more permanent development and demonstration environment than a scratch org.
 
 -   [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page): After you have installed the component on your org, you can add a Tableau viz to a Lightning page in Salesforce.
 
 -   [Try Filtering](#try-filtering): If you place the component on a record page you can try filtering a visualization based on the context of the hosting record page, or you can specify the fields in Tableau and Salesforce to use for filtering.
 
--   [Sign up for the Tableau LWC Beta on the Tableau Developer Program Portal](#sign-up-for-the-tableau-LWC-beta-on-the-tableau-developer-program-portal): Join the Developer Program and gain access to the Tableau Viz Lightning Web Component Beta.
+-   [Sign up for the Tableau Developer Program](#sign-up-for-the-tableau-developer-program): Join the Developer Program and the DataDev community. Learn how to customize, integrate and extend the Tableau platform to suit the needs of your organization.
 
--   [Troubleshooting problems deploying the LWC for Tableau](#troubleshooting-problems-deploying-the-lwc-for-Tableau): Solve issues related to deploying the Lightning Web Component for Tableau.
+-   [Troubleshooting problems deploying the Lightning web component for Tableau](#troubleshooting-problems-deploying-the-tableau-lightning-web-component): Solve issues related to deploying the Lightning Web Component for Tableau.
 
 ---
 
-> For a demonstration of the Tableau LWC in action, see the [Tableau Viz Lightning web component video](https://www.youtube.com/watch?v=JozeD7nZMEQ&feature=youtu.be) from the Trailheadx conference.
+> For a demonstration of the Tableau Lightning web component in action, see the [Tableau Viz Lightning web component video](https://youtu.be/BliG1NbNg0w).
 
-## Install the beta managed package
+## Install the Tableau Viz Lightning web component from the AppExchange
 
-The managed package is the easiest way to install the Lightning Web Component for Tableau. The managed package is only available when you join the beta program. If you haven't already done so, go [Sign up for the Tableau LWC Beta on the Tableau Developer Program Portal](#sign-up-for-the-tableau-LWC-beta-on-the-tableau-developer-program-portal).
+The easiest way to install the Lightning web component for Tableau is from the [AppExchange](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N4V00000GF1cSUAT).
 
-The package (Tableau Viz LWC) is a container for the Tableau Visualization component available in this GitHub repository. You can install the beta package in sandbox or Developer Edition organizations on Salesforce, or in test organizations furnished through the Environment Hub. You can learn more about [Beta Versions of Managed Package](https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/packaging_about_beta_packages.htm) on the Salesforce website.
+The Tableau Viz web component on AppExchange is a container for the Tableau Visualization component available in this GitHub repository. You can install the component in production environments, or in sandbox or Developer Edition organizations on Salesforce, or in test organizations furnished through the Environment Hub. You can learn more about the Tableau Viz Lightning web component, see [Embed Tableau views in Salesforce](https://help.tableau.com/current/pro/desktop/en-us/embed_ex_lwc.htm).
 
 After you install the package, you can [Add the Tableau Visualization component to a Lightning page](#add-the-tableau-visualization-component-to-a-lightning-page).
-
-> **Note:** The Tableau Viz LWC package is a beta package and can't be used in production environments until it is officially released.
 
 ---
 
@@ -52,7 +50,7 @@ After you install the package, you can [Add the Tableau Visualization component 
 
     **Note:** You will use the Salesforce CLI to perform the following steps. Be sure you enable Dev Hub in your Trailhead Playground before you begin. Login to your Playground. Go to **Setup > Development > Dev Hub**).
 
-1. If you haven't already done so, open a Command window and authorize your hub org and provide it with an alias (**myhuborg** in the following command):
+1. If you haven't already done so, open a Command or Terminal window and authorize your hub org and provide it with an alias (**myhuborg** in the following command):
 
     ```
     sfdx force:auth:web:login -d -a myhuborg
@@ -160,13 +158,13 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 1. Drag the **Tableau Visualization** component from the Custom area of the Lightning Components list to the top of the Page Canvas.
 
-1. Select a Tableau viz to display by providing the URL for the viz in the **Enter the Viz URL** text box.
+1. Select a Tableau viz to display by providing the URL for the viz in the **The URL for the Tableau view** text box.
 
     To find the URL for a viz on Tableau Server or Tableau Online, click **Share** on the toolbar and select **Copy Link** from the Share View dialog box. For Tableau Public, copy the URL for the viz from the address bar in your browser.
 
     In Salesforce, use the options for the **Tableau Visualization** component to control the size of the viz and whether you want to show the Tableau toolbar or any tabs for the viz.
 
-> For this first release, we support SSO only with SAML. If you want to configure Tableau to use Salesforce IdP, follow the steps described in [Configure SAML with Salesforce](https://help.tableau.com/current/online/en-us/saml_config_salesforce.htm).
+> For this first release, we support SSO only with SAML. If you want to configure Tableau to use Salesforce IdP, follow the steps described in [Configure SAML with Salesforce](https://help.tableau.com/current/online/en-us/saml_config_salesforce.htm) and [Configure SAML for Tableau Viz Lightning Web Component](https://help.tableau.com/current/online/en-us/saml_config_TOL_LWC.htm) for Tableau Online. For Tableau Server, see [Configure SAML for Tableau Viz Lightning Web Component](https://help.tableau.com/current/server/en-us/saml_config_LWC.htm) for Windows and [Configure SAML for Tableau Viz Lightning Web Component](https://help.tableau.com/current/server-linux/en-us/saml_config_LWC.htm) for Linux.
 
 ![Tableau Visualization LWC](./assets/lwc_tableau_viz_url.png 'Tableau Visualization LWC')
 
@@ -174,7 +172,7 @@ After you have successfully deployed or pushed the `tableau-viz-lwc` component t
 
 ## Try filtering
 
-The beta release of the Tableau LWC supports two ways of filtering the Tableau visualization. These methods of filtering only work on Lightning record pages. Filtering is not available for Home pages or App pages. For record pages, you can automatically filter the Tableau visualization based upon the page it is embedded in (_context filtering_), or you can specify fields in Tableau and in Salesforce to create more sophisticated filtering.
+The Tableau Lightning web component supports two ways of filtering the Tableau visualization. These methods of filtering only work on Lightning record pages. Filtering is not available for Home pages or App pages. For record pages, you can automatically filter the Tableau visualization based upon the page it is embedded in (_context filtering_), or you can specify fields in Tableau and in Salesforce to create more sophisticated filtering.
 
 ### Context filtering
 
@@ -184,14 +182,14 @@ To have the visualization filtered based upon the page it is embedded in, the Ta
 
 1. Edit the record page and configure the component by entering the URL of the Tableau viz that contains the data you want to display. The Tableau visualization must include that a field that holds the record IDs (for example, user or account IDs).
 
-1. Select **Filter visualization based on the page** and save your changes to the page.
+1. Select **Filter the Tableau view based upon the current Salesforce record** and save your changes to the page.
 
-    When the record ID of the page matches the corresponding value in a field in the Tableau viz, the LWC applies that filter. For example, LWC filters the viz to show just the sales data for the user on the user's page.
+    When the record ID of the page matches the corresponding value in a field in the Tableau viz, the component applies that filter. For example, component filters the viz to show just the sales data for the user on the user's page.
 
 ### Advanced filtering
 
 If you want more control over filtering the Tableau visualization on a records page, you can map a field in Tableau to a specific field in Salesforce.  
-The Tableau field needs to be on the viz that you are embedding. The Salesforce field must be a qualified field on the page where you are embedding the viz. When the values of these two fields match, the LWC will automatically filter the Tableau viz
+The Tableau field needs to be on the viz that you are embedding. The Salesforce field must be a qualified field on the page where you are embedding the viz. When the values of these two fields match, the Tableau Lightning web component will automatically filter the Tableau viz.
 
 To test out this filtering, you can add the **Tableau Visualization** component to a record page. For example, if you have a Tableau viz that contains data that is related to sales information, you can add that viz to your opportunity record pages.
 
@@ -213,26 +211,25 @@ To test out this filtering, you can add the **Tableau Visualization** component 
 
     ![Tableau Visualization LWC Filter Settings](./assets/lwc_filtering.png 'Tableau Visualization LWC Filter Settings')
 
+    <img src=">
+
 1. Save your changes to the page.
 
 ---
 
-## Sign up for the Tableau LWC Beta on the Tableau Developer Program Portal
+## Sign up for the Tableau Developer Program
 
 We want to hear from you!
 
 ![Flex DataDev Warrior](./assets/smallWarrior_DataDev_nohashtag.png)
 
-Join the Developer Program and gain access to the Tableau Viz Lightning Web Component Beta on the Developer Program Portal.
+Join the Developer Program and gain access to the latest news about the Tableau developer platform and tools.
 
 1. To join the Developer Program, go to [(https://www.tableau.com/developer)](https://www.tableau.com/developer) and use your Tableau login to sign up. After you join, you can sign up and get a Tableau Online developer site [(https://www.tableau.com/developer/get-site)](https://www.tableau.com/developer/get-site). With this free developer site, you can try the single sign-on experience using Salesforce as your SAML IdP and configuring SAML on Tableau Online, or you can just use the site to embed a viz from Tableau Online.
 
-1. After you sign up for the Developer Program, we'll contact you with information about joining the Tableau LWC Beta on the Tableau Pre-Release site (https://prerelease.tableau.com/).
+1. Try out the Tableau Viz Lightning component and samples!
 
-    If you don't already have access to Developer Program Portal, send email to [tableaulwcprerelease@tableau.com](mailto:tableaulwcprerelease@tableau.com?subject=Tableau%20LWC%20Pre-Release) with **Tableau LWC Pre-Release** on the subject line.
-
-1. Try out the Tableau Viz Lightning component!
-
+    - Check out the [Tableau Viz Lightning Web Component Samples](https://github.com/tableau/tableau-viz-lwc-samples)
     - Send us your feedback
     - Check the current [Issues](https://github.com/tableau/tableau-viz-lwc/issues) and add any new ones you find
     - Request new features (add them to [Issues](https://github.com/tableau/tableau-viz-lwc/issues))
@@ -242,7 +239,7 @@ Welcome to the **#DataDev** Community!
 
 ---
 
-## Troubleshooting problems deploying the LWC for Tableau
+## Troubleshooting problems deploying the Tableau Lightning web component
 
 -   **Tip:** Be sure to run the `sfdx` commands from within the project folder.
 
