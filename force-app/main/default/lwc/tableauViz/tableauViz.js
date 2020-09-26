@@ -11,9 +11,6 @@ export default class TableauViz extends LightningElement {
     @api objectApiName;
     @api recordId;
     @api vizUrl;
-    @api showTabs;
-    @api showToolbar;
-    @api filterOnRecordId;
     @api height;
     @api tabAdvancedFilter;
     @api sfAdvancedFilter;
@@ -22,6 +19,11 @@ export default class TableauViz extends LightningElement {
     advancedFilterValue;
     errorMessage;
     isLibLoaded = false;
+
+    // Use hashnames for private fields when that is accepted
+    _showTabs = false;
+    _showToolbar = false;
+    _filterOnRecordId = false;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -43,6 +45,44 @@ export default class TableauViz extends LightningElement {
                 error
             )}`;
         }
+    }
+
+    // In JavaScript, there are six falsy values:
+    // false, 0, '', null, undefined, and NaN. Everything else is truthy.
+    // LWC can sometimes return 'false' as a string and we need to treat it as false
+    // the !! operator converts any object to Boolean type
+    static booleanNormalize(val) {
+        if (typeof val == 'string' && val.toLowerCase() === 'false') {
+            return false;
+        }
+        return !!val;
+    }
+
+    @api
+    get showTabs() {
+        return this._showTabs;
+    }
+
+    set showTabs(val) {
+        this._showTabs = TableauViz.booleanNormalize(val);
+    }
+
+    @api
+    get showToolbar() {
+        return this._showToolbar;
+    }
+
+    set showToolbar(val) {
+        this._showToolbar = TableauViz.booleanNormalize(val);
+    }
+
+    @api
+    get filterOnRecordId() {
+        return this._filterOnRecordId;
+    }
+
+    set filterOnRecordId(val) {
+        this._filterOnRecordId = TableauViz.booleanNormalize(val);
     }
 
     async connectedCallback() {

@@ -418,4 +418,18 @@ describe('tableau-viz', () => {
             expect(appendFn.mock.calls[3][1]).toBe(`SFMobileApp_${device}`);
         });
     });
+
+    describe('Validate normalization functions', () => {
+        it('Checks Boolean normalize', () => {
+            let result;
+            result = TableauViz.booleanNormalize(true);
+            expect(result).toBe(true);
+            result = TableauViz.booleanNormalize(false);
+            expect(result).toBe(false);
+            result = TableauViz.booleanNormalize('false');
+            expect(result).toBe(false);
+            result = TableauViz.booleanNormalize('true');
+            expect(result).toBe(true);
+        });
+    });
 });
