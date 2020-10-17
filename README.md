@@ -1,7 +1,7 @@
 # Lightning Web Component for embedding Tableau into Salesforce
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
-![GitHub version](https://img.shields.io/badge/release-blue)
+![GitHub version](https://img.shields.io/badge/release-blue) - [Release Notes](#release-notes)
 
 This project provides a Lightning web component that you can customize, deploy, and use to embed a Tableau visualization into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau views into web pages.
 
@@ -254,3 +254,25 @@ Welcome to the **#DataDev** Community!
     Use the `-u username` option. To determine the `username` for your Salesforce org, you can use the command `sfdx force:org:list` to display information about the orgs you have created or are connected to.
 
 > For more information about fixing problems with deployment, see [Troubleshoot Salesforce DX](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_troubleshoot.htm) in the [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm).
+
+## Release Notes
+
+### Version 1.2
+
+_October 17, 2020_
+
+**Using the Tableau Viz Lightning web component on Lighting communities**
+
+Salesforce Spring '21 is removing the **Allow Inline Scripts and Script Access to Any Third-party Host** Content Security Policy (CSP) setting for Lightning communities. For Winter `21, Salesforce recommends switching your community to a more secure option now.
+
+To support the increased level of security, version 1.2 of the Tableau Viz Lightning web component adds Tableau Public and Tableau Online as trusted web sites in the managed package. If you are using the Tableau Viz Lighting web component on Lighting community pages and want to embed Tableau views from Tableau Public and Tableau Online, the version 1.2 package handles the CSP change for you. However, if you want to add views from Tableau Server, you need to add the Tableau Server URL as a CSP Trusted Site. For information about how to add Tableau Server as a trusted site, see the Salesforce Help documentation, [Create CSP Trusted Sites to Access Third-Party APIs](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/csp_trusted_sites.htm).
+
+**Fixed in this release**
+
+-   [Fixed] When you opened a Salesforce page for editing that contains a Tableau view from Tableau Online on the page, the tabs and the toolbar are shown even if the **Show Toolbar** and **Show Tabs** options were not selected.
+
+### Version 1.1
+
+_September 21, 2020_
+
+-   Initial public release of the Tableau Viz Lighting web component.
