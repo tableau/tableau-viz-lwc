@@ -8,35 +8,52 @@ import templateMain from './tableauViz.html';
 import templateError from './tableauVizError.html';
 
 export default class TableauViz extends LightningElement {
-    @api objectApiName;
-    @api recordId;
-    @api vizUrl;
-    @api height;
-    @api tabAdvancedFilter;
-    @api sfAdvancedFilter;
+//#region Member Variables
+//#region Special LWC variable
+    // https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.use_context
+    @api objectApiName
+    @api recordId
+//#endregion Special LWC variable
 
-    viz;
-    advancedFilterValue;
+//#region Filter variables
+    // Need to maintain an independent list that wire service can react to changes on
+    _recordFilterFields = []
+    _recordFilters = new Map()
+    _recordFiltersResolved = true // If there are no fields, then they are resolved
+    // this is a bit of a duplication of the above but we do this for manageability of the 'truth'
+    _filters = new Map()
+
+    // We need these cause the property editor UI is not expressive enough yet
+    _sfAdvancedFilter
+    _tabAdvancedFilter
+//#endregion Filter variables
+    
+    // Used in the error html page
     errorMessage;
-    isLibLoaded = false;
 
-    // Use hashnames for private fields when that is accepted
-    _showTabs = false;
-    _showToolbar = false;
-    _filterOnRecordId = false;
+    _viz;
+    _isLibLoaded = false;
+//#endregion Member Variables
 
     @wire(getRecord, {
         recordId: '$recordId',
-        fields: '$sfAdvancedFilter'
+        fields: '$_recordFilterFields'
     })
     getRecord({ error, data }) {
         if (data) {
-            this.advancedFilterValue = getFieldValue(
-                data,
-                this.sfAdvancedFilter
-            );
-            if (this.advancedFilterValue === undefined) {
-                this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`;
+            // iterate over each recordFilterField and get the value
+            let err = false
+            this._recordFilters.forEach( (tableauField, recordField) => {
+                const fieldValue = getFieldValue(data, recordField)
+                if (fieldValue === undefined) {
+                    err = true
+                } else {
+                    this.addFilter(tableauField, fieldValue)
+                }
+            })
+            this._recordFiltersResolved = true
+            if (err) {
+                this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`
             } else {
                 this.renderViz();
             }
@@ -47,47 +64,129 @@ export default class TableauViz extends LightningElement {
         }
     }
 
-    // In JavaScript, there are six falsy values:
-    // false, 0, '', null, undefined, and NaN. Everything else is truthy.
-    // LWC can sometimes return 'false' as a string and we need to treat it as false
-    // the !! operator converts any object to Boolean type
-    static booleanNormalize(val) {
-        if (typeof val == 'string' && val.toLowerCase() === 'false') {
-            return false;
+//#region Getter & Setter Helpers
+    // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
+    _setBooleanAttribute(name, v) {
+        switch (typeof v) {
+            case 'string' :
+                if ((v === '') || (v === name)) {
+                    this.setAttribute(name, '')
+                } else {
+                    this.removeAttribute(name);
+                }
+                break;
+            case 'boolean' :
+                if (v) {
+                    this.setAttribute(name, '');
+                } else {
+                    this.removeAttribute(name);
+                }
+                break;
+            default:
+                this.removeAttribute(name);
         }
-        return !!val;
+    }
+
+    // hasAttribute is not available on the LightningElement from testing so ... workaround
+    // All boolean elements are defaulted to false
+    _checkBooleanAttribute(name) {
+        return (null != this.getAttribute(name)) ? true : false
+    }
+
+    // Use a _default map to make it clearer on review of code what defaults are for the object
+    static _defaults = {
+        'viz-url': '',
+        'height': 550
+    }
+//#endregion
+
+//#region Simple Getters / Setters
+    @api
+    get vizUrl() {
+        return this.getAttribute('viz-url') || TableauViz._defaults['viz-url']
+    }
+
+    set vizUrl(val) {
+        this.setAttribute('viz-url', val)
     }
 
     @api
     get showTabs() {
-        return this._showTabs;
+        return this._checkBooleanAttribute('show-tabs')
     }
 
     set showTabs(val) {
-        this._showTabs = TableauViz.booleanNormalize(val);
+        this._setBooleanAttribute('show-tabs', val)
     }
 
     @api
     get showToolbar() {
-        return this._showToolbar;
+        return this._checkBooleanAttribute('show-toolbar')
     }
 
     set showToolbar(val) {
-        this._showToolbar = TableauViz.booleanNormalize(val);
+        this._setBooleanAttribute('show-toolbar', val)
     }
 
     @api
     get filterOnRecordId() {
-        return this._filterOnRecordId;
+        return this._checkBooleanAttribute('filter-on-record-id')
     }
 
     set filterOnRecordId(val) {
-        this._filterOnRecordId = TableauViz.booleanNormalize(val);
+        this._setBooleanAttribute('filter-on-record-id', val)
     }
 
+    @api
+    get height() {
+        return this.getAttribute('height') || TableauViz._defaults.height
+    }
+
+    set height(val) {
+        this.setAttribute('height', val)
+    }
+
+    @api
+    get tabAdvancedFilter() {
+        return this._tabAdvancedFilter
+    }
+
+    set tabAdvancedFilter(val) {
+        this._tabAdvancedFilter = val;
+        if (this.sfAdvancedFilter) {
+            this.addRecordFilter(this.sfAdvancedFilter, this._tabAdvancedFilter)
+        }
+    }
+
+    @api
+    get sfAdvancedFilter() {
+        return this._sfAdvancedFilter
+    }
+
+    set sfAdvancedFilter(val) {
+        this._sfAdvancedFilter = val
+        if (this.tabAdvancedFilter) {
+            this.addRecordFilter(this._sfAdvancedFilter, this.tabAdvancedFilter)
+        }
+    }
+//#endregion
+
+//#region Filter handling
+    // Record filter is of type { recordField: <>, tableauField: <> }
+    addRecordFilter(recordField, tableauField) {
+        this._recordFiltersResolved = false
+        this._recordFilters.set(recordField, tableauField)
+        this._recordFilterFields = [...this._recordFilters.keys()]
+    }
+
+    addFilter(field, value) {
+        this._filters.set(field, value)
+    }
+
+//#endregion
     async connectedCallback() {
         await loadScript(this, tableauJSAPI);
-        this.isLibLoaded = true;
+        this._isLibLoaded = true;
         this.renderViz();
     }
 
@@ -102,12 +201,12 @@ export default class TableauViz extends LightningElement {
         }
 
         // Halt rendering if lib is not loaded
-        if (!this.isLibLoaded) {
+        if (!this._isLibLoaded) {
             return;
         }
 
         // Halt rendering if advanced filter value is not yet loaded
-        if (this.sfAdvancedFilter && this.advancedFilterValue === undefined) {
+        if (!this._recordFiltersResolved) {
             return;
         }
 
@@ -131,7 +230,7 @@ export default class TableauViz extends LightningElement {
         };
 
         // eslint-disable-next-line no-undef
-        this.viz = new tableau.Viz(containerDiv, vizURLString, options);
+        this._viz = new tableau.Viz(containerDiv, vizURLString, options);
     }
 
     render() {
@@ -141,10 +240,16 @@ export default class TableauViz extends LightningElement {
         return templateMain;
     }
 
+//#region Validation methods
+    _validateRecordFilterValuesSet(sfField, tabField) {
+        // either both are set or neither. 
+        return (sfField && tabField) || !(sfField || tabField)
+    }
+
     validateInputs() {
         // Validate viz url
         try {
-            const u = new URL(this.vizUrl);
+            const u = new URL(this.vizUrl)
             if (u.protocol !== 'https:') {
                 throw Error(
                     'Invalid URL. Make sure the link to the Tableau view is using HTTPS.'
@@ -161,11 +266,8 @@ export default class TableauViz extends LightningElement {
             return false;
         }
 
-        // Advanced filter checks
-        if (
-            (this.sfAdvancedFilter && !this.tabAdvancedFilter) ||
-            (!this.sfAdvancedFilter && this.tabAdvancedFilter)
-        ) {
+        // when the new UI framework comes out, it will allow for composite properties so we won't get piecemeal. Until then, we check
+        if (!this._validateRecordFilterValuesSet(this.sfAdvancedFilter, this.tabAdvancedFilter)) {
             this.errorMessage =
                 'Advanced filtering requires that you select both Tableau and Salesforce fields. The fields should represent corresponding data, for example, user or account identifiers.';
             return false;
@@ -173,6 +275,7 @@ export default class TableauViz extends LightningElement {
 
         return true;
     }
+//#endregion Validaton methods
 
     // Height is set by the user
     // Width is based on the containerDiv to which the viz is added
@@ -190,15 +293,12 @@ export default class TableauViz extends LightningElement {
             vizToLoad.searchParams.append(filterNameTab, this.recordId);
         }
 
-        // Additional Filtering
-        if (this.tabAdvancedFilter && this.advancedFilterValue) {
-            vizToLoad.searchParams.append(
-                this.tabAdvancedFilter,
-                this.advancedFilterValue
-            );
-        }
+        this._filters.forEach( (val, field) => {
+            vizToLoad.searchParams.append(field, val)
+        })
     }
 
+//#region Mobile specific methods
     static checkForMobileApp(vizToLoad, userAgent) {
         const mobileRegex = /SalesforceMobileSDK/g;
         if (!mobileRegex.test(userAgent)) {
@@ -249,4 +349,5 @@ export default class TableauViz extends LightningElement {
             getRandomSymbol
         );
     }
+    //#endregion Mobile specific methods
 }
