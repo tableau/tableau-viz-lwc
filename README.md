@@ -5,6 +5,15 @@
 
 This project provides a Lightning web component that you can customize, deploy, and use to embed a Tableau visualization into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau views into web pages.
 
+<div>
+    <img src="https://developer.salesforce.com/resource/images/trailhead/badges/projects/trailhead_project_embed-tableau-visualizations-in-salesforce.png" align="left" alt="Trailhead Badge" width="100"/>
+    Learn more about the Tableau Viz Lightning web component by completing the <a href="https://trailhead.salesforce.com/en/content/learn/projects/embed-tableau-visualizations-in-salesforce">Embed Tableau Visualizations in Salesforce</a> Trailhead project.
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</div>
+
 > This sample component is designed to run on the Salesforce Lightning Platform.
 
 ## Table of contents
