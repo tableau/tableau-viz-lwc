@@ -21,6 +21,13 @@
                 default="https://public.tableau.com/views/LinkedIn-PerformanceOverview/LinkedIn-PerformanceOverview?:showVizHome=no&amp;:embed=true"
             />
             <property
+                name="filterOnRecordId"
+                type="Boolean"
+                default="false"
+                description="Filter the Tableau view based on the current Salesforce record. ie 'Account ID'={id}"
+                label="Filter based on the current record id"
+            />
+            <property
                 name="showTabs"
                 type="Boolean"
                 default="false"
@@ -40,22 +47,16 @@
                 required="true"
             />
             <property
-                name="filterOnRecordId"
-                type="Boolean"
-                default="false"
-                label="Filter the Tableau view based on the current Salesforce record"
-            />
-            <property
                 name="tabAdvancedFilter"
                 type="String"
-                label="Add additional filter, define the Tableau field name"
+                label="Additional Filter: Tableau field name"
                 description="Enter the name of the Tableau field you want to filter on. The field needs to be in the Tableau view you are embedding."
             />
             <property
                 name="sfAdvancedFilter"
                 type="String"
                 datasource="apex://ObjectFieldPickList"
-                label="Add additional filter, select a Salesforce object field"
+                label="Additional Filter: Salesforce object field"
             />
             <supportedFormFactors>
                 <supportedFormFactor type="Small" />

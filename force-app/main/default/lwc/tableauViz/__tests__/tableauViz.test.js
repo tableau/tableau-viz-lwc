@@ -7,6 +7,7 @@ import { registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 
 // Support for mocking wired record
 const mockGetRecord = require('./data/getRecord.json');
+const mockGetRecordMultipleFilters = require('./data/getRecordMultipleFilters.json');
 const getRecordWireAdapter = registerLdsTestWireAdapter(getRecord);
 
 const TABLEAU_JS_API = 'tableauJSAPI';
@@ -110,6 +111,25 @@ describe('tableau-viz', () => {
         );
     });
 
+    it('verifies that attributes are set for the viz properties', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+
+        element.vizUrl = VIZ_URL;
+        element.filterOnRecordId = true;
+        element.height = '700';
+        element.showTabs = true;
+        element.showToolbar = true;
+
+        // kinda silly since this is the impl of the 'get' methods but we care that the attr is set
+        expect(element.getAttribute('viz-url')).toBe(VIZ_URL);
+        expect(element.getAttribute('filter-on-record-id')).toBe('');
+        expect(element.getAttribute('viz-height')).toBe('700');
+        expect(element.getAttribute('show-tabs')).toBe('');
+        expect(element.getAttribute('show-toolbar')).toBe('');
+    });
+
     it('calls the right viz URL with record id filter', async () => {
         const element = createElement('c-tableau-viz', {
             is: TableauViz
@@ -159,6 +179,67 @@ describe('tableau-viz', () => {
         const instance = global.tableauMockInstances[0];
         expect(instance.vizToLoad).toBe(
             `${VIZ_DISPLAY}${vizPlaceholder.offsetWidth}%2C650&Name=SpacelySprockets`
+        );
+    });
+
+    it('handles multiple record filters', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizUrl = VIZ_URL;
+        element.filterOnRecordId = false;
+        element.height = 650;
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
+        element.sfAdvancedFilter = 'Account.Name';
+        element.tabAdvancedFilter = 'Name';
+        element.addRecordFilter('Account.Owner', 'Owner');
+        element.addRecordFilter('Account.Alias', 'Nickname');
+        document.body.appendChild(element);
+
+        getRecordWireAdapter.emit(mockGetRecordMultipleFilters);
+
+        await flushPromises();
+
+        const vizPlaceholder = element.shadowRoot.querySelector(
+            'div.tabVizPlaceholder'
+        );
+        expect(vizPlaceholder).not.toBeNull();
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            `${VIZ_DISPLAY}${vizPlaceholder.offsetWidth}%2C650&Name=SpacelySprockets&Owner=Acme&Nickname=Jimmy`
+        );
+    });
+
+    it('handles record filters and simple filters', async () => {
+        const element = createElement('c-tableau-viz', {
+            is: TableauViz
+        });
+        element.vizUrl = VIZ_URL;
+        element.filterOnRecordId = false;
+        element.height = 650;
+        element.objectApiName = 'Account';
+        element.recordId = 'mockId';
+        element.sfAdvancedFilter = 'Account.Name';
+        element.tabAdvancedFilter = 'Name';
+        element.addRecordFilter('Account.Owner', 'Owner');
+        element.addRecordFilter('Account.Alias', 'Nickname');
+        element.addFilter('Region', 'Northwest');
+        document.body.appendChild(element);
+
+        getRecordWireAdapter.emit(mockGetRecordMultipleFilters);
+
+        await flushPromises();
+
+        const vizPlaceholder = element.shadowRoot.querySelector(
+            'div.tabVizPlaceholder'
+        );
+        expect(vizPlaceholder).not.toBeNull();
+        expect(global.tableauMockInstances.length).toBe(1);
+        const instance = global.tableauMockInstances[0];
+        expect(instance.vizToLoad).toBe(
+            `${VIZ_DISPLAY}${vizPlaceholder.offsetWidth}%2C650&Region=Northwest&Name=SpacelySprockets&Owner=Acme&Nickname=Jimmy`
         );
     });
 
@@ -420,16 +501,32 @@ describe('tableau-viz', () => {
     });
 
     describe('Validate normalization functions', () => {
-        it.skip('Checks Boolean normalize', () => {
-            let result;
-            result = TableauViz.booleanNormalize(true);
-            expect(result).toBe(true);
-            result = TableauViz.booleanNormalize(false);
-            expect(result).toBe(false);
-            result = TableauViz.booleanNormalize('false');
-            expect(result).toBe(false);
-            result = TableauViz.booleanNormalize('true');
-            expect(result).toBe(true);
+        it('Checks Boolean normalize', () => {
+            // we will validate through the showTabs boolean property
+            const element = createElement('c-tableau-viz', {
+                is: TableauViz
+            });
+
+            // TRUE tests
+            element.showTabs = true;
+            expect(element.getAttribute('show-tabs')).toBe('');
+
+            element.showTabs = '';
+            expect(element.getAttribute('show-tabs')).toBe('');
+
+            element.showTabs = 'show-tabs';
+            expect(element.getAttribute('show-tabs')).toBe('');
+
+            // FALSE tests
+            element.showTabs = false;
+            expect(element.getAttribute('show-tabs')).toBeNull();
+
+            // only '' and 'show-tabs' are treated as TRUE as per w3c spec
+            element.showTabs = 'true';
+            expect(element.getAttribute('show-tabs')).toBeNull();
+
+            element.showTabs = 1;
+            expect(element.getAttribute('show-tabs')).toBeNull();
         });
     });
 });
