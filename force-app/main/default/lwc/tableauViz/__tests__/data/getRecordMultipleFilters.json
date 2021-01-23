@@ -1,0 +1,13 @@
+{
+    "fields": {
+        "Name": {
+            "value": "SpacelySprockets"
+        },
+        "Owner": {
+            "value": "Acme"
+        },
+        "Alias": {
+            "value": "Jimmy"
+        }
+    }
+}
