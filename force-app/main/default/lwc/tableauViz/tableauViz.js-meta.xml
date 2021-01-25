@@ -24,13 +24,13 @@
                 name="showTabs"
                 type="Boolean"
                 default="false"
-                label="Show Tabs"
+                label="{!$Label.showTabs}"
             />
             <property
                 name="showToolbar"
                 type="Boolean"
                 default="false"
-                label="Show Toolbar"
+                label="{!$Label.showToolbar}"
             />
             <property
                 name="height"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+  <customLabels>
+    <label>(fr) Show Tabs</label>
+    <name>showTabs</name>
+  </customLabels>
+  <customLabels>
+    <label>(fr) Show Toolbar</label>
+    <name>showToolbar</name>
+  </customLabels>
+</Translations>
