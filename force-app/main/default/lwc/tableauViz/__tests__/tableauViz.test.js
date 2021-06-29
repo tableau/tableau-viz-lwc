@@ -3,11 +3,9 @@ import { createElement } from 'lwc';
 import TableauViz from 'c/tableauViz';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord } from 'lightning/uiRecordApi';
-import { registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 
 // Support for mocking wired record
 const mockGetRecord = require('./data/getRecord.json');
-const getRecordWireAdapter = registerLdsTestWireAdapter(getRecord);
 
 const TABLEAU_JS_API = 'tableauJSAPI';
 
@@ -147,7 +145,7 @@ describe('tableau-viz', () => {
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
-        getRecordWireAdapter.emit(mockGetRecord);
+        getRecord.emit(mockGetRecord);
 
         await flushPromises();
 
@@ -287,7 +285,7 @@ describe('tableau-viz', () => {
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
-        getRecordWireAdapter.error();
+        getRecord.error();
 
         await flushPromises();
 
@@ -312,7 +310,7 @@ describe('tableau-viz', () => {
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
-        getRecordWireAdapter.emit(mockGetRecord);
+        getRecord.emit(mockGetRecord);
 
         await flushPromises();
 
