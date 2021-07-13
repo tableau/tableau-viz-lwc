@@ -9,6 +9,7 @@
         <target>lightning__HomePage</target>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
+        <target>analytics__Dashboard</target>
     </targets>
     <targetConfigs>
     <targetConfig targets="lightning__RecordPage">
@@ -63,7 +64,7 @@
             </supportedFormFactors>
         </targetConfig>
         <targetConfig
-            targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
+            targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default,analytics__Dashboard"
         >
             <property
                 name="vizUrl"
