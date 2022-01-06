@@ -1,13 +1,13 @@
 import { LightningElement, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
-import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
+import tableauEmbeddingAPI from '@salesforce/resourceUrl/tableauEmbeddingAPI';
 import { reduceErrors } from './errorUtils.js';
 
 import templateMain from './tableauViz.html';
 import templateError from './tableauVizError.html';
 
-export default class TableauViz extends LightningElement {
+export default class TableauLWCViz extends LightningElement {
     //#region Member Variables
     //#region Special LWC variable
     // https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.use_context
@@ -99,7 +99,9 @@ export default class TableauViz extends LightningElement {
     //#region Simple Getters / Setters
     @api
     get vizUrl() {
-        return this.getAttribute('viz-url') || TableauViz._defaults['viz-url'];
+        return (
+            this.getAttribute('viz-url') || TableauLWCViz._defaults['viz-url']
+        );
     }
 
     set vizUrl(val) {
@@ -137,7 +139,7 @@ export default class TableauViz extends LightningElement {
     get height() {
         return (
             this.getAttribute('viz-height') ||
-            TableauViz._defaults['viz-height']
+            TableauLWCViz._defaults['viz-height']
         );
     }
 
@@ -191,7 +193,11 @@ export default class TableauViz extends LightningElement {
 
     //#endregion
     async connectedCallback() {
-        await loadScript(this, tableauJSAPI);
+        try {
+            await loadScript(this, tableauEmbeddingAPI);
+        } catch (e) {
+            console.log(e.message);
+        }
         this._isLibLoaded = true;
         this.renderViz();
     }
@@ -220,23 +226,22 @@ export default class TableauViz extends LightningElement {
             'div.tabVizPlaceholder'
         );
 
+        /*global TableauViz */
+        let viz = new TableauViz();
         // Configure viz URL
-        const vizToLoad = new URL(this.vizUrl);
-        this.setVizDimensions(vizToLoad, containerDiv);
-        this.setVizFilters(vizToLoad);
-        TableauViz.checkForMobileApp(vizToLoad, window.navigator.userAgent);
-        const vizURLString = vizToLoad.toString();
+        this.setVizDimensions(viz, containerDiv);
+        //this.setVizFilters(viz);
+        //TableauLWCViz.checkForMobileApp(vizToLoad, window.navigator.userAgent);
 
         // Set viz Options
-        const options = {
-            hideTabs: !this.showTabs,
-            hideToolbar: !this.showToolbar,
-            height: `${this.height}px`,
-            width: '100%'
-        };
-
-        // eslint-disable-next-line no-undef
-        this._viz = new tableau.Viz(containerDiv, vizURLString, options);
+        if (!this.showTabs) {
+            viz.hideTabs = true;
+        }
+        if (!this.showToolbar) {
+            viz.toolbar = 'hidden';
+        }
+        viz.src = this.vizUrl;
+        containerDiv.appendChild(viz);
     }
 
     render() {
@@ -291,10 +296,9 @@ export default class TableauViz extends LightningElement {
     // Height is set by the user
     // Width is based on the containerDiv to which the viz is added
     // The ':size' parameter is added to the url to communicate this
-    setVizDimensions(vizToLoad, containerDiv) {
-        containerDiv.style.height = `${this.height}px`;
-        const vizWidth = containerDiv.offsetWidth;
-        vizToLoad.searchParams.append(':size', `${vizWidth},${this.height}`);
+    setVizDimensions(viz, containerDiv) {
+        viz.height = this.height;
+        viz.width = containerDiv.offsetWidth;
     }
 
     setVizFilters(vizToLoad) {
@@ -322,7 +326,7 @@ export default class TableauViz extends LightningElement {
         const deviceIdMatches = deviceIdRegex.exec(userAgent);
         const deviceId =
             deviceIdMatches == null
-                ? TableauViz.generateRandomDeviceId()
+                ? TableauLWCViz.generateRandomDeviceId()
                 : deviceIdMatches[1];
         const deviceNameMatches = deviceNameRegex.exec(userAgent);
         const deviceName =
