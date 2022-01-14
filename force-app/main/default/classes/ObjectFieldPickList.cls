@@ -4,11 +4,6 @@ global with sharing class ObjectFieldPickList extends VisualEditor.DynamicPickLi
 
     private VisualEditor.DynamicPickListRows rows;
 
-    @TestVisible
-    public ObjectFieldPickList(String pageType, String objectName) {
-        this.rows = getRows(pageType, objectName);
-    }
-
     global ObjectFieldPickList(VisualEditor.DesignTimePageContext context) {
         this.rows = getRows(context.pageType, context.entityName);
     }
