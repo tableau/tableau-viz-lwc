@@ -1,3 +1,4 @@
+/* global tableau */
 import { LightningElement, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
@@ -7,23 +8,29 @@ import { reduceErrors } from './errorUtils.js';
 import templateMain from './tableauViz.html';
 import templateError from './tableauVizError.html';
 
+/** Delay used when debouncing viz rendering */
+export const VIZ_RENDER_DELAY = 100;
+
 export default class TableauViz extends LightningElement {
+    /** Object API name - automatically passed when in a record page */
     @api objectApiName;
+    /** Object record ID - automatically passed when in a record page */
     @api recordId;
-    @api vizUrl;
-    @api height;
-    @api tabAdvancedFilter;
-    @api sfAdvancedFilter;
 
     viz;
     advancedFilterValue;
     errorMessage;
     isLibLoaded = false;
+    vizRenderDelayTimeout;
 
     // Use hashnames for private fields when that is accepted
+    _vizUrl;
+    _height = 550;
     _showTabs = false;
     _showToolbar = false;
     _filterOnRecordId = false;
+    _tabAdvancedFilter;
+    _sfAdvancedFilter;
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -38,7 +45,7 @@ export default class TableauViz extends LightningElement {
             if (this.advancedFilterValue === undefined) {
                 this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`;
             } else {
-                this.renderViz();
+                this.requestRenderViz();
             }
         } else if (error) {
             this.errorMessage = `Failed to retrieve record data: ${reduceErrors(
@@ -59,42 +66,93 @@ export default class TableauViz extends LightningElement {
     }
 
     @api
+    get vizUrl() {
+        return this._vizUrl;
+    }
+    set vizUrl(val) {
+        this._vizUrl = val;
+        this.requestRenderViz();
+    }
+
+    @api
+    get height() {
+        return this._height;
+    }
+    set height(val) {
+        this._height = val;
+        this.requestRenderViz();
+    }
+
+    @api
     get showTabs() {
         return this._showTabs;
     }
-
     set showTabs(val) {
         this._showTabs = TableauViz.booleanNormalize(val);
+        this.requestRenderViz();
     }
 
     @api
     get showToolbar() {
         return this._showToolbar;
     }
-
     set showToolbar(val) {
         this._showToolbar = TableauViz.booleanNormalize(val);
+        this.requestRenderViz();
     }
 
     @api
     get filterOnRecordId() {
         return this._filterOnRecordId;
     }
-
     set filterOnRecordId(val) {
         this._filterOnRecordId = TableauViz.booleanNormalize(val);
+        this.requestRenderViz();
+    }
+
+    @api
+    get tabAdvancedFilter() {
+        return this._tabAdvancedFilter;
+    }
+    set tabAdvancedFilter(val) {
+        this._tabAdvancedFilter = val;
+        this.requestRenderViz();
+    }
+
+    @api
+    get sfAdvancedFilter() {
+        return this._sfAdvancedFilter;
+    }
+    set sfAdvancedFilter(val) {
+        this._sfAdvancedFilter = val;
+        this.requestRenderViz();
     }
 
     async connectedCallback() {
         await loadScript(this, tableauJSAPI);
         this.isLibLoaded = true;
-        this.renderViz();
+        this.requestRenderViz();
     }
 
     renderedCallback() {
-        this.renderViz();
+        this.requestRenderViz();
     }
 
+    /**
+     * Method that debounces calls to `renderViz` in order to limit viz redraws
+     */
+    requestRenderViz() {
+        window.clearTimeout(this.vizRenderDelayTimeout);
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        this.vizRenderDelayTimeout = setTimeout(() => {
+            this.renderViz();
+        }, VIZ_RENDER_DELAY);
+    }
+
+    /**
+     * Renders the Tableau Viz.
+     * This method must only be called from `requestRenderViz` for performance reasons.
+     */
     renderViz() {
         // Halt rendering if inputs are invalid or if there's an error
         if (!this.validateInputs() || this.errorMessage) {
@@ -111,11 +169,13 @@ export default class TableauViz extends LightningElement {
             return;
         }
 
+        // Remove existing viz if present
+        this.viz?.dispose();
+
+        // Configure viz URL
         const containerDiv = this.template.querySelector(
             'div.tabVizPlaceholder'
         );
-
-        // Configure viz URL
         const vizToLoad = new URL(this.vizUrl);
         this.setVizDimensions(vizToLoad, containerDiv);
         this.setVizFilters(vizToLoad);
@@ -130,7 +190,6 @@ export default class TableauViz extends LightningElement {
             width: '100%'
         };
 
-        // eslint-disable-next-line no-undef
         this.viz = new tableau.Viz(containerDiv, vizURLString, options);
     }
 

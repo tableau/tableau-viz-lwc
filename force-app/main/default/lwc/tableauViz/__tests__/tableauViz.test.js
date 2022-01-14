@@ -1,13 +1,11 @@
-/* eslint-disable @lwc/lwc/no-unexpected-wire-adapter-usages */
 import { createElement } from 'lwc';
 import TableauViz from 'c/tableauViz';
+import { VIZ_RENDER_DELAY } from 'c/tableauViz';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord } from 'lightning/uiRecordApi';
-import { registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 
 // Support for mocking wired record
 const mockGetRecord = require('./data/getRecord.json');
-const getRecordWireAdapter = registerLdsTestWireAdapter(getRecord);
 
 const TABLEAU_JS_API = 'tableauJSAPI';
 
@@ -27,11 +25,12 @@ describe('tableau-viz', () => {
         global.tableauMockInstances = [];
     });
 
-    // Helper function to wait until the microtask queue is empty. This is needed for promise
-    // timing when the platformResourceLoader promises.
-    function flushPromises() {
-        // eslint-disable-next-line no-undef
-        return new Promise((resolve) => setImmediate(resolve));
+    // Helper function to wait untile the viz is rendered
+    function holdForVizRendering() {
+        return new Promise((resolve) => {
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => resolve(), VIZ_RENDER_DELAY + 10);
+        });
     }
 
     it('loads the Tableau JS API static resource', () => {
@@ -57,10 +56,12 @@ describe('tableau-viz', () => {
         element.height = 650;
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
-        expect(global.tableauMockInstances.length).toBe(1);
-        const instance = global.tableauMockInstances[0];
+        expect(global.tableauMockInstances.length).toBeGreaterThanOrEqual(1);
+        const instance =
+            global.tableauMockInstances[global.tableauMockInstances.length - 1];
         expect(instance.options.hideTabs).toBeFalsy();
         expect(instance.options.hideToolbar).toBeTruthy();
         expect(instance.options.height).toBe('650px');
@@ -72,10 +73,10 @@ describe('tableau-viz', () => {
         });
         element.height = '550';
         element.vizUrl = VIZ_URL_NO_FILTERS;
-
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const vizPlaceholder = element.shadowRoot.querySelector(
             'div.tabVizPlaceholder'
@@ -99,7 +100,8 @@ describe('tableau-viz', () => {
         element.recordId = 'mockId';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const div = element.shadowRoot.querySelector('div.tabVizPlaceholder');
         expect(div).not.toBeNull();
@@ -121,7 +123,8 @@ describe('tableau-viz', () => {
         element.recordId = 'mockId';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const vizPlaceholder = element.shadowRoot.querySelector(
             'div.tabVizPlaceholder'
@@ -147,9 +150,10 @@ describe('tableau-viz', () => {
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
-        getRecordWireAdapter.emit(mockGetRecord);
+        getRecord.emit(mockGetRecord);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const vizPlaceholder = element.shadowRoot.querySelector(
             'div.tabVizPlaceholder'
@@ -169,7 +173,8 @@ describe('tableau-viz', () => {
         element.vizUrl = 'invalid';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
@@ -187,7 +192,8 @@ describe('tableau-viz', () => {
         element.vizUrl = 'javascript:void(0)';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
@@ -206,7 +212,8 @@ describe('tableau-viz', () => {
         element.vizUrl = 'http://fakeurl.com';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
@@ -226,7 +233,8 @@ describe('tableau-viz', () => {
             'https://vizurl.com/#/views/WorldIndicators/Population';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
@@ -246,7 +254,8 @@ describe('tableau-viz', () => {
         element.tabAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
@@ -266,7 +275,8 @@ describe('tableau-viz', () => {
         element.sfAdvancedFilter = 'mockValue';
         document.body.appendChild(element);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
@@ -287,9 +297,10 @@ describe('tableau-viz', () => {
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
-        getRecordWireAdapter.error();
+        getRecord.error();
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
@@ -312,9 +323,10 @@ describe('tableau-viz', () => {
         element.tabAdvancedFilter = 'Name';
         document.body.appendChild(element);
 
-        getRecordWireAdapter.emit(mockGetRecord);
+        getRecord.emit(mockGetRecord);
 
-        await flushPromises();
+        // Wait for any asynchronous DOM updates
+        await holdForVizRendering();
 
         const errorEl = element.shadowRoot.querySelector(
             'h3.slds-text-color_destructive'
