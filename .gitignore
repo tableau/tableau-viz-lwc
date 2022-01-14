@@ -8,6 +8,7 @@
 
 # vscode
 .vscode/
+jsconfig.json
 
 # Logs
 logs
