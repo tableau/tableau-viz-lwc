@@ -9,6 +9,9 @@
 # vscode
 .vscode/
 
+# LWC VSCode autocomplete
+jsconfig.json
+
 # Logs
 logs
 *.log
