@@ -3,6 +3,7 @@ name: CI
 
 # Definition when the workflow should run
 on:
+    workflow_dispatch:
     push:
         branches:
             - master
@@ -12,12 +13,12 @@ jobs:
     formatting-and-lwc-tests:
         runs-on: ubuntu-latest
         steps:
-            # Checkout the code in the pull request
+            # Checkout the source code
             - name: 'Checkout source code'
               uses: actions/checkout@v2
 
             # Cache node_modules to speed up the process
-            - name: Restore node_modules cache
+            - name: 'Restore node_modules cache'
               id: cache-npm
               uses: actions/cache@v1
               with:
@@ -49,35 +50,42 @@ jobs:
         needs: formatting-and-lwc-tests
         steps:
             # Install Salesforce CLI
-            - name: Install Salesforce CLI
+            - name: 'Install Salesforce CLI'
               run: |
-                  wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
-                  mkdir sfdx-cli
-                  tar xJf sfdx-linux-amd64.tar.xz -C sfdx-cli --strip-components 1
-                  ./sfdx-cli/install
+                  wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+                  mkdir ~/sfdx
+                  tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+                  echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+                  ~/sfdx/bin/sfdx version
 
-            # Checkout the code in the pull request
+            # Checkout the source code
             - name: 'Checkout source code'
               uses: actions/checkout@v2
 
             # Store secret for dev hub
             - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
               shell: bash
-              run: 'echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
+              run: |
+                  echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt
+                  secretFileSize=$(wc -c "./DEVHUB_SFDX_URL.txt" | awk '{print $1}')
+                  if [ $secretFileSize == 1 ]; then
+                      echo "Missing DEVHUB_SFDX_URL secret. Is this workflow running on a fork?";
+                      exit 1;
+                  fi
 
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
-              run: 'sfdx force:auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d'
+              run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d
 
             # Create scratch org
             - name: 'Create scratch org'
-              run: 'sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1'
+              run: sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1
 
             # Deploy source to scratch org
             - name: 'Push source to scratch org'
-              run: 'sfdx force:source:push'
+              run: sfdx force:source:push
 
             # Housekeeping
             - name: 'Delete scratch org'
               if: always()
-              run: 'sfdx force:org:delete -p -u scratch-org'
+              run: sfdx force:org:delete -p -u scratch-org
