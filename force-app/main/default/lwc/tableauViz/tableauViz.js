@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import tableauJSAPI from '@salesforce/resourceUrl/tableauJSAPI';
@@ -14,11 +14,16 @@ export default class TableauViz extends LightningElement {
     @api height;
     @api tabAdvancedFilter;
     @api sfAdvancedFilter;
+    @api parentURLField;
+    @track fields;
 
     viz;
     advancedFilterValue;
     errorMessage;
+    recordTableauURL;
     isLibLoaded = false;
+    urlToLoad = this.vizUrl;
+
 
     // Use hashnames for private fields when that is accepted
     _showTabs = false;
@@ -27,16 +32,26 @@ export default class TableauViz extends LightningElement {
 
     @wire(getRecord, {
         recordId: '$recordId',
-        fields: '$sfAdvancedFilter'
+        fields: '$fields'
     })
+    //fields: ['$sfAdvancedFilter','$parentURLField']
     getRecord({ error, data }) {
         if (data) {
             this.advancedFilterValue = getFieldValue(
                 data,
                 this.sfAdvancedFilter
             );
-            if (this.advancedFilterValue === undefined) {
-                this.errorMessage = `Failed to retrieve value for field ${this.sfAdvancedFilter}`;
+            this.recordTableauURL = getFieldValue(
+                data,
+                this.parentURLField
+            );
+            if(this.recordTableauURL === undefined && parentURLField !== undefined) {
+                this.errorMessage = "Failed to retrieve value for field " + this.parentURLField;
+            } else {
+                this.renderViz();
+            }
+            if (this.advancedFilterValue === undefined && this.sfAdvancedFilter !== undefined) {
+                this.errorMessage = "Failed to retrieve value for field " + this.sfAdvancedFilter;
             } else {
                 this.renderViz();
             }
@@ -88,6 +103,14 @@ export default class TableauViz extends LightningElement {
     async connectedCallback() {
         await loadScript(this, tableauJSAPI);
         this.isLibLoaded = true;
+        let fs = [];
+        if(this.sfAdvancedFilter !== undefined) {
+            fs.push(this.sfAdvancedFilter);
+        }
+        if(this.parentURLField !== undefined) {
+            fs.push(this.parentURLField);
+        }
+        this.fields = fs;
         this.renderViz();
     }
 
@@ -111,12 +134,22 @@ export default class TableauViz extends LightningElement {
             return;
         }
 
+        // Halt rendering if parent url field value is not yet loaded
+        if (this.parentURLField && this.recordTableauURL === undefined) {
+            return;
+        }
+
         const containerDiv = this.template.querySelector(
             'div.tabVizPlaceholder'
         );
 
         // Configure viz URL
-        const vizToLoad = new URL(this.vizUrl);
+        if(this.recordTableauURL !== undefined) {
+            this.urlToLoad = this.recordTableauURL;
+        } else { 
+            this.urlToLoad = this.vizUrl;
+        }
+        const vizToLoad = new URL(this.urlToLoad);
         this.setVizDimensions(vizToLoad, containerDiv);
         this.setVizFilters(vizToLoad);
         TableauViz.checkForMobileApp(vizToLoad, window.navigator.userAgent);
@@ -157,7 +190,7 @@ export default class TableauViz extends LightningElement {
                 );
             }
         } catch (error) {
-            this.errorMessage = error.message ? error.message : 'Invalid URL';
+            this.errorMessage = error.message ? error.message : 'Invalid URL : ' + this.urlToLoad;
             return false;
         }
 

@@ -21,6 +21,12 @@
                 default="https://public.tableau.com/views/LinkedIn-PerformanceOverview/LinkedIn-PerformanceOverview?:showVizHome=no&amp;:embed=true"
             />
             <property
+                name="parentURLField"
+                type="String"
+                datasource="apex://ObjectFieldPickList"
+                label="Select field containing the URL from Parent Object, instead of hardcoded URL"
+            />
+            <property
                 name="showTabs"
                 type="Boolean"
                 default="false"

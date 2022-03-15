@@ -266,6 +266,14 @@ Welcome to the **#DataDev** Community!
 
 ## Release Notes
 
+### Version 1.3
+
+_March 15, 2022_
+
+**Allow URL reference to come from field on parent record**
+To suppor the ability to use a URL field from the parent record. This allows a dynaamic URL to be constructed using formula fields on the parent record. Additionally allows for developers to build an object to list all available tableau dashboard and display them without having to hard code the URL in the lightning page. 
+
+
 ### Version 1.2
 
 _October 17, 2020_
