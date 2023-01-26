@@ -93,6 +93,8 @@ After you install the package, you can [Add the Tableau Visualization component 
     sfdx force:source:push
     ```
 
+    Or try `force:source:legacy:push` via the SFDX extension in VS Code if the above doesn't work.
+
 1. Open the scratch org:
 
     ```
