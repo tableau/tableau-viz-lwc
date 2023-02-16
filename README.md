@@ -1,7 +1,7 @@
 # Lightning Web Component for embedding Tableau into Salesforce
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
-![GitHub version](https://img.shields.io/badge/release-blue) - [Release Notes](#release-notes) (v1.2)
+![GitHub version](https://img.shields.io/badge/release-blue) - [Release Notes](#release-notes) (v1.3)
 
 This project provides a Lightning web component that you can customize, deploy, and use to embed a Tableau visualization into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau views into web pages.
 
@@ -268,6 +268,18 @@ Welcome to the **#DataDev** Community!
 
 ## Release Notes
 
+### Version 1.3
+
+_February 9, 2023_
+
+Updated the component to use the latest version of the Tableau JavaScript API.
+
+**Fixed in this release**
+
+-   [Fixed] Error "[Cannot read properties of null (reading 'width')]" When Viewing Viz Embedded in Salesforce Using Lightning Web Component. There was a conflict with the Embedding JavaScript API used in the app that required an update.
+
+---
+
 ### Version 1.2
 
 _October 17, 2020_
@@ -281,6 +293,8 @@ To support the increased level of security, version 1.2 of the Tableau Viz Light
 **Fixed in this release**
 
 -   [Fixed] When you opened a Salesforce page for editing that contains a Tableau view from Tableau Online on the page, the tabs and the toolbar are shown even if the **Show Toolbar** and **Show Tabs** options were not selected.
+
+---
 
 ### Version 1.1
 
