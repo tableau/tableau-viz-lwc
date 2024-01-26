@@ -1,4 +1,27 @@
-# Lightning Web Component for embedding Tableau into Salesforce
+# [Deprecated] Tableau _Viz_ LWC is being replaced by native Tableau LWC
+
+In the spirit of innovation, we're delighted to announce a major update to the Tableau LWC. With the recent Spring '24 release, we've unveiled a native version of the [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm) to seamlessly integrate Tableau within the Salesforce ecosystem. The native Tableau _View_ LWC will replace the open-source Tableau _Viz_ LWC.
+
+*What's New:*
+
+The native Tableau View LWC brings a host of exciting features and optimizations, promising a more intuitive and integrated experience. This strategic enhancement is designed to elevate your workflow and empower you to create even more powerful and impactful solutions.
+
+*Migration to Native LWC:*
+
+To align with this exciting evolution, we've made the strategic decision to discontinue support for the open-source LWC version. As a result, we will no longer support the Tableau _Viz_ LWC. Over the coming weeks we will address and close open Issues.
+
+*Next Steps:*
+
+We encourage you to dive into the possibilities offered by the new native LWC. Should you encounter any challenges or if the issue persists, please feel free to file a bug report. We're committed to providing you with the support you need in this transformative phase.
+
+Thank you for being part of this exciting chapter in Tableau's journey.
+
+## Deprecated Project Information
+<details>
+<summary>Archived README</summary>
+
+# Please be aware that this Tableau _Viz_ LWC will no longer be supported. Please migrate to the native [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm)
+### Lightning Web Component for embedding Tableau into Salesforce
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
 ![GitHub version](https://img.shields.io/badge/release-blue) - [Release Notes](#release-notes) (v1.3)
@@ -301,3 +324,5 @@ To support the increased level of security, version 1.2 of the Tableau Viz Light
 _September 21, 2020_
 
 -   Initial public release of the Tableau Viz Lighting web component.
+
+</details>
