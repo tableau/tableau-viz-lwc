@@ -1,22 +1,68 @@
-# [Deprecated] Tableau _Viz_ LWC is being replaced by native Tableau LWC
+# [Deprecated] Tableau _Viz_ LWC is being replaced by native Tableau _View_ LWC
 
 In the spirit of innovation, we're delighted to announce a major update to the Tableau LWC. With the recent Spring '24 release, we've unveiled a native version of the [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm) to seamlessly integrate Tableau within the Salesforce ecosystem. The native Tableau _View_ LWC will replace the open-source Tableau _Viz_ LWC.
 
-_What's New:_
+**What's New:**
 
 The native Tableau View LWC brings a host of exciting features and optimizations, promising a more intuitive and integrated experience. This strategic enhancement is designed to elevate your workflow and empower you to create even more powerful and impactful solutions.
 
-_Migration to Native LWC:_
+**Migration to Native LWC:**
 
 To align with this exciting evolution, we've made the strategic decision to discontinue support for the open-source LWC version. As a result, we will no longer support the Tableau _Viz_ LWC. Over the coming weeks we will address and close open Issues.
 
-_Next Steps:_
+**Next Steps:**
 
-We encourage you to dive into the possibilities offered by the new native LWC. Should you encounter any challenges or if the issue persists, please feel free to file a bug report. We're committed to providing you with the support you need in this transformative phase.
+-   We encourage you to dive into the possibilities offered by the new native [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm).
+-   Should you encounter any challenges or if the issue persists, please feel free to file a bug report. We're committed to providing you with the support you need in this transformative phase.
 
 Thank you for being part of this exciting chapter in Tableau's journey.
 
-## Deprecated Project Information
+## Release Notes
+
+### Project Archival
+
+January 29, 2024
+
+-   Deprecation of the Tableau Viz Lighting web component
+-   Please migrate to [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm).
+
+### Version 1.3
+
+<details>
+<summary>February 9, 2023</summary>
+Updated the component to use the latest version of the Tableau JavaScript API.
+
+**Fixed in this release**
+
+-   [Fixed] Error "[Cannot read properties of null (reading 'width')]" When Viewing Viz Embedded in Salesforce Using Lightning Web Component. There was a conflict with the Embedding JavaScript API used in the app that required an update.
+</details>
+
+### Version 1.2
+
+<details>
+<summary>October 17, 2020</summary>
+
+**Using the Tableau Viz Lightning web component on Lighting communities**
+
+Salesforce Spring '21 is removing the **Allow Inline Scripts and Script Access to Any Third-party Host** Content Security Policy (CSP) setting for Lightning communities. For Winter `21, Salesforce recommends switching your community to a more secure option now.
+
+To support the increased level of security, version 1.2 of the Tableau Viz Lightning web component adds Tableau Public and Tableau Online as trusted web sites in the managed package. If you are using the Tableau Viz Lighting web component on Lighting community pages and want to embed Tableau views from Tableau Public and Tableau Online, the version 1.2 package handles the CSP change for you. However, if you want to add views from Tableau Server, you need to add the Tableau Server URL as a CSP Trusted Site. For information about how to add Tableau Server as a trusted site, see the Salesforce Help documentation, [Create CSP Trusted Sites to Access Third-Party APIs](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/csp_trusted_sites.htm).
+
+**Fixed in this release**
+
+-   [Fixed] When you opened a Salesforce page for editing that contains a Tableau view from Tableau Online on the page, the tabs and the toolbar are shown even if the **Show Toolbar** and **Show Tabs** options were not selected.
+</details>
+
+### Version 1.1
+
+<details>
+<summary>September 21, 2020</summary>
+
+-   Initial public release of the Tableau Viz Lighting web component.
+
+</details>
+
+## Legacy Tableau Viz LWC Documentation
 
 <details>
 <summary>Archived README</summary>
@@ -290,41 +336,5 @@ Welcome to the **#DataDev** Community!
     Use the `-u username` option. To determine the `username` for your Salesforce org, you can use the command `sfdx force:org:list` to display information about the orgs you have created or are connected to.
 
 > For more information about fixing problems with deployment, see [Troubleshoot Salesforce DX](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_troubleshoot.htm) in the [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm).
-
-## Release Notes
-
-### Version 1.3
-
-_February 9, 2023_
-
-Updated the component to use the latest version of the Tableau JavaScript API.
-
-**Fixed in this release**
-
--   [Fixed] Error "[Cannot read properties of null (reading 'width')]" When Viewing Viz Embedded in Salesforce Using Lightning Web Component. There was a conflict with the Embedding JavaScript API used in the app that required an update.
-
----
-
-### Version 1.2
-
-_October 17, 2020_
-
-**Using the Tableau Viz Lightning web component on Lighting communities**
-
-Salesforce Spring '21 is removing the **Allow Inline Scripts and Script Access to Any Third-party Host** Content Security Policy (CSP) setting for Lightning communities. For Winter `21, Salesforce recommends switching your community to a more secure option now.
-
-To support the increased level of security, version 1.2 of the Tableau Viz Lightning web component adds Tableau Public and Tableau Online as trusted web sites in the managed package. If you are using the Tableau Viz Lighting web component on Lighting community pages and want to embed Tableau views from Tableau Public and Tableau Online, the version 1.2 package handles the CSP change for you. However, if you want to add views from Tableau Server, you need to add the Tableau Server URL as a CSP Trusted Site. For information about how to add Tableau Server as a trusted site, see the Salesforce Help documentation, [Create CSP Trusted Sites to Access Third-Party APIs](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/csp_trusted_sites.htm).
-
-**Fixed in this release**
-
--   [Fixed] When you opened a Salesforce page for editing that contains a Tableau view from Tableau Online on the page, the tabs and the toolbar are shown even if the **Show Toolbar** and **Show Tabs** options were not selected.
-
----
-
-### Version 1.1
-
-_September 21, 2020_
-
--   Initial public release of the Tableau Viz Lighting web component.
 
 </details>
