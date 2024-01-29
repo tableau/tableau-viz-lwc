@@ -1,4 +1,7 @@
-# [Deprecated] Tableau _Viz_ LWC is being replaced by native Tableau _View_ LWC
+# [Archived] Tableau _Viz_ LWC is being replaced by native Tableau _View_ LWC
+
+![Static Badge](https://img.shields.io/badge/archived-red)
+![Static Badge](https://img.shields.io/badge/no%20maintenance%20intended-gray)
 
 In the spirit of innovation, we're delighted to announce a major update to the Tableau LWC. With the recent Spring '24 release, we've unveiled a native version of the [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm) to seamlessly integrate Tableau within the Salesforce ecosystem. The native Tableau _View_ LWC will replace the open-source Tableau _Viz_ LWC.
 
@@ -19,11 +22,11 @@ Thank you for being part of this exciting chapter in Tableau's journey.
 
 ## Release Notes
 
-### Project Archival
+### Archival
 
 January 29, 2024
 
--   Deprecation of the Tableau Viz Lighting web component
+-   Archival of the Tableau Viz Lighting web component
 -   Please migrate to [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm).
 
 ### Version 1.3
@@ -67,22 +70,27 @@ To support the increased level of security, version 1.2 of the Tableau Viz Light
 <details>
 <summary>Archived README</summary>
 
-# Please be aware that this Tableau _Viz_ LWC will no longer be supported. Please migrate to the native [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm)
+### This project is archived. Please migrate to [Tableau _View_ LWC](https://help.tableau.com/current/online/en-us/lwc_seamless_auth.htm).
 
 ### Lightning Web Component for embedding Tableau into Salesforce
 
 [![GitHub Workflow](https://github.com/tableau/tableau-viz-lwc/workflows/CI/badge.svg?branch=master)](https://github.com/tableau/tableau-viz-lwc/actions)
-![GitHub version](https://img.shields.io/badge/release-blue) - [Release Notes](#release-notes) (v1.3)
+![Static Badge](https://img.shields.io/badge/archived-red)
+![Static Badge](https://img.shields.io/badge/no%20maintenance%20intended-gray)
 
 This project provides a Lightning web component that you can customize, deploy, and use to embed a Tableau visualization into Salesforce. This component uses the [Tableau JavaScript API](https://help.tableau.com/current/api/js_api/en-us/JavaScriptAPI/js_api.htm) for embedding Tableau views into web pages.
 
 <div>
-    <img src="https://developer.salesforce.com/resource/images/trailhead/badges/projects/trailhead_project_embed-tableau-visualizations-in-salesforce.png" align="left" alt="Trailhead Badge" width="100"/>
-    Learn more about the Tableau Viz Lightning web component by completing the <a href="https://trailhead.salesforce.com/en/content/learn/projects/embed-tableau-visualizations-in-salesforce">Embed Tableau Visualizations in Salesforce</a> Trailhead project.
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+    <table>
+        <tr>
+            <td>
+                <img src="https://developer.salesforce.com/resource/images/trailhead/badges/projects/trailhead_project_embed-tableau-visualizations-in-salesforce.png" alt="Trailhead Badge" width="100"/>
+            </td>
+            <td>
+                Learn more about the Tableau Viz Lightning web component by completing the <a href="https://trailhead.salesforce.com/en/content/learn/projects/embed-tableau-visualizations-in-salesforce">Embed Tableau Visualizations in Salesforce</a> Trailhead project.
+            </td>
+        </tr>
+    </table>
 </div>
 
 > This sample component is designed to run on the Salesforce Lightning Platform.
